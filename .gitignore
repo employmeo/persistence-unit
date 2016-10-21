@@ -1,0 +1,11 @@
+# DB backups
+*.backup
+.classpath
+.project
+.settings/
+target/
+/bin/
+*.bat
+*.log
+*.jar
+
