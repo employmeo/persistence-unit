@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.employmeo</groupId>
-	<artifactId>persistence-unit</artifactId>
+	<artifactId>persistence</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Persistence Unit</name>
+	<name>Employmeo Persistence Unit</name>
 	<description>Employmeo persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
 	<properties>
@@ -163,6 +163,6 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		<finalName>persistence-unit</finalName>
+		<finalName>${artifactId}-${version}</finalName>
 	</build>
 </project>
