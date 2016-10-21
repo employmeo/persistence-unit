@@ -22,10 +22,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-/**
- * The persistent class for the corefactors database table.
- * 
- */
 @Entity
 @Table(name = "corefactors")
 @NamedQueries({

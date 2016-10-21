@@ -1,12 +1,17 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.*;
 
+import com.employmeo.data.model.Corefactor.CorefactorBuilder;
 import com.employmeo.data.model.identifier.CorefactorDescriptionId;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
@@ -17,6 +22,9 @@ import lombok.NonNull;
 @Table(name="corefactor_descriptions")
 @NamedQuery(name="CorefactorDescription.findAll", query="SELECT c FROM CorefactorDescription c")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CorefactorDescription implements Serializable {
 	@Transient
 	private static final long serialVersionUID = -2439383939589791820L;

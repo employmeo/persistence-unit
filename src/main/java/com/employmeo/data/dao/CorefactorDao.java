@@ -1,5 +1,5 @@
 package com.employmeo.data.dao;
-
+ 
 import java.util.List;
 
 import com.employmeo.data.model.Corefactor;

@@ -11,7 +11,7 @@ import com.employmeo.data.dao.CorefactorDao;
 
 import com.employmeo.data.model.Corefactor;
 import com.employmeo.data.model.identifier.CorefactorId;
-
+ 
 @Repository("corefactorDao")
 @Transactional
 public class CorefactorDaoImpl extends AbstractDao<CorefactorId, Corefactor> implements CorefactorDao {

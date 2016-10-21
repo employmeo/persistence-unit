@@ -13,7 +13,7 @@ import com.employmeo.data.model.Corefactor;
 import com.employmeo.data.model.identifier.CorefactorId;
 
 import lombok.NonNull;
-
+ 
 @Service
 @Transactional
 public class CorefactorServiceImpl implements CorefactorService {

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.employmeo.data.model.Corefactor;
 import com.employmeo.data.model.identifier.CorefactorId;
-
+ 
 public interface CorefactorService {
 
 	List<Corefactor> getAllCorefactors();

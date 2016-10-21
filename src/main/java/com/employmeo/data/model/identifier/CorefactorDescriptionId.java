@@ -1,7 +1,7 @@
 package com.employmeo.data.model.identifier;
 
 import lombok.Data;
-
+ 
 @Data
 public class CorefactorDescriptionId implements Identity {
 	private static final long serialVersionUID = -1417574865664019888L;
