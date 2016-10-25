@@ -31,7 +31,7 @@ public class CorefactorRepositoryIntegrationTest {
 		Corefactor corefactor =  corefactorRepository.findOne(1001L);
 		
 		assertNotNull("Corefactor is null", corefactor);
-		assertTrue("Corefactor ids not as expected", 1001L == corefactor.getIdValue());
+		assertTrue("Corefactor ids not as expected", 1001L == corefactor.getId());
 		assertNotNull("Corefactor name is null", corefactor.getName());
 		assertEquals("Corefactor name not as expected", "test-humility", corefactor.getName());
 	}	

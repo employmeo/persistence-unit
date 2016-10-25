@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employmeo.data.model.Corefactor;
-import com.employmeo.data.model.identifier.CorefactorId;
 import com.employmeo.data.repository.CorefactorRepository;
 
 import lombok.NonNull;
@@ -31,9 +30,9 @@ public class CorefactorServiceImpl implements CorefactorService {
 	}
 
 	@Override
-	public Corefactor findCorefactorById(@NonNull CorefactorId id) {
-		Corefactor corefactor = corefactorRepository.findOne(id.getLongValue());
-		log.debug("Retrieved for id {} entity {}", id, corefactor);
+	public Corefactor findCorefactorById(@NonNull Long corefactorId) {
+		Corefactor corefactor = corefactorRepository.findOne(corefactorId);
+		log.debug("Retrieved for id {} entity {}", corefactorId, corefactor);
 		
 		return corefactor;
 	}

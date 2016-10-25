@@ -1,18 +1,13 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.*;
-
-import com.employmeo.data.model.Corefactor.CorefactorBuilder;
-import com.employmeo.data.model.identifier.CorefactorDescriptionId;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 /**
  * The persistent class for the corefactor_descriptions database table.
@@ -32,7 +27,7 @@ public class CorefactorDescription implements Serializable {
 	@Id
 	@Basic(optional=false)
 	@Column(name="cfdesc_id")
-	private Long idValue;
+	private Long id;
 
 	@Column(name="cf_description")
 	private String cfDescription;
@@ -50,11 +45,4 @@ public class CorefactorDescription implements Serializable {
 	@Column(name="cf_low_end")
 	private double cfLowEnd;
 
-	public CorefactorDescriptionId getId() {
-		return CorefactorDescriptionId.of(this.idValue);
-	}
-	
-	public void setId(@NonNull CorefactorDescriptionId id) {
-		this.idValue = id.getLongValue();
-	}	
 }

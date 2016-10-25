@@ -8,25 +8,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import com.employmeo.data.model.identifier.CorefactorId;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Entity
 @Table(name = "corefactors")
-@NamedQueries({
-	@NamedQuery(name = "Corefactor.findAll", query = "SELECT c FROM Corefactor c"),
-})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,7 +30,7 @@ public class Corefactor implements Serializable {
 	@Id
 	@Basic(optional=false)
 	@Column(name = "corefactor_id")
-	private Long idValue;
+	private Long id;
 
 	@Column(name = "cf_high")
 	private Double highValue;
@@ -79,11 +71,4 @@ public class Corefactor implements Serializable {
 	@OneToMany(mappedBy = "corefactor", fetch = FetchType.EAGER)
 	private List<CorefactorDescription> corefactorDescriptions;
 
-	public CorefactorId getId() {
-		return CorefactorId.of(this.idValue);
-	}
-	
-	public void setId(@NonNull CorefactorId id) {
-		this.idValue = id.getLongValue();
-	}
 }
