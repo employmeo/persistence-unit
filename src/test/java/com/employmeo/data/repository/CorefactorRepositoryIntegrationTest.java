@@ -1,6 +1,8 @@
-package com.employmeo.data.dao.hibernate;
+package com.employmeo.data.repository;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,27 +15,24 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employmeo.data.config.PersistenceConfiguration;
-import com.employmeo.data.dao.CorefactorDao;
 import com.employmeo.data.model.Corefactor;
-import com.employmeo.data.model.identifier.CorefactorId;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {PersistenceConfiguration.class}, loader=AnnotationConfigContextLoader.class)
 @Transactional
-public class CorefactorDaoImplIntegrationTest {
+public class CorefactorRepositoryIntegrationTest {
 
 	@Autowired
-	private CorefactorDao corefactorDao;
-
+	private CorefactorRepository corefactorRepository;
+	
 	@Test
-	@Sql(scripts = "/sql/CorefactorDaoImplIntegrationTest.sql", config = @SqlConfig(commentPrefix = "--"))
+	@Sql(scripts = "/sql/CorefactorRepositoryIntegrationTest.sql", config = @SqlConfig(commentPrefix = "--"))
 	public void findById() {
-		Corefactor corefactor = corefactorDao.findById(CorefactorId.of(1001L));
+		Corefactor corefactor =  corefactorRepository.findOne(1001L);
 		
 		assertNotNull("Corefactor is null", corefactor);
 		assertTrue("Corefactor ids not as expected", 1001L == corefactor.getIdValue());
 		assertNotNull("Corefactor name is null", corefactor.getName());
 		assertEquals("Corefactor name not as expected", "test-humility", corefactor.getName());
-	}
-
+	}	
 }

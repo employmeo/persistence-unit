@@ -9,14 +9,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.employmeo.data.dao.CorefactorDao;
 import com.employmeo.data.model.Corefactor;
 import com.employmeo.data.model.identifier.CorefactorId;
+import com.employmeo.data.repository.CorefactorRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CorefactorServiceImplTest {
 	@Mock
-	CorefactorDao corefactorDao;
+	CorefactorRepository corefactorRepository;
 
 	@InjectMocks
 	CorefactorServiceImpl corefactorService;
@@ -32,7 +32,7 @@ public class CorefactorServiceImplTest {
 				.lowValue(1.0D)
 				.highValue(12.0D)
 				.build();
-		when(corefactorDao.findById(testCorefactorId)).thenReturn(testCorefactor);
+		when(corefactorRepository.findOne(testCorefactorId.getLongValue())).thenReturn(testCorefactor);
 		
 		// invoke method under test
 		Corefactor resultCorefactor = corefactorService.findCorefactorById(testCorefactorId);
@@ -42,8 +42,8 @@ public class CorefactorServiceImplTest {
 		assertTrue(testCorefactorId.equals(resultCorefactor.getId()));
 		assertEquals("test-name", resultCorefactor.getName());
 		
-		verify(corefactorDao).findById(testCorefactorId);
-		verifyNoMoreInteractions(corefactorDao);
+		verify(corefactorRepository).findOne(testCorefactorId.getLongValue());
+		verifyNoMoreInteractions(corefactorRepository);
 	}
 	
 	@Test(expected = NullPointerException.class)
