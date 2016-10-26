@@ -1,9 +1,11 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 
@@ -11,8 +13,8 @@ import lombok.*;
 @Table(name = "accounts")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"accountSurveys","positions","locations","users","respondants","billingItems"})
+@ToString(exclude={"accountSurveys","positions","locations","users","respondants","billingItems"})
 public class Account implements Serializable {
 
 	@Transient
@@ -60,28 +62,33 @@ public class Account implements Serializable {
 	private Long defaultAsId;
 
 	// bi-directional many-to-one association to Survey
+	@JsonIgnore
 	@OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-	private Set<AccountSurvey> accountSurveys;
+	private Set<AccountSurvey> accountSurveys = new HashSet<>();
 
 	// bi-directional many-to-one association to Position
+	@JsonIgnore
 	@OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-	private Set<Position> positions;
+	private Set<Position> positions = new HashSet<>();
 
 	// bi-directional many-to-one association to Position
+	@JsonIgnore
 	@OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-	private Set<Location> locations;
+	private Set<Location> locations = new HashSet<>();
 
 	// bi-directional many-to-one association to User
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
-	private Set<User> users;
+	private Set<User> users = new HashSet<>();
 
 	// bi-directional many-to-one association to Position
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
-	// @OrderBy("respondant.respondantCreatedDate DESC")
-	private Set<Respondant> respondants;
+	private Set<Respondant> respondants = new HashSet<>();
 
 	// bi-directional many-to-one association to BillingItem
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
-	private Set<BillingItem> billingItems;
+	private Set<BillingItem> billingItems = new HashSet<>();
 
 }

@@ -12,8 +12,8 @@ import lombok.*;
 @Table(name = "answers")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"question"})
+@ToString(exclude={"question"})
 public class Answer implements Serializable {
 
 	@Transient
@@ -39,6 +39,9 @@ public class Answer implements Serializable {
 	// bi-directional many-to-one association to Question
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "ANSWER_QUESTION_ID")
+	@JoinColumn(name = "ANSWER_QUESTION_ID", insertable=false, updatable=false)
 	private Question question;
+
+	@Column(name = "ANSWER_QUESTION_ID")
+	private Long questionId;
 }

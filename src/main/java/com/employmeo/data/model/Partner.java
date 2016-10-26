@@ -10,8 +10,6 @@ import lombok.*;
 @Table(name = "partners")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Partner implements Serializable {
 
 	@Transient

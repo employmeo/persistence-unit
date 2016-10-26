@@ -1,7 +1,7 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 
@@ -13,8 +13,8 @@ import lombok.*;
 @Table(name = "persons")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"respondants"})
+@ToString(exclude={"respondants"})
 public class Person implements Serializable {
 
 	@Transient
@@ -41,10 +41,10 @@ public class Person implements Serializable {
 	private String address;
 
 	@Column(name = "person_lat")
-	private double latitude;
+	private Double latitude;
 
 	@Column(name = "person_long")
-	private double longitude;
+	private Double longitude;
 
 	@Column(name = "person_ats_id")
 	private String atsId;
@@ -52,5 +52,5 @@ public class Person implements Serializable {
 	// bi-directional many-to-one association to Respondant
 	@JsonIgnore
 	@OneToMany(mappedBy = "person")
-	private Set<Respondant> respondants;
+	private Set<Respondant> respondants = new HashSet<>();
 }

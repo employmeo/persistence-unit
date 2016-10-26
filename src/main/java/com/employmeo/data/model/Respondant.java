@@ -14,8 +14,8 @@ import lombok.*;
 @Table(name = "respondants")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"account","accountSurvey","partner","position","location","person","responses","respondantScores"})
+@ToString(exclude={"account","accountSurvey","partner","position","location","person","responses","respondantScores"})
 public class Respondant implements Serializable {
 
 	@Transient
@@ -63,7 +63,7 @@ public class Respondant implements Serializable {
 	private AccountSurvey accountSurvey;
 
 	@Column(name = "respondant_asid", insertable = true, updatable = false)
-	private Long asid;
+	private Long accountSurveyId;
 
 	@JsonBackReference
 	@ManyToOne
@@ -92,18 +92,21 @@ public class Respondant implements Serializable {
 	// bi-directional many-to-one association to Person
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "respondant_person_id")
+	@JoinColumn(name = "respondant_person_id", insertable=false, updatable=false)
 	private Person person;
 
-	// bi-directional many-to-one association to Responses
-	@JsonManagedReference
-	@OneToMany(mappedBy = "respondant")
-	private List<Response> responses;
+	@Column(name = "respondant_person_id")
+	private Long personId;
 
 	// bi-directional many-to-one association to Responses
 	@JsonManagedReference
 	@OneToMany(mappedBy = "respondant", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-	private Set<RespondantScore> respondantScores;
+	private Set<Response> responses = new HashSet<>();
+
+	// bi-directional many-to-one association to Responses
+	@JsonManagedReference
+	@OneToMany(mappedBy = "respondant", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	private Set<RespondantScore> respondantScores = new HashSet<>();
 
 	// Scoring info
 	@Column(name = "respondant_profile")

@@ -4,14 +4,16 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.*;
 
 @Entity
 @Table(name = "account_surveys")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"account","survey"})
+@ToString(exclude={"account","survey"})
 public class AccountSurvey implements Serializable {
 
 	@Transient
@@ -22,6 +24,7 @@ public class AccountSurvey implements Serializable {
 	@Column(name = "as_id")
 	private Long id;
 
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "as_account_id", insertable = false, updatable = false)
 	private Account account;

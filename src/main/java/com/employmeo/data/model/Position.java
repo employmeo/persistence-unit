@@ -5,14 +5,16 @@ import java.math.BigDecimal;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.*;
 
 @Entity
 @Table(name = "positions")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"account"})
+@ToString(exclude={"account"})
 public class Position implements Serializable {
 
 	@Transient
@@ -36,8 +38,13 @@ public class Position implements Serializable {
 	private BigDecimal targetTenure;
 
 	// bi-directional many-to-one association to Account
+	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "position_account")
+	@JoinColumn(name = "position_account", insertable=false, updatable=false)
 	private Account account;
+
+	@Column(name = "position_account")
+	private Long accountId;
+
 
 }

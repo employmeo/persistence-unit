@@ -6,14 +6,16 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.*;
+
 import lombok.*;
 
 @Entity
 @Table(name = "position_prediction_config")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"position","predictionTarget","predictionModel","predictions"})
+@ToString(exclude={"position","predictionTarget","predictionModel","predictions"})
 public class PositionPredictionConfiguration implements Serializable {
 
 	@Transient
@@ -25,17 +27,29 @@ public class PositionPredictionConfiguration implements Serializable {
 	@Column(name = "position_prediction_config_id")
 	private Integer positionPredictionConfigId;
 
+	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "position_id")
+	@JoinColumn(name = "position_id", insertable=false, updatable=false)
 	private Position position;
 
+	@Column(name = "position_id")
+	private Long positionId;
+
+	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "prediction_target_id")
+	@JoinColumn(name = "prediction_target_id", insertable=false, updatable=false)
 	private PredictionTarget predictionTarget;
 
+	@Column(name = "prediction_target_id")
+	private Long predictionTargetId;
+
+	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "model_id")
+	@JoinColumn(name = "model_id", insertable=false, updatable=false)
 	private PredictionModel predictionModel;
+
+	@Column(name = "model_id")
+	private Long predictionModelId;
 
 	@Column(name = "target_threshold")
 	private BigDecimal targetThreshold;
@@ -43,9 +57,10 @@ public class PositionPredictionConfiguration implements Serializable {
 	@Column(name = "active")
 	private Boolean active;
 
-	@Column(name = "created_date", insertable = false, updatable = false)
+	@Column(name = "created_date", insertable = true, updatable = false)
 	private Date createdDate;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "positionPredictionConfig", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private Set<Prediction> predictions;
+	private Set<Prediction> predictions = new HashSet<>();
 }

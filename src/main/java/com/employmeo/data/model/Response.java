@@ -12,8 +12,8 @@ import lombok.*;
 @Table(name = "responses")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"respondant","question"})
+@ToString(exclude={"respondant","question"})
 public class Response implements Serializable {
 
 	@Transient

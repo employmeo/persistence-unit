@@ -23,13 +23,12 @@ public class CorefactorServiceImplTest {
 	public void findCorefactorByIdWithValidId() {
 		// setup data and expectations
 		Long testCorefactorId = 1001L;
-		Corefactor testCorefactor = Corefactor.builder()
-				.id(testCorefactorId)
-				.name("test-name")
-				.description("test-description")
-				.lowValue(1.0D)
-				.highValue(12.0D)
-				.build();
+		Corefactor testCorefactor = new Corefactor();
+		testCorefactor.setId(testCorefactorId);
+		testCorefactor.setName("test-name");
+		testCorefactor.setDescription("test-description");
+		testCorefactor.setLowValue(1.0D);
+		testCorefactor.setHighValue(12.0D);
 		when(corefactorRepository.findOne(testCorefactorId)).thenReturn(testCorefactor);
 
 		// invoke method under test

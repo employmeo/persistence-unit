@@ -5,14 +5,16 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 @Entity
 @Table(name = "prediction_targets")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"positionTargets","predictionModels"})
+@ToString(exclude={"positionTargets","predictionModels"})
 public class PredictionTarget implements Serializable {
 
 	@Transient
@@ -38,11 +40,13 @@ public class PredictionTarget implements Serializable {
 	@Column(name = "created_date", insertable = false, updatable = false)
 	private Date createdDate;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "predictionTarget", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private Set<PositionPredictionConfiguration> positionTargets;
+	private Set<PositionPredictionConfiguration> positionTargets = new HashSet<>();
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "predictionTarget", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private Set<PredictionModel> predictionModels;
+	private Set<PredictionModel> predictionModels = new HashSet<>();
 
 
 

@@ -5,14 +5,16 @@ import java.sql.Timestamp;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.*;
 
 @Entity
 @Table(name = "billing_item")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"account"})
+@ToString(exclude={"account"})
 public class BillingItem implements Serializable {
 
 	@Transient
@@ -38,9 +40,12 @@ public class BillingItem implements Serializable {
 	private Integer billingItemStatus;
 
 	// bi-directional many-to-one association to Account
+	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "billing_item_account_id")
+	@JoinColumn(name = "billing_item_account_id", insertable=false, updatable=false)
 	private Account account;
 
+	@Column(name = "billing_item_account_id")
+	private Long accountId;
 
 }

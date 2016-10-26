@@ -5,14 +5,16 @@ import java.sql.Timestamp;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.*;
 
 @Entity
 @Table(name = "users")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"account"})
+@ToString(exclude={"account"})
 public class User implements Serializable {
 
 	@Transient
@@ -54,6 +56,7 @@ public class User implements Serializable {
 	private Integer userType;
 
 	// bi-directional many-to-one association to Account
+	@JsonBackReference
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "USER_ACCOUNT_ID", updatable = false, insertable = false)
 	private Account account;

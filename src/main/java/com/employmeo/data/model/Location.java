@@ -4,14 +4,16 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.*;
 
 @Entity
 @Table(name = "locations")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"account"})
+@ToString(exclude={"account"})
 public class Location implements Serializable {
 
 	@Transient
@@ -26,6 +28,7 @@ public class Location implements Serializable {
 	private String locationName;
 
 	// bi-directional many-to-one association to Account
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "location_account_id", insertable = false, updatable = false)
 	private Account account;
@@ -40,10 +43,10 @@ public class Location implements Serializable {
 	private String fein;
 
 	@Column(name = "location_lat")
-	private double latitude;
+	private Double latitude;
 
 	@Column(name = "location_long")
-	private double longitude;
+	private Double longitude;
 
 	@Column(name = "location_state")
 	private String state;

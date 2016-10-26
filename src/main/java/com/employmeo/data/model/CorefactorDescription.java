@@ -6,23 +6,20 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * The persistent class for the corefactor_descriptions database table.
- * 
+ *
  */
 @Entity
 @Table(name="corefactor_descriptions")
 @Data
+@EqualsAndHashCode(exclude={"corefactor"})
+@ToString(exclude={"corefactor"})
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class CorefactorDescription implements Serializable {
-	
+
 	@Transient
 	private static final long serialVersionUID = -353768828266224466L;
 
@@ -41,7 +38,7 @@ public class CorefactorDescription implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "cf_id",insertable=false,updatable=false)
 	private Corefactor corefactor;
-	
+
 	@Column(name="cf_id")
 	private Long corefactorId;
 

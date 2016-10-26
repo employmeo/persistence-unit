@@ -2,7 +2,6 @@ package com.employmeo.data.service;
 
 import java.util.Set;
 
-import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +11,12 @@ import com.employmeo.data.repository.*;
 
 import jersey.repackaged.com.google.common.collect.Sets;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
+@Slf4j
 public class AccountServiceImpl implements AccountService {
-	private static final Logger log = LoggerFactory.getLogger(AccountServiceImpl.class);
 
 	@Autowired
 	private AccountRepository accountRepository;

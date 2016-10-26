@@ -1,7 +1,7 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 
@@ -13,8 +13,7 @@ import lombok.*;
 @Table(name = "corefactors")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"corefactorDescriptions"})
 public class Corefactor implements Serializable {
 	@Transient
 	private static final long serialVersionUID = -2852093083745544195L;
@@ -62,6 +61,6 @@ public class Corefactor implements Serializable {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "corefactor", fetch = FetchType.EAGER)
-	private Set<CorefactorDescription> corefactorDescriptions;
+	private Set<CorefactorDescription> corefactorDescriptions = new HashSet<>();
 
 }

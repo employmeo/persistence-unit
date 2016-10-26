@@ -13,8 +13,8 @@ import lombok.*;
 @Table(name = "questions")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"answers","responses","surveyQuestions"})
+@ToString(exclude={"answers","responses","surveyQuestions"})
 public class Question implements Serializable {
 
 	@Transient
@@ -59,13 +59,13 @@ public class Question implements Serializable {
 	private Set<Answer> answers = new HashSet<>();
 
 	// bi-directional many-to-one association to Response
-	@JsonManagedReference
+	@JsonIgnore
 	@OneToMany(mappedBy = "question")
 	private Set<Response> responses = new HashSet<>();
 
 	// bi-directional many-to-one association to SurveyQuestion
 	@JsonBackReference
-	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "question")
 	private Set<SurveyQuestion> surveyQuestions = new HashSet<>();
 
 }

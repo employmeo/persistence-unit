@@ -13,8 +13,8 @@ import lombok.*;
 @Table(name = "surveys")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(exclude={"surveyQuestions","surveySections"})
+@ToString(exclude={"surveyQuestions","surveySections"})
 public class Survey implements Serializable {
 
 	@Transient
