@@ -1,9 +1,13 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -55,16 +59,19 @@ public class Question implements Serializable {
 
 	// bi-directional many-to-one association to Answer
 	@JsonManagedReference
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Answer> answers = new HashSet<>();
 
 	// bi-directional many-to-one association to Response
 	@JsonIgnore
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "question")
 	private Set<Response> responses = new HashSet<>();
 
 	// bi-directional many-to-one association to SurveyQuestion
 	@JsonBackReference
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "question")
 	private Set<SurveyQuestion> surveyQuestions = new HashSet<>();
 

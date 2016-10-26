@@ -6,7 +6,11 @@ import java.util.*;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.*;
 
@@ -100,11 +104,13 @@ public class Respondant implements Serializable {
 
 	// bi-directional many-to-one association to Responses
 	@JsonManagedReference
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "respondant", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<Response> responses = new HashSet<>();
 
 	// bi-directional many-to-one association to Responses
 	@JsonManagedReference
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "respondant", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<RespondantScore> respondantScores = new HashSet<>();
 

@@ -1,9 +1,13 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -60,6 +64,7 @@ public class Corefactor implements Serializable {
 	private String displayGroup;
 
 	@JsonManagedReference
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "corefactor", fetch = FetchType.EAGER)
 	private Set<CorefactorDescription> corefactorDescriptions = new HashSet<>();
 

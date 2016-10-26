@@ -1,9 +1,13 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -63,32 +67,38 @@ public class Account implements Serializable {
 
 	// bi-directional many-to-one association to Survey
 	@JsonIgnore
-	@OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<AccountSurvey> accountSurveys = new HashSet<>();
 
 	// bi-directional many-to-one association to Position
 	@JsonIgnore
-	@OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<Position> positions = new HashSet<>();
 
 	// bi-directional many-to-one association to Position
 	@JsonIgnore
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<Location> locations = new HashSet<>();
 
 	// bi-directional many-to-one association to User
 	@JsonIgnore
-	@OneToMany(mappedBy = "account")
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<User> users = new HashSet<>();
 
 	// bi-directional many-to-one association to Position
 	@JsonIgnore
-	@OneToMany(mappedBy = "account")
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<Respondant> respondants = new HashSet<>();
 
 	// bi-directional many-to-one association to BillingItem
 	@JsonIgnore
-	@OneToMany(mappedBy = "account")
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<BillingItem> billingItems = new HashSet<>();
 
 }
