@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +37,7 @@ public class CorefactorDescription implements Serializable {
 	@Column(name="cf_high_end")
 	private double cfHighEnd;
 
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "cf_id",insertable=false,updatable=false)
 	private Corefactor corefactor;

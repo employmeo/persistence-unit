@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -68,6 +70,7 @@ public class Corefactor implements Serializable {
 	@Column(name = "cf_display_group")
 	private String displayGroup;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "corefactor", fetch = FetchType.EAGER)
 	private List<CorefactorDescription> corefactorDescriptions;
 
