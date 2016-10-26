@@ -5,8 +5,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.employmeo.data.model.Corefactor;
@@ -19,7 +18,7 @@ public class CorefactorServiceImplTest {
 
 	@InjectMocks
 	CorefactorServiceImpl corefactorService;
-	
+
 	@Test
 	public void findCorefactorByIdWithValidId() {
 		// setup data and expectations
@@ -32,19 +31,19 @@ public class CorefactorServiceImplTest {
 				.highValue(12.0D)
 				.build();
 		when(corefactorRepository.findOne(testCorefactorId)).thenReturn(testCorefactor);
-		
+
 		// invoke method under test
 		Corefactor resultCorefactor = corefactorService.findCorefactorById(testCorefactorId);
-		
+
 		// assert expectations
 		assertNotNull(resultCorefactor);
 		assertTrue(testCorefactorId.equals(resultCorefactor.getId()));
 		assertEquals("test-name", resultCorefactor.getName());
-		
+
 		verify(corefactorRepository).findOne(testCorefactorId);
 		verifyNoMoreInteractions(corefactorRepository);
 	}
-	
+
 	@Test(expected = NullPointerException.class)
 	public void findCorefactorByIdWithNullId() {
 		corefactorService.findCorefactorById(null);

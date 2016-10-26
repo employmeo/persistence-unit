@@ -1,23 +1,13 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "corefactors")
@@ -69,9 +59,9 @@ public class Corefactor implements Serializable {
 
 	@Column(name = "cf_display_group")
 	private String displayGroup;
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "corefactor", fetch = FetchType.EAGER)
-	private List<CorefactorDescription> corefactorDescriptions;
+	private Set<CorefactorDescription> corefactorDescriptions;
 
 }

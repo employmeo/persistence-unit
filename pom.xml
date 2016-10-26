@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.employmeo</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>Employmeo Persistence Unit</name>
 	<description>Employmeo persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
@@ -22,8 +22,15 @@
 		<javax-validation.version>1.1.0.Final</javax-validation.version>
 		<springdata-jpa.version>1.10.3.RELEASE</springdata-jpa.version>
 		<jersey-jackson.version>2.23.2</jersey-jackson.version>
+		<lombok.version>1.16.10</lombok.version>
 	</properties>
 	<dependencies>
+<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
+</dependency>	
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>

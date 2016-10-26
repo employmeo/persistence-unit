@@ -1,0 +1,48 @@
+package com.employmeo.data.service;
+
+import java.util.Set;
+
+import org.slf4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.employmeo.data.model.Partner;
+import com.employmeo.data.repository.PartnerRepository;
+
+import jersey.repackaged.com.google.common.collect.Sets;
+import lombok.NonNull;
+
+@Service
+@Transactional
+public class PartnerServiceImpl implements PartnerService {
+	private static final Logger log = LoggerFactory.getLogger(PartnerServiceImpl.class);
+
+	@Autowired
+	private PartnerRepository partnerRepository;
+
+	@Override
+	public Set<Partner> getAllPartners() {
+		Set<Partner> partners = Sets.newHashSet(partnerRepository.findAll());
+		log.debug("Retrieved all {} partners", partners);
+
+		return partners;
+	}
+
+
+	@Override
+	public Partner getPartnerById(@NonNull Long partnerId) {
+		Partner partner = partnerRepository.findOne(partnerId);
+		log.debug("Retrieved for id {} entity {}", partnerId, partner);
+
+		return partner;
+	}
+
+	@Override
+	public Partner save(@NonNull Partner partner) {
+		Partner savedPartner = partnerRepository.save(partner);
+		log.debug("Saved partner {}", partner);
+
+		return savedPartner;
+	}
+}

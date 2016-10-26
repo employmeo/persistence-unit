@@ -17,14 +17,14 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Table(name="corefactor_descriptions")
-@NamedQuery(name="CorefactorDescription.findAll", query="SELECT c FROM CorefactorDescription c")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class CorefactorDescription implements Serializable {
+	
 	@Transient
-	private static final long serialVersionUID = -2439383939589791820L;
+	private static final long serialVersionUID = -353768828266224466L;
 
 	@Id
 	@Basic(optional=false)
@@ -32,10 +32,10 @@ public class CorefactorDescription implements Serializable {
 	private Long id;
 
 	@Column(name="cf_description")
-	private String cfDescription;
+	private String description;
 
 	@Column(name="cf_high_end")
-	private double cfHighEnd;
+	private Double highEnd;
 
 	@JsonBackReference
 	@ManyToOne
@@ -43,9 +43,9 @@ public class CorefactorDescription implements Serializable {
 	private Corefactor corefactor;
 	
 	@Column(name="cf_id")
-	private Long cfId;
+	private Long corefactorId;
 
 	@Column(name="cf_low_end")
-	private double cfLowEnd;
+	private Double lowEnd;
 
 }
