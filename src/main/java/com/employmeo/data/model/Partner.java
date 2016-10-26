@@ -17,7 +17,7 @@ public class Partner implements Serializable {
 
 	@Id
 	@Column(name = "partner_id")
-	private Integer id;
+	private Long id;
 
 	@Column(name = "partner_name")
 	private String partnerName;

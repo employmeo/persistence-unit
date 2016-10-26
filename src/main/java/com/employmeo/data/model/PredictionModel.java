@@ -5,7 +5,11 @@ import java.util.*;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 
@@ -23,7 +27,7 @@ public class PredictionModel implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "prediction_model_id")
-	private Integer modelId;
+	private Long modelId;
 
 	@Column(name = "model_name")
 	private String name;
@@ -46,6 +50,7 @@ public class PredictionModel implements Serializable {
 	private Long predictionTargetId;
 
 	@JsonIgnore
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "predictionModel", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<PositionPredictionConfiguration> positionPredictionConfigs = new HashSet<>();
 

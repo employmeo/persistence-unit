@@ -23,7 +23,7 @@ public class Prediction implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "prediction_id")
-	private Integer predictionId;
+	private Long predictionId;
 
 	@JsonBackReference
 	@ManyToOne

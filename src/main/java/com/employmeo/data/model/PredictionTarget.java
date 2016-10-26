@@ -5,6 +5,9 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
@@ -23,7 +26,7 @@ public class PredictionTarget implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "prediction_target_id")
-	private Integer predictionTargetId;
+	private Long predictionTargetId;
 
 	@Column(name = "name")
 	private String name;
@@ -41,10 +44,12 @@ public class PredictionTarget implements Serializable {
 	private Date createdDate;
 
 	@JsonIgnore
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "predictionTarget", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<PositionPredictionConfiguration> positionTargets = new HashSet<>();
 
 	@JsonIgnore
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "predictionTarget", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<PredictionModel> predictionModels = new HashSet<>();
 

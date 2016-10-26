@@ -6,7 +6,11 @@ import java.util.*;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 
@@ -21,11 +25,10 @@ public class PositionPredictionConfiguration implements Serializable {
 	@Transient
 	private static final long serialVersionUID = 93934417467941938L;
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "position_prediction_config_id")
-	private Integer positionPredictionConfigId;
+	private Long positionPredictionConfigId;
 
 	@JsonBackReference
 	@ManyToOne
@@ -61,6 +64,7 @@ public class PositionPredictionConfiguration implements Serializable {
 	private Date createdDate;
 
 	@JsonIgnore
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "positionPredictionConfig", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<Prediction> predictions = new HashSet<>();
 }

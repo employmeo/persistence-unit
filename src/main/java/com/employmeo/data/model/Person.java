@@ -1,9 +1,13 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,7 +27,7 @@ public class Person implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "person_id")
-	private Integer id;
+	private Long id;
 
 	@Column(name = "person_email")
 	private String email;
@@ -51,6 +55,7 @@ public class Person implements Serializable {
 
 	// bi-directional many-to-one association to Respondant
 	@JsonIgnore
+	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "person")
 	private Set<Respondant> respondants = new HashSet<>();
 }

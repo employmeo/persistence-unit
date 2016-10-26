@@ -16,7 +16,7 @@ public class RespondantScorePK implements Serializable {
 	private static final long serialVersionUID = 3088515487119303195L;
 
 	@Column(name = "rs_cf_id", insertable = true, updatable = false)
-	private Integer corefactorId;
+	private Long corefactorId;
 
 	@Column(name = "rs_respondant_id", insertable = true, updatable = false)
 	private Long respondantId;
