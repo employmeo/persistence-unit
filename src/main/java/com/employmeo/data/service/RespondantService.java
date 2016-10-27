@@ -10,14 +10,14 @@ public interface RespondantService {
 
 	Set<Respondant> getAllRespondants();
 
-	Respondant save(Respondant respondant);
+	Respondant save(@NonNull Respondant respondant);
 
-	Respondant getRespondantById(Long respondantId);
+	Respondant getRespondantById(@NonNull Long respondantId);
 
 	Set<RespondantScore> getAllRespondantScores();
 
-	RespondantScore save(RespondantScore respondantScore);
+	RespondantScore save(@NonNull RespondantScore respondantScore);
 
-	RespondantScore getRespondantScoreById(RespondantScorePK respondantScorePK);
+	RespondantScore getRespondantScoreById(@NonNull RespondantScorePK respondantScorePK);
 
 }

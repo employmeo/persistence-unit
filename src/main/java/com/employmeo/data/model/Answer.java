@@ -22,7 +22,7 @@ public class Answer implements Serializable {
 	@Id
 	@Basic(optional = false)
 	@Column(name = "ANSWER_ID")
-	private String id;
+	private Long id;
 
 	@Column(name = "ANSWER_DESCRIPTION")
 	private String description;
