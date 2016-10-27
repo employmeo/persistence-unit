@@ -10,8 +10,8 @@ public interface UserService {
 
 	Set<User> getAllUsers();
 
-	User save(User user);
+	User save(@NonNull User user);
 
-	User getUserById(Long userId);
+	User getUserById(@NonNull Long userId);
 
 }

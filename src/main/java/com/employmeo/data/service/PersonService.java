@@ -10,8 +10,8 @@ public interface PersonService {
 
 	Set<Person> getAllPersons();
 
-	Person save(Person person);
+	Person save(@NonNull Person person);
 
-	Person getPersonById(Long personId);
+	Person getPersonById(@NonNull Long personId);
 
 }

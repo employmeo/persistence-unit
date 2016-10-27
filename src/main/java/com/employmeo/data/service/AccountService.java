@@ -2,9 +2,9 @@ package com.employmeo.data.service;
 
 import java.util.Set;
 
-import com.employmeo.data.model.*;
+import com.employmeo.data.model.Account;
+import com.employmeo.data.model.Position;
 
-import jersey.repackaged.com.google.common.collect.Sets;
 import lombok.NonNull;
 
 public interface AccountService {
