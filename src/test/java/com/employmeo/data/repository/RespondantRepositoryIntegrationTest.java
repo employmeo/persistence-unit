@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {PersistenceConfiguration.class}, loader=AnnotationConfigContextLoader.class)
 @Transactional
+@Ignore
 public class RespondantRepositoryIntegrationTest {
 
 	@Autowired
