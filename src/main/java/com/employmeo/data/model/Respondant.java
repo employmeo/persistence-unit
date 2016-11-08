@@ -5,9 +5,11 @@ import java.sql.Timestamp;
 import java.util.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -42,8 +44,11 @@ public class Respondant implements Serializable {
 	@Column(name = "respondant_id")
 	private Long id;
 
-	@Column(name = "respondant_uuid", insertable = false, updatable = false, columnDefinition = "UUID")
-	@Convert(converter = UUIDConverter.class)
+	@Column(name = "respondant_uuid", insertable = true, updatable = false)
+	//@Column(name = "respondant_uuid", insertable = false, updatable = false, columnDefinition = "UUID")
+	//@Convert(converter = UUIDConverter.class)
+	@Convert(disableConversion = true)
+	@Type(type="pg-uuid")
 	private UUID respondantUuid;
 
 	// bi-directional many-to-one association to Account
