@@ -27,4 +27,8 @@ public interface RespondantService {
 
 	RespondantScore getRespondantScoreById(@NonNull RespondantScorePK respondantScorePK);
 
+	Response saveResponse(Response response);
+
+	Response saveResponse(Long respondantId, Long questionId, Integer responseValue, String responseText);
+
 }

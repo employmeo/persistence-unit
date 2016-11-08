@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employmeo.data.model.*;
-import com.employmeo.data.repository.RespondantRepository;
-import com.employmeo.data.repository.RespondantScoreRepository;
+import com.employmeo.data.repository.*;
 
 import jersey.repackaged.com.google.common.collect.Sets;
 import lombok.NonNull;
@@ -28,6 +27,10 @@ public class RespondantServiceImpl implements RespondantService  {
 	private RespondantRepository respondantRepository;
 	@Autowired
 	private RespondantScoreRepository respondantScoreRepository;
+	@Autowired
+	private ResponseRepository responseRepository;
+	@Autowired
+	private QuestionRepository questionRepository;
 
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
 	private static final Integer DEFAULT_PAGE_SIZE = 10;
@@ -96,5 +99,32 @@ public class RespondantServiceImpl implements RespondantService  {
 		log.debug("Retrieved for id {} entity {}", respondantScorePK, respondantScore);
 
 		return respondantScore;
+	}
+
+	@Override
+	public Response saveResponse(@NonNull Response response) {
+		Response savedResponse = responseRepository.save(response);
+		log.debug("Saved response {}", response);
+
+		return savedResponse;
+	}
+
+	@Override
+	public Response saveResponse(@NonNull Long respondantId, @NonNull Long questionId, Integer responseValue, String responseText) {
+		Respondant respondant = respondantRepository.findOne(respondantId);
+		Question question = questionRepository.findOne(questionId);
+
+		Response response = new Response();
+		response.setQuestion(question);
+		response.setQuestionId(questionId);
+		response.setRespondant(respondant);
+		response.setRespondantId(respondantId);
+		response.setResponseText(responseText);
+		response.setResponseValue(responseValue);
+
+		Response savedResponse = responseRepository.save(response);
+		log.debug("Saved response {}", savedResponse);
+
+		return savedResponse;
 	}
 }
