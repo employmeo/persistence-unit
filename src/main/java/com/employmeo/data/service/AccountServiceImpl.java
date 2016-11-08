@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.employmeo.data.model.*;
-import com.employmeo.data.repository.*;
+import com.employmeo.data.model.Account;
+import com.employmeo.data.model.Position;
+import com.employmeo.data.repository.AccountRepository;
+import com.employmeo.data.repository.PositionRepository;
 
 import jersey.repackaged.com.google.common.collect.Sets;
 import lombok.NonNull;
@@ -35,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Account save(@NonNull Account account) {
 		Account savedAccount = accountRepository.save(account);
-		log.debug("Saved account {}", account);
+		log.debug("Saved account {}", savedAccount);
 
 		return savedAccount;
 	}
@@ -71,4 +73,6 @@ public class AccountServiceImpl implements AccountService {
 
 		return position;
 	}
+
+
 }

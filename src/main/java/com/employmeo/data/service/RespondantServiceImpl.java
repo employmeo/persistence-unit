@@ -1,8 +1,13 @@
 package com.employmeo.data.service;
 
 import java.util.Set;
+import java.util.UUID;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,20 +22,24 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @Slf4j
-public class RespondantServiceImpl implements RespondantService {
+public class RespondantServiceImpl implements RespondantService  {
 
 	@Autowired
 	private RespondantRepository respondantRepository;
 	@Autowired
 	private RespondantScoreRepository respondantScoreRepository;
 
+	private static final Integer DEFAULT_PAGE_NUMBER = 1;
+	private static final Integer DEFAULT_PAGE_SIZE = 10;
+
+
 
 	@Override
-	public Set<Respondant> getAllRespondants() {
-		Set<Respondant> respondants = Sets.newHashSet(respondantRepository.findAll());
-		log.debug("Retrieved all {} respondants", respondants);
+	public Respondant getRespondant(@NonNull UUID respondantUuid) {
+		Respondant respondant = respondantRepository.findByRespondantUuid(respondantUuid);
+		log.debug("Respondant by uuid '{}' : ", respondantUuid, respondant);
 
-		return respondants;
+		return respondant;
 	}
 
 	@Override
@@ -48,6 +57,22 @@ public class RespondantServiceImpl implements RespondantService {
 
 		return respondant;
 	}
+
+	@Override
+	public Page<Respondant> getByAccountId(Long accountId, @NonNull @Min(value = 1) Integer pageNumber, @NonNull @Min(value = 1) @Max(value = 100) Integer pageSize) {
+		Pageable  pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
+
+		Page<Respondant> respondants = respondantRepository.findAllByAccountId(accountId, pageRequest);
+		log.debug("Respondants for AccountId {} for pageNumber {}: {}", accountId, pageNumber, respondants);
+
+		return respondants;
+	}
+
+	@Override
+	public Page<Respondant> getByAccountId(@NonNull Long accountId) {
+		return getByAccountId(accountId, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE);
+	}
+
 
 	@Override
 	public Set<RespondantScore> getAllRespondantScores() {

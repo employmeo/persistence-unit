@@ -3,6 +3,8 @@ package com.employmeo.data.repository;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -16,14 +18,14 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	public Respondant findByRespondantUuid(UUID respondantUuid);
 
 	@Query
-	public List<Respondant> findAllByAccountIdOrderByIdDesc(Long accountId);
+	public Page<Respondant> findAllByAccountId(Long accountId, Pageable  pageRequest);
 
 	@Query
-	public List<Respondant> findAllByAccountIdAndLocationIdOrderByIdDesc(Long accountId, Long locationId);
+	public Page<Respondant> findAllByAccountIdAndLocationId(Long accountId, Long locationId, Pageable  pageRequest);
 
 	@Query
-	public List<Respondant> findAllByAccountIdAndPositionIdOrderByIdDesc(Long accountId, Long positionId);
+	public Page<Respondant> findAllByAccountIdAndPositionId(Long accountId, Long positionId, Pageable  pageRequest);
 
 	@Query
-	public List<Respondant> findAllByAccountIdAndRespondantStatusInOrderByIdDesc(Long accountId, List<Integer> respondantStatuses);
+	public Page<Respondant> findAllByAccountIdAndRespondantStatusIn(Long accountId, List<Integer> respondantStatuses, Pageable  pageRequest);
 }

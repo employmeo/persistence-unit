@@ -45,10 +45,8 @@ public class Respondant implements Serializable {
 	private Long id;
 
 	@Column(name = "respondant_uuid", insertable = true, updatable = false)
-	//@Column(name = "respondant_uuid", insertable = false, updatable = false, columnDefinition = "UUID")
-	//@Convert(converter = UUIDConverter.class)
-	@Convert(disableConversion = true)
-	@Type(type="pg-uuid")
+	@Convert(disableConversion = true)  // hibernate specific mapping
+	@Type(type="pg-uuid") // hibernate specific mapping
 	private UUID respondantUuid;
 
 	// bi-directional many-to-one association to Account

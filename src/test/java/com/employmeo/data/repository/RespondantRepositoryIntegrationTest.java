@@ -8,6 +8,7 @@ import java.util.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -58,57 +59,61 @@ public class RespondantRepositoryIntegrationTest {
 	}
 
 	@Test
-	public void findAllByAccountIdOrderByIdDesc() {
+	public void findAllByAccountId() {
 		Long accountId = 1L;
-
-		List<Respondant> respondants =  respondantRepository.findAllByAccountIdOrderByIdDesc(accountId);
+		Pageable  pageRequest = new PageRequest(0, 5, Sort.Direction.DESC, "id");
+		Page<Respondant> respondants =  respondantRepository.findAllByAccountId(accountId, pageRequest);
 		log.debug("Account filtered Respondants: {}", respondants);
 
 		assertNotNull("Respondant is null", respondants);
-		assertTrue(!respondants.isEmpty());
+		assertTrue(!respondants.getContent().isEmpty());
 
-		log.debug("Total respondants fetched for accountId " + accountId + ": " + respondants.size());
+
+		log.debug("Total respondants fetched for accountId " + accountId + ": " + respondants.getSize());
 	}
 
 	@Test
-	public void findAllByAccountIdAndLocationIdOrderByIdDesc() {
+	public void findAllByAccountIdAndLocationId() {
 		Long accountId = 1L;
 		Long locationId = 1L;
+		Pageable  pageRequest = new PageRequest(0, 5, Sort.Direction.DESC, "id");
 
-		List<Respondant> respondants =  respondantRepository.findAllByAccountIdAndLocationIdOrderByIdDesc(accountId, locationId);
+		Page<Respondant> respondants =  respondantRepository.findAllByAccountIdAndLocationId(accountId, locationId, pageRequest);
 		log.debug("Account and Location filtered Respondants: {}", respondants);
 
 		assertNotNull("Respondant is null", respondants);
-		assertTrue(!respondants.isEmpty());
+		assertTrue(!respondants.getContent().isEmpty());
 
-		log.debug("Total respondants fetched for accountId " + accountId + " and locationId " + locationId + ": " + respondants.size());
+		log.debug("Total respondants fetched for accountId " + accountId + " and locationId " + locationId + ": " + respondants.getSize());
 	}
 
 	@Test
-	public void findAllByAccountIdAndPositionIdOrderByIdDesc() {
+	public void findAllByAccountIdAndPositionId() {
 		Long accountId = 1L;
 		Long positionId = 19L;
+		Pageable  pageRequest = new PageRequest(0, 5, Sort.Direction.DESC, "id");
 
-		List<Respondant> respondants =  respondantRepository.findAllByAccountIdAndPositionIdOrderByIdDesc(accountId, positionId);
+		Page<Respondant> respondants =  respondantRepository.findAllByAccountIdAndPositionId(accountId, positionId, pageRequest);
 		log.debug("Account and Position filtered Respondants: {}", respondants);
 
 		assertNotNull("Respondant is null", respondants);
-		assertTrue(!respondants.isEmpty());
+		assertTrue(!respondants.getContent().isEmpty());
 
-		log.debug("Total respondants fetched for accountId " + accountId + " and positionId " + positionId + ": " + respondants.size());
+		log.debug("Total respondants fetched for accountId " + accountId + " and positionId " + positionId + ": " + respondants.getSize());
 	}
 
 	@Test
-	public void findAllByAccountIdAndRespondantStatusInOrderByIdDesc() {
+	public void findAllByAccountIdAndRespondantStatusIn() {
 		Long accountId = 1L;
 		List<Integer> statuses = Arrays.asList(Respondant.STATUS_COMPLETED, Respondant.STATUS_SCORED, Respondant.STATUS_PREDICTED);
+		Pageable  pageRequest = new PageRequest(0, 5, Sort.Direction.DESC, "id");
 
-		List<Respondant> respondants =  respondantRepository.findAllByAccountIdAndRespondantStatusInOrderByIdDesc(accountId, statuses);
+		Page<Respondant> respondants =  respondantRepository.findAllByAccountIdAndRespondantStatusIn(accountId, statuses, pageRequest);
 		log.debug("Account and Status filtered Respondants: {}", respondants);
 
 		assertNotNull("Respondant is null", respondants);
-		assertTrue(!respondants.isEmpty());
+		assertTrue(!respondants.getContent().isEmpty());
 
-		log.debug("Total respondants fetched for accountId " + accountId + " and statuses " + statuses + ": " + respondants.size());
+		log.debug("Total respondants fetched for accountId " + accountId + " and statuses " + statuses + ": " + respondants.getSize());
 	}
 }
