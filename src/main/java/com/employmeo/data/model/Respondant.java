@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.*;
@@ -106,7 +107,7 @@ public class Respondant implements Serializable {
 	private Long personId;
 
 	// bi-directional many-to-one association to Responses
-	@JsonManagedReference
+	@JsonIgnore
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "respondant", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<Response> responses = new HashSet<>();

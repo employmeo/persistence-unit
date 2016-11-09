@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 
@@ -25,7 +26,7 @@ public class Response implements Serializable {
 	private Long id;
 
 	// bi-directional many-to-one association to Respondant
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "response_respondant_id", insertable = false, updatable = false)
 	private Respondant respondant;
@@ -40,7 +41,7 @@ public class Response implements Serializable {
 	private Integer responseValue;
 
 	// bi-directional many-to-one association to Question
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "response_question_id", insertable = false, updatable = false)
 	private Question question;

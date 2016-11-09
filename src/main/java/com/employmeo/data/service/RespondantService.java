@@ -31,4 +31,6 @@ public interface RespondantService {
 
 	Response saveResponse(Long respondantId, Long questionId, Integer responseValue, String responseText);
 
+	Set<Response> getResponses(@NonNull UUID respondantUuid);
+
 }

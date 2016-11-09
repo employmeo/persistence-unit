@@ -127,4 +127,12 @@ public class RespondantServiceImpl implements RespondantService  {
 
 		return savedResponse;
 	}
+	
+	@Override
+	public Set<Response> getResponses(@NonNull UUID respondantUuid) {
+		Respondant respondant = respondantRepository.findByRespondantUuid(respondantUuid);
+		log.debug("Retrieved for id {} entity {}", respondantUuid, respondant);
+
+		return respondant.getResponses();
+	}
 }
