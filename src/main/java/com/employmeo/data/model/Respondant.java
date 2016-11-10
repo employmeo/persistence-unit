@@ -15,7 +15,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Entity
 @Table(name = "respondants")
 @Data
@@ -164,4 +166,11 @@ public class Respondant implements Serializable {
 	@Column(name = "respondant_hire_date")
 	private Date hireDate;
 
+	@PrePersist
+	void generateRespondantUUID() {
+		if(null == respondantUuid) {
+			respondantUuid = UUID.randomUUID();
+			log.debug("Generating respondantUuid randomly PrePersist as {}", respondantUuid);
+		}
+	}
 }
