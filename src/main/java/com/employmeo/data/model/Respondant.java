@@ -47,7 +47,7 @@ public class Respondant implements Serializable {
 	@Column(name = "respondant_id")
 	private Long id;
 
-	@Column(name = "respondant_uuid", insertable = false, updatable = false)
+	@Column(name = "respondant_uuid", insertable = true, updatable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Convert(disableConversion = true)  // hibernate specific mapping
 	@Type(type="pg-uuid") // hibernate specific mapping

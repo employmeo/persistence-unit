@@ -44,7 +44,14 @@ public class RespondantServiceImpl implements RespondantService  {
 
 		return respondant;
 	}
-
+	
+	@Override
+	public Respondant getRespondantByAccountSurveyIdAndPayrollId(@NonNull Long accountSurveyId, @NonNull String payrollId) {
+		log.debug("Respondant account survey {} and payrolls {}", accountSurveyId, payrollId);
+		Respondant respondant = respondantRepository.findByAccountSurveyIdAndPayrollId(accountSurveyId, payrollId);
+		return respondant;		
+	}
+	
 	@Override
 	public Respondant save(@NonNull Respondant respondant) {
 		Respondant savedRespondant = respondantRepository.save(respondant);

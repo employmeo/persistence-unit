@@ -13,6 +13,8 @@ public interface RespondantService {
 
 	Respondant getRespondant(@NonNull UUID respondantUuid);
 
+	Respondant getRespondantByAccountSurveyIdAndPayrollId(@NonNull Long accountSurveyId, @NonNull String payrollId);
+	
 	Respondant save(@NonNull Respondant respondant);
 
 	Respondant getRespondantById(@NonNull Long respondantId);
