@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.employmeo</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.0.7-SNAPSHOT</version>
+	<version>0.0.8-SNAPSHOT</version>
 	<name>Employmeo Persistence Unit</name>
 	<description>Employmeo persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
@@ -22,6 +22,9 @@
 		<javax-validation.version>1.1.0.Final</javax-validation.version>
 		<springdata-jpa.version>1.10.3.RELEASE</springdata-jpa.version>
 		<jersey-jackson.version>2.23.2</jersey-jackson.version>
+		<dbdeploy.version>3.0M3</dbdeploy.version>
+		<dbdeploy.dbms>pgsql</dbdeploy.dbms>
+		<postgres-version>9.4.1208</postgres-version>		
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -165,6 +168,35 @@
 						</dependency>
 					</dependencies>
 				</plugin>
+			<plugin>
+				<!-- Database change management and versioning plugin -->
+				<!-- http://dbdeploy.com/documentation/getting-started/rules-for-using-dbdeploy/ -->
+				<!-- Usage -->
+				<!-- Generate DB scripts: mvn clean install dbdeploy:db-scripts -->
+				<!-- Apply DB deltas: mvn clean install dbdeploy:update -->
+				<groupId>com.dbdeploy</groupId>
+				<artifactId>maven-dbdeploy-plugin</artifactId>
+				<version>${dbdeploy.version}</version>
+				<configuration>
+					<scriptdirectory>${basedir}/src/main/sql</scriptdirectory>
+					<driver>${jdbc.driverClassName}</driver>
+					<url>${jdbc.url}</url>
+					<userid>${jdbc.username}</userid>
+					<password>${jdbc.password}</password>
+					<dbms>${dbdeploy.dbms}</dbms>
+					<delimiter>;</delimiter>
+					<delimiterType>row</delimiterType>
+					<outputfile>${basedir}/target/dbdeploy-apply.out</outputfile>
+					<undoOutputfile>${basedir}/target/dbdeploy-undo.out</undoOutputfile>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.postgresql</groupId>
+						<artifactId>postgresql</artifactId>
+						<version>${postgres-version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>				
 			</plugins>
 		</pluginManagement>
 		<finalName>${project.artifactId}-${project.version}</finalName>
