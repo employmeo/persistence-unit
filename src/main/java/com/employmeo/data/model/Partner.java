@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "partners")
