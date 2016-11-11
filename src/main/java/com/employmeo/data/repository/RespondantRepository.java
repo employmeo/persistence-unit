@@ -1,5 +1,6 @@
 package com.employmeo.data.repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,5 +32,17 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 
 	@Query
 	public Page<Respondant> findAllByAccountIdAndRespondantStatusIn(Long accountId, List<Integer> respondantStatuses, Pageable  pageRequest);
+
+	@Query
+	public Page<Respondant> findAllByAccountIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+
+	@Query
+	public Page<Respondant> findAllByAccountIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long positionId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+
+	@Query
+	public Page<Respondant> findAllByAccountIdAndLocationIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long locationId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+
+	@Query
+	public Page<Respondant> findAllByAccountIdAndLocationIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long locationId, Long positionId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 
 }

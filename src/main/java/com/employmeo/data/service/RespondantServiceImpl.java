@@ -1,5 +1,6 @@
 package com.employmeo.data.service;
 
+import java.sql.Timestamp;
 import java.util.Set;
 import java.util.UUID;
 
@@ -142,4 +143,54 @@ public class RespondantServiceImpl implements RespondantService  {
 
 		return respondant.getResponses();
 	}
+	
+	@Override
+	public Page<Respondant> getBySearchParams(
+			@NonNull Long accountId,
+			@NonNull Integer statusLow,
+			@NonNull Integer statusHigh,
+			Long locationId,
+			Long positionId,
+			@NonNull Timestamp fromDate,
+			@NonNull Timestamp toDate) {
+		
+		return getBySearchParams(accountId,
+				   statusLow, statusHigh,
+				   locationId,
+				   positionId,
+				   fromDate, toDate,
+				   DEFAULT_PAGE_NUMBER,
+				   DEFAULT_PAGE_SIZE);
+	}
+	
+	@Override
+	public Page<Respondant> getBySearchParams(
+			@NonNull Long accountId,
+			@NonNull Integer statusLow,
+			@NonNull Integer statusHigh,
+			Long locationId,
+			Long positionId,
+			@NonNull Timestamp fromDate,
+			@NonNull Timestamp toDate,
+			@NonNull @Min(value = 1) Integer pageNumber, 
+			@NonNull @Min(value = 1) @Max(value = 100) Integer pageSize
+			) {
+		
+		Pageable  pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
+		
+		Page<Respondant> respondants = null;
+		
+		if ((locationId != null) && (positionId != null)) {
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);		
+		} else if ((locationId == null) && (positionId == null)) {		
+			respondants = respondantRepository.findAllByAccountIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, statusLow, statusHigh, fromDate, toDate, pageRequest);		
+		} else if (locationId == null) {
+			respondants = respondantRepository.findAllByAccountIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);					
+		} else {
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, statusLow, statusHigh, fromDate, toDate, pageRequest);					
+		}
+		
+	    return respondants;	
+	};
+	
 }
