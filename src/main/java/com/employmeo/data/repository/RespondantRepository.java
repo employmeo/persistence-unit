@@ -34,15 +34,15 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	public Page<Respondant> findAllByAccountIdAndRespondantStatusIn(Long accountId, List<Integer> respondantStatuses, Pageable  pageRequest);
 
 	@Query
-	public Page<Respondant> findAllByAccountIdAndStatusBetweenAndCreateDateBetween(Long accountId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+	public Page<Respondant> findAllByAccountIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 
 	@Query
-	public Page<Respondant> findAllByAccountIdAndPositionIdAndStatusBetweenAndCreateDateBetween(Long accountId, Long positionId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+	public Page<Respondant> findAllByAccountIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long positionId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 
 	@Query
-	public Page<Respondant> findAllByAccountIdAndLocationIdAndStatusBetweenAndCreateDateBetween(Long accountId, Long locationId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+	public Page<Respondant> findAllByAccountIdAndLocationIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long locationId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 
 	@Query
-	public Page<Respondant> findAllByAccountIdAndLocationIdAndPositionIdAndStatusBetweenAndCreateDateBetween(Long accountId, Long locationId, Long positionId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+	public Page<Respondant> findAllByAccountIdAndLocationIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long locationId, Long positionId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 
 }

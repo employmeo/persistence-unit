@@ -181,13 +181,13 @@ public class RespondantServiceImpl implements RespondantService  {
 		Page<Respondant> respondants = null;
 		
 		if ((locationId != null) && (positionId != null)) {
-			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndPositionIdAndStatusBetweenAndCreateDateBetween(accountId, locationId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);		
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);		
 		} else if ((locationId == null) && (positionId == null)) {		
-			respondants = respondantRepository.findAllByAccountIdAndStatusBetweenAndCreateDateBetween(accountId, statusLow, statusHigh, fromDate, toDate, pageRequest);		
+			respondants = respondantRepository.findAllByAccountIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, statusLow, statusHigh, fromDate, toDate, pageRequest);		
 		} else if (locationId == null) {
-			respondants = respondantRepository.findAllByAccountIdAndPositionIdAndStatusBetweenAndCreateDateBetween(accountId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);					
+			respondants = respondantRepository.findAllByAccountIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);					
 		} else {
-			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndStatusBetweenAndCreateDateBetween(accountId, locationId, statusLow, statusHigh, fromDate, toDate, pageRequest);					
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, statusLow, statusHigh, fromDate, toDate, pageRequest);					
 		}
 		
 	    return respondants;	
