@@ -34,7 +34,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	private QuestionRepository questionRepository;
 
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
-	private static final Integer DEFAULT_PAGE_SIZE = 10;
+	private static final Integer DEFAULT_PAGE_SIZE = 100;
 
 
 
@@ -173,7 +173,7 @@ public class RespondantServiceImpl implements RespondantService  {
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate,
 			@NonNull @Min(value = 1) Integer pageNumber, 
-			@NonNull @Min(value = 1) @Max(value = 100) Integer pageSize
+			@NonNull @Min(value = 1) @Max(value = 500) Integer pageSize
 			) {
 		
 		Pageable  pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");

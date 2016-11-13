@@ -13,5 +13,7 @@ public interface UserService {
 	User save(@NonNull User user);
 
 	User getUserById(@NonNull Long userId);
+	
+	User getUserByEmail(@NonNull String email);
 
 }

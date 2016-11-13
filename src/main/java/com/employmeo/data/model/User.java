@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 
@@ -46,6 +47,7 @@ public class User implements Serializable {
 	@Column(name = "USER_NAME")
 	private String userName;
 
+	@JsonIgnore
 	@Column(name = "USER_PASSWORD")
 	private String password;
 

@@ -44,4 +44,12 @@ public class UserServiceImpl implements UserService {
 
 		return user;
 	}
+	
+	@Override
+	public User getUserByEmail(@NonNull String email) {
+		User user = userRepository.findByEmail(email);
+		log.debug("Retrieved for email {} entity {}", email, user);
+
+		return user;
+	}	
 }
