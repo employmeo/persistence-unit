@@ -8,6 +8,7 @@ public interface CorefactorService {
 
 	Set<Corefactor> getAllCorefactors();
 	Corefactor findCorefactorById(Long corefactorId);
+	Corefactor getByForeignId(String foreignId);
 	Corefactor save(Corefactor corefactor);
 
 }
