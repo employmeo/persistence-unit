@@ -101,7 +101,7 @@ public class Respondant implements Serializable {
 	private Long locationId;
 
 	// bi-directional many-to-one association to Person
-	@JsonBackReference
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "respondant_person_id", insertable=false, updatable=false)
 	private Person person;
@@ -121,6 +121,12 @@ public class Respondant implements Serializable {
 	@OneToMany(mappedBy = "respondant", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<RespondantScore> respondantScores = new HashSet<>();
 
+	// bi-directional many-to-one association to Responses
+	@JsonManagedReference
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "respondant", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	private Set<Prediction> predictions = new HashSet<>();
+	
 	// Scoring info
 	@Column(name = "respondant_profile")
 	private String profileRecommendation;
