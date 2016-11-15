@@ -1,8 +1,7 @@
 package com.employmeo.data.service;
 
 import java.sql.Timestamp;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -45,14 +44,14 @@ public class RespondantServiceImpl implements RespondantService  {
 
 		return respondant;
 	}
-	
+
 	@Override
 	public Respondant getRespondantByAccountSurveyIdAndPayrollId(@NonNull Long accountSurveyId, @NonNull String payrollId) {
 		log.debug("Respondant account survey {} and payrolls {}", accountSurveyId, payrollId);
 		Respondant respondant = respondantRepository.findByAccountSurveyIdAndPayrollId(accountSurveyId, payrollId);
-		return respondant;		
+		return respondant;
 	}
-	
+
 	@Override
 	public Respondant save(@NonNull Respondant respondant) {
 		Respondant savedRespondant = respondantRepository.save(respondant);
@@ -135,7 +134,7 @@ public class RespondantServiceImpl implements RespondantService  {
 
 		return savedResponse;
 	}
-	
+
 	@Override
 	public Set<Response> getResponses(@NonNull UUID respondantUuid) {
 		Respondant respondant = respondantRepository.findByRespondantUuid(respondantUuid);
@@ -143,7 +142,7 @@ public class RespondantServiceImpl implements RespondantService  {
 
 		return respondant.getResponses();
 	}
-	
+
 	@Override
 	public Page<Respondant> getBySearchParams(
 			@NonNull Long accountId,
@@ -153,7 +152,7 @@ public class RespondantServiceImpl implements RespondantService  {
 			Long positionId,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate) {
-		
+
 		return getBySearchParams(accountId,
 				   statusLow, statusHigh,
 				   locationId,
@@ -162,7 +161,7 @@ public class RespondantServiceImpl implements RespondantService  {
 				   DEFAULT_PAGE_NUMBER,
 				   DEFAULT_PAGE_SIZE);
 	}
-	
+
 	@Override
 	public Page<Respondant> getBySearchParams(
 			@NonNull Long accountId,
@@ -172,25 +171,33 @@ public class RespondantServiceImpl implements RespondantService  {
 			Long positionId,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate,
-			@NonNull @Min(value = 1) Integer pageNumber, 
+			@NonNull @Min(value = 1) Integer pageNumber,
 			@NonNull @Min(value = 1) @Max(value = 500) Integer pageSize
 			) {
-		
+
 		Pageable  pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
-		
+
 		Page<Respondant> respondants = null;
-		
+
 		if ((locationId != null) && (positionId != null)) {
-			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);		
-		} else if ((locationId == null) && (positionId == null)) {		
-			respondants = respondantRepository.findAllByAccountIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, statusLow, statusHigh, fromDate, toDate, pageRequest);		
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);
+		} else if ((locationId == null) && (positionId == null)) {
+			respondants = respondantRepository.findAllByAccountIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		} else if (locationId == null) {
-			respondants = respondantRepository.findAllByAccountIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);					
+			respondants = respondantRepository.findAllByAccountIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		} else {
-			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, statusLow, statusHigh, fromDate, toDate, pageRequest);					
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		}
-		
-	    return respondants;	
+
+	    return respondants;
 	};
-	
+
+	@Override
+	public List<Respondant> getAnalysisPendingRespondants() {
+		List<Integer> scoringEligibleRespondantStatuses = Arrays.asList(Respondant.STATUS_COMPLETED, Respondant.STATUS_SCORED);
+		List<Respondant> scoringEligibleRespondants = respondantRepository.findAllByRespondantStatusInOrderByFinishTimeDesc(scoringEligibleRespondantStatuses);
+
+		log.debug("Returning {} scoring eligible respondants", scoringEligibleRespondants.size());
+		return scoringEligibleRespondants;
+	}
 }

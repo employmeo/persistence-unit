@@ -17,7 +17,7 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 
 	@Query
 	public Respondant findByRespondantUuid(UUID respondantUuid);
-	
+
 	@Query
 	public Respondant findByAccountSurveyIdAndPayrollId(Long accountSurveyId, String payrollId);
 
@@ -44,5 +44,8 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 
 	@Query
 	public Page<Respondant> findAllByAccountIdAndLocationIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long locationId, Long positionId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+
+	@Query
+	public List<Respondant> findAllByRespondantStatusInOrderByFinishTimeDesc(List<Integer> scoringEligibleRespondantStatuses);
 
 }

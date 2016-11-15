@@ -1,8 +1,7 @@
 package com.employmeo.data.service;
 
 import java.sql.Timestamp;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -18,7 +17,7 @@ public interface RespondantService {
 	Respondant getRespondant(@NonNull UUID respondantUuid);
 
 	Respondant getRespondantByAccountSurveyIdAndPayrollId(@NonNull Long accountSurveyId, @NonNull String payrollId);
-	
+
 	Respondant save(@NonNull Respondant respondant);
 
 	Respondant getRespondantById(@NonNull Long respondantId);
@@ -38,7 +37,9 @@ public interface RespondantService {
 	Response saveResponse(Long respondantId, Long questionId, Integer responseValue, String responseText);
 
 	Set<Response> getResponses(@NonNull UUID respondantUuid);
-	
+
+	List<Respondant> getAnalysisPendingRespondants();
+
 	Page<Respondant> getBySearchParams(
 			@NonNull Long accountId,
 			@NonNull Integer statusLow,
@@ -47,7 +48,7 @@ public interface RespondantService {
 			Long positionId,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate);
-	
+
 	public Page<Respondant> getBySearchParams(
 			@NonNull Long accountId,
 			@NonNull Integer statusLow,
@@ -56,7 +57,7 @@ public interface RespondantService {
 			Long positionId,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate,
-			@NonNull @Min(value = 1) Integer pageNumber, 
+			@NonNull @Min(value = 1) Integer pageNumber,
 			@NonNull @Min(value = 1) @Max(value = 100) Integer pageSize
 			);
 }
