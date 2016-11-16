@@ -19,6 +19,10 @@ public interface RespondantService {
 
 	Respondant getRespondantByAccountSurveyIdAndPayrollId(@NonNull Long accountSurveyId, @NonNull String payrollId);
 	
+	Respondant getRespondantByAtsId(@NonNull String atsId);
+	
+	Respondant getRespondantByAccountIdAndAtsId(@NonNull Long accountId, @NonNull String atsId);
+	
 	Respondant save(@NonNull Respondant respondant);
 
 	Respondant getRespondantById(@NonNull Long respondantId);

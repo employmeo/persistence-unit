@@ -44,4 +44,18 @@ public class PersonServiceImpl implements PersonService  {
 
 		return person;
 	}
+
+	@Override
+	public Person findByAtsId(String atsId) {
+		Person person = personRepository.findByAtsId(atsId);
+		log.debug("Retrieved for atsid {} entity {}", atsId, person);
+		return null;
+	}
+
+	@Override
+	public Person findByAccountIdAndAtsId(Long accountId, String atsId) {
+		Person person = personRepository.findByAccountIdAndAtsId(accountId, atsId);
+		log.debug("Retrieved for account {} and atsid {} entity {}",accountId, atsId, person);
+		return person;
+	}
 }

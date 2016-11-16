@@ -48,9 +48,20 @@ public class RespondantServiceImpl implements RespondantService  {
 	
 	@Override
 	public Respondant getRespondantByAccountSurveyIdAndPayrollId(@NonNull Long accountSurveyId, @NonNull String payrollId) {
-		log.debug("Respondant account survey {} and payrolls {}", accountSurveyId, payrollId);
-		Respondant respondant = respondantRepository.findByAccountSurveyIdAndPayrollId(accountSurveyId, payrollId);
-		return respondant;		
+		log.debug("Respondant account survey {} and payrollId {}", accountSurveyId, payrollId);
+		return respondantRepository.findByAccountSurveyIdAndPayrollId(accountSurveyId, payrollId);
+	}
+	
+	@Override
+	public Respondant getRespondantByAtsId(String atsId) {
+		log.debug("Respondant by atsId {}", atsId);
+		return respondantRepository.findByAtsId(atsId);
+	}
+	
+	@Override
+	public Respondant getRespondantByAccountIdAndAtsId(Long accountId, String atsId) {
+		log.debug("Respondant account {} and atsId {}", accountId, atsId);
+		return respondantRepository.findByAccountIdAndAtsId(accountId, atsId);
 	}
 	
 	@Override
@@ -191,6 +202,6 @@ public class RespondantServiceImpl implements RespondantService  {
 		}
 		
 	    return respondants;	
-	};
-	
+	}
+
 }

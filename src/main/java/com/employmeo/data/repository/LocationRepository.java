@@ -4,12 +4,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import com.employmeo.data.model.Partner;
+import com.employmeo.data.model.Location;
 
 @Repository
-public interface PartnerRepository extends PagingAndSortingRepository<Partner, Long> {
+public interface LocationRepository extends PagingAndSortingRepository<Location, Long> {
 	
 	@Query
-	Partner findByPartnerName(String partnerName);
-
+	public Location findByAccountIdAndAtsId(Long accountId, String atsId);
+	
 }

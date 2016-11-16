@@ -20,7 +20,13 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	
 	@Query
 	public Respondant findByAccountSurveyIdAndPayrollId(Long accountSurveyId, String payrollId);
-
+	
+	@Query
+	public Respondant findByAtsId(String atsId);
+	
+	@Query
+	public Respondant findByAccountIdAndAtsId(Long accountId, String atsId);
+	
 	@Query
 	public Page<Respondant> findAllByAccountId(Long accountId, Pageable  pageRequest);
 
