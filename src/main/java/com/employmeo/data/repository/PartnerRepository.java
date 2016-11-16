@@ -12,4 +12,7 @@ public interface PartnerRepository extends PagingAndSortingRepository<Partner, L
 	@Query
 	Partner findByPartnerName(String partnerName);
 
+	@Query
+	Partner findByLogin(String login);
+
 }

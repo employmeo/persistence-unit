@@ -13,7 +13,4 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Lon
 	@Query
 	public Person findByAtsId(String atsId);
 	
-	@Query
-	public Person findByAccountIdAndAtsId(Long accountId, String atsId);
-	
 }

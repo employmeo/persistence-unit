@@ -10,9 +10,7 @@ public interface PersonService {
 
 	Set<Person> getAllPersons();
 	
-	Person findByAtsId(String atsId);
-	
-	Person findByAccountIdAndAtsId(Long accountId, String atsId);
+	Person getPersonByAtsId(String atsId);
 
 	Person save(@NonNull Person person);
 
