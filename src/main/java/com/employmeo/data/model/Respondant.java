@@ -82,7 +82,7 @@ public class Respondant implements Serializable {
 	private Partner partner;
 
 	@Column(name = "respondant_partner_id", insertable = true, updatable = true)
-	private Integer partnerId;
+	private Long partnerId;
 
 	@JsonBackReference
 	@ManyToOne
