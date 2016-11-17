@@ -13,5 +13,8 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
 	
 	@Query
 	public Account findByAtsId(String atsId);
+	
+	@Query
+	public Account findByAccountName(String accountName);
 
 }
