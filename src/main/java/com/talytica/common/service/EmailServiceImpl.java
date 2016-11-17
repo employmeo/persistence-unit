@@ -139,7 +139,7 @@ public class EmailServiceImpl implements EmailService {
 
 		Personalization pers = new Personalization();
 		pers.addSubstitution("[LINK]", link );
-		pers.addSubstitution("[FNAME]", fullname);
+		pers.addSubstitution("[FULL_NAME]", fullname);
 		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
 		pers.addTo(new Email(respondant.getEmailRecipient()));		
 		
@@ -174,10 +174,10 @@ public class EmailServiceImpl implements EmailService {
 		String link = null;
 		try {
 			link = new URL(
-					BASE_SURVEY_URL + "/take_assessment.html" + "?&respondant_uuid=" + respondant.getRespondantUuid())
+					BASE_SURVEY_URL + "/take" + "?&respondant_uuid=" + respondant.getRespondantUuid())
 							.toString();
 		} catch (Exception e) {
-			link = BASE_SURVEY_URL + "/take_assessment.html" + "?&respondant_uuid=" + respondant.getRespondantUuid();
+			link = BASE_SURVEY_URL + "/take" + "?&respondant_uuid=" + respondant.getRespondantUuid();
 		}
 		return link.toString();
 	}
@@ -186,10 +186,10 @@ public class EmailServiceImpl implements EmailService {
 		String link = null;
 		try {
 			link = new URL(
-					BASE_PORTAL_URL + "/respondant_score.jsp" + "?&respondant_uuid=" + respondant.getRespondantUuid())
+					BASE_PORTAL_URL + "/portal.htm?&component=respondant_score&respondantUuid=" + respondant.getRespondantUuid())
 							.toString();
 		} catch (Exception e) {
-			link = BASE_PORTAL_URL + "/respondant_score.jsp" + "?&respondant_uuid=" + respondant.getRespondantUuid();
+			link = BASE_PORTAL_URL + "/portal.htm?&component=respondant_score&respondantUuid=" + respondant.getRespondantUuid();
 		}
 		return link.toString();
 	}
@@ -197,10 +197,10 @@ public class EmailServiceImpl implements EmailService {
 	public String getRenderLink(Respondant respondant) {
 		String link = null;
 		try {
-			link = new URL(BASE_PORTAL_URL + "/render.html" + "?&scores=" + respondant.getRespondantUuid())
+			link = new URL(BASE_PORTAL_URL + "/render.htm?&respondant_uuid=" + respondant.getRespondantUuid())
 					.toString();
 		} catch (Exception e) {
-			link = BASE_PORTAL_URL + "/render.html" + "?&scores=" + respondant.getRespondantUuid();
+			link = BASE_PORTAL_URL + "/render.htm?&respondant_uuid=" + respondant.getRespondantUuid();
 		}
 		return link.toString();
 	}
