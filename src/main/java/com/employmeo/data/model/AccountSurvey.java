@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Type;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.*;
@@ -26,6 +28,12 @@ public class AccountSurvey implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "as_id")
 	private Long id;
+
+	@Column(name = "as_uuid")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Convert(disableConversion = true)  // hibernate specific mapping
+	@Type(type="pg-uuid") // hibernate specific mapping
+	private UUID uuId;
 
 	@JsonBackReference
 	@ManyToOne
@@ -59,9 +67,6 @@ public class AccountSurvey implements Serializable {
 	@Column(name = "as_status")
 	private Integer accountSurveyStatus;
 	
-	@Column(name = "as_uuid")
-	private UUID uuId;
-
 	@ManyToOne
 	@JoinColumn(name = "as_survey_id", insertable = false, updatable = false)
 	private Survey survey;
