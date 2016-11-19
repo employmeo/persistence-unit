@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employmeo.data.model.AccountSurvey;
-import com.employmeo.data.model.Respondant;
 import com.employmeo.data.repository.AccountSurveyRepository;
 
 import lombok.NonNull;
@@ -30,7 +29,7 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 
 	@Override
 	public AccountSurvey getAccountSurveyByUuid(UUID asUuid) {
-		AccountSurvey accountSurvey = accountSurveyRepository.findByAsUuid(asUuid);
+		AccountSurvey accountSurvey = accountSurveyRepository.findByUuId(asUuid);
 		log.debug("Account Survey by uuid {} : {}", asUuid, accountSurvey);
 
 		return accountSurvey;

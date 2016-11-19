@@ -12,6 +12,6 @@ import com.employmeo.data.model.AccountSurvey;
 public interface AccountSurveyRepository extends PagingAndSortingRepository<AccountSurvey, Long> {
 
 	@Query
-	public AccountSurvey findByAsUuid(UUID asUuid);
+	public AccountSurvey findByUuId(UUID UuId);
 	
 }
