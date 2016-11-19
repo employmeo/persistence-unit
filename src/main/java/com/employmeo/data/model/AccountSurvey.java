@@ -1,13 +1,16 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Entity
 @Table(name = "account_surveys")
 @Data
@@ -41,14 +44,23 @@ public class AccountSurvey implements Serializable {
 	@Column(name = "as_preamble_text")
 	private String preambleText;
 
+	@Column(name = "as_preamble_media")
+	private String preambleMedia;
+
 	@Column(name = "as_thankyou_text")
 	private String thankyouText;
+
+	@Column(name = "as_thankyou_media")
+	private String thankyouMedia;
 
 	@Column(name = "as_redirect_page")
 	private String redirectPage;
 
 	@Column(name = "as_status")
 	private Integer accountSurveyStatus;
+	
+	@Column(name = "as_uuid")
+	private UUID uuId;
 
 	@ManyToOne
 	@JoinColumn(name = "as_survey_id", insertable = false, updatable = false)
@@ -56,5 +68,12 @@ public class AccountSurvey implements Serializable {
 
 	@Column(name = "as_survey_id")
 	private Long surveyId;
-
+	
+	@PrePersist
+	void generateUUID() {
+		if(null == uuId) {
+			uuId = UUID.randomUUID();
+			log.debug("Generating account survey uuId randomly PrePersist as {}", uuId);
+		}
+	}
 }
