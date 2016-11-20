@@ -41,6 +41,9 @@ public class Question implements Serializable {
 
 	@Column(name = "QUESTION_TEXT")
 	private String questionText;
+	
+	@Column(name = "QUESTION_MEDIA")
+	private String questionMedia;
 
 	@Column(name = "QUESTION_TYPE")
 	private Integer questionType;

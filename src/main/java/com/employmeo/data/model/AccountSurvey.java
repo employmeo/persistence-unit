@@ -1,13 +1,18 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Entity
 @Table(name = "account_surveys")
 @Data
@@ -23,6 +28,12 @@ public class AccountSurvey implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "as_id")
 	private Long id;
+
+	@Column(name = "as_uuid")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Convert(disableConversion = true)  // hibernate specific mapping
+	@Type(type="pg-uuid") // hibernate specific mapping
+	private UUID uuId;
 
 	@JsonBackReference
 	@ManyToOne
@@ -41,20 +52,33 @@ public class AccountSurvey implements Serializable {
 	@Column(name = "as_preamble_text")
 	private String preambleText;
 
+	@Column(name = "as_preamble_media")
+	private String preambleMedia;
+
 	@Column(name = "as_thankyou_text")
 	private String thankyouText;
+
+	@Column(name = "as_thankyou_media")
+	private String thankyouMedia;
 
 	@Column(name = "as_redirect_page")
 	private String redirectPage;
 
 	@Column(name = "as_status")
 	private Integer accountSurveyStatus;
-
+	
 	@ManyToOne
 	@JoinColumn(name = "as_survey_id", insertable = false, updatable = false)
 	private Survey survey;
 
 	@Column(name = "as_survey_id")
 	private Long surveyId;
-
+	
+	@PrePersist
+	void generateUUID() {
+		if(null == uuId) {
+			uuId = UUID.randomUUID();
+			log.debug("Generating account survey uuId randomly PrePersist as {}", uuId);
+		}
+	}
 }

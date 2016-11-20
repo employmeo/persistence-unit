@@ -37,6 +37,9 @@ public class Response implements Serializable {
 	@Column(name = "response_text")
 	private String responseText;
 
+	@Column(name = "response_media")
+	private String responseMedia;
+	
 	@Column(name = "response_value")
 	private Integer responseValue;
 
