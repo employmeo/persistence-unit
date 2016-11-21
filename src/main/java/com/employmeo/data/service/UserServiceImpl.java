@@ -51,5 +51,10 @@ public class UserServiceImpl implements UserService {
 		log.debug("Retrieved for email {} entity {}", email, user);
 
 		return user;
+	}
+
+	@Override
+	public Set<User> getUsersForAccount(Long accountId) {
+		return userRepository.findAllByUserAccountId(accountId);
 	}	
 }

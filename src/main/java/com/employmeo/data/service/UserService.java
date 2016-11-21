@@ -9,6 +9,8 @@ import lombok.NonNull;
 public interface UserService {
 
 	Set<User> getAllUsers();
+	
+	Set<User> getUsersForAccount(Long accountId);
 
 	User save(@NonNull User user);
 

@@ -1,7 +1,7 @@
 package com.employmeo.data.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.employmeo.data.model.Criterion;
 import com.employmeo.data.model.Grade;
 import com.employmeo.data.model.Grader;
 import com.employmeo.data.model.Question;
@@ -38,6 +39,9 @@ public class GraderServiceImpl implements GraderService {
 	@Autowired
 	CriterionRepository criterionRepository;
 	
+	@Autowired
+	QuestionService questionService;
+	
 	@Override
 	public Grader getGraderByUuid(UUID uuId) {
 		return graderRepository.findByUuId(uuId);
@@ -61,35 +65,42 @@ public class GraderServiceImpl implements GraderService {
 		return graderRepository.findAllByUserId(userId, pageRequest);
 	}
 
-
 	@Override
 	public List<Question> getQuestionsByGraderUuid(UUID uuId) {
-		// TODO Auto-generated method stub
-		return null;
+		Grader grader = graderRepository.findByUuId(uuId);
+		return getCriteriaByQuestionId(grader.getQuestionId());
+	}
+	
+	@Override
+	public List<Question> getCriteriaByQuestionId(Long questionId) {
+		List<Criterion> criteria =  criterionRepository.findAllBySurveyQuestionIdOrderBySequenceAsc(questionId);
+		List<Question> questions = new ArrayList<Question>();
+		for (Criterion criterion : criteria) {
+			Question question = questionService.getQuestionById(criterion.getGraderQuestionId());
+			questions.add(question);
+		}
+		return questions;
 	}
 
 	@Override
 	public List<Question> getQuestionsByGraderId(Long graderId) {
-		// TODO Auto-generated method stub
-		return null;
+		Grader grader = graderRepository.findOne(graderId);
+		return getCriteriaByQuestionId(grader.getQuestionId());
 	}
 
 	@Override
 	public Grader save(Grader grader) {
-		// TODO Auto-generated method stub
-		return null;
+		Grader savedGrader = graderRepository.save(grader);
+		log.debug("Saved Grader {}", savedGrader);
+		return savedGrader;
 	}
 
 	@Override
 	public Grade saveGrade(Grade grade) {
-		// TODO Auto-generated method stub
-		return null;
+		Grade savedGrade = gradeRepository.save(grade);
+		log.debug("Saved Grader {}", savedGrade);
+		return savedGrade;
 	}
 
-	@Override
-	public List<Question> getCriteriaByQuestionId(Long questionId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }
