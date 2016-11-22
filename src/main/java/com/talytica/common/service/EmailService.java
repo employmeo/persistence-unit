@@ -23,5 +23,7 @@ public interface EmailService {
 	public String getRenderLink(Respondant respondant);
 	
 	public String getForgotPasswordLink(User user);
+	
+	public String getVerifyEmailLink(User user);
 
 }
