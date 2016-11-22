@@ -31,6 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 public class Grader implements Serializable {
 	
+	public static final int STATUS_NEW = 1;
+	public static final int STATUS_STARTED = 5;
+	public static final int STATUS_COMPLETED = 10;
+	public static final int STATUS_IGNORED = 20;
+	public static final int TYPE_USER = 1;
+	public static final int TYPE_PERSON = 2;
+	
 	@Transient
 	private static final long serialVersionUID = -8654344203277805503L;
 
