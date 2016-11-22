@@ -1,11 +1,12 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 
@@ -25,8 +26,9 @@ public class User implements Serializable {
 	@Column(name = "USER_ID")
 	private Long id;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "MODIFIED_DATE")
-	private Timestamp modifiedDate;
+	private Date modifiedDate;
 
 	@Column(name = "USER_AVATAR_URL")
 	private String avatarUrl;
@@ -46,6 +48,7 @@ public class User implements Serializable {
 	@Column(name = "USER_NAME")
 	private String userName;
 
+	@JsonIgnore
 	@Column(name = "USER_PASSWORD")
 	private String password;
 
@@ -64,5 +67,10 @@ public class User implements Serializable {
 	// direct access to account id
 	@Column(name = "USER_ACCOUNT_ID", updatable = false, insertable = true)
 	private Long userAccountId;
+	
+    @PrePersist
+    protected void onPersist() {
+    	modifiedDate = new Date();
+    }
 
 }

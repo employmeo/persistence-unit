@@ -9,6 +9,8 @@ import lombok.NonNull;
 public interface PersonService {
 
 	Set<Person> getAllPersons();
+	
+	Person getPersonByAtsId(String atsId);
 
 	Person save(@NonNull Person person);
 

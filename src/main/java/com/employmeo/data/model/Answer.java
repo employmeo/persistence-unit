@@ -33,6 +33,9 @@ public class Answer implements Serializable {
 	@Column(name = "ANSWER_TEXT")
 	private String answerText;
 
+	@Column(name = "ANSWER_MEDIA")
+	private String answerMedia;
+
 	@Column(name = "ANSWER_VALUE")
 	private Integer answerValue;
 

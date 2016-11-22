@@ -41,9 +41,17 @@ public class CorefactorServiceImpl implements CorefactorService {
 	public Corefactor save(@NonNull Corefactor corefactor) {
 		log.debug("Saving corefactor {}", corefactor);
 		Corefactor savedCorefactor = corefactorRepository.save(corefactor);
-		log.debug("Saved corefactor {}", corefactor);
+		log.debug("Saved corefactor {}", savedCorefactor);
 
 		return savedCorefactor;
+	}
+
+	@Override
+	public Corefactor getByForeignId(String foreignId) {
+		Corefactor corefactor = corefactorRepository.findByForeignId(foreignId);
+		log.debug("Retrieved for foreignId {}, corefactors :", foreignId, corefactor);
+
+		return corefactor;
 	}
 
 }

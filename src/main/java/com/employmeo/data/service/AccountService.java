@@ -12,6 +12,8 @@ public interface AccountService {
 	Set<Account> getAllAccounts();
 
 	Account getAccountById(@NonNull Long accountId);
+	
+	Account getAccountByAtsId(@NonNull String atsId);
 
 	Account save(@NonNull Account account);
 

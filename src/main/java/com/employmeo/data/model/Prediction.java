@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.*;
 
@@ -33,7 +34,7 @@ public class Prediction implements Serializable {
 	@Column(name = "respondant_id")
 	private Long respondantId;
 
-	@JsonBackReference
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "position_prediction_config_id", insertable=false, updatable=false)
 	private PositionPredictionConfiguration positionPredictionConfig;

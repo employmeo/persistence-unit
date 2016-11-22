@@ -11,6 +11,7 @@ import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.*;
 
@@ -38,7 +39,7 @@ public class PositionPredictionConfiguration implements Serializable {
 	@Column(name = "position_id")
 	private Long positionId;
 
-	@JsonBackReference
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "prediction_target_id", insertable=false, updatable=false)
 	private PredictionTarget predictionTarget;

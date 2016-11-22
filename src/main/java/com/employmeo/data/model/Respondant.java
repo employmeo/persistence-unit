@@ -16,7 +16,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Entity
 @Table(name = "respondants")
 @Data
@@ -45,7 +47,7 @@ public class Respondant implements Serializable {
 	@Column(name = "respondant_id")
 	private Long id;
 
-	@Column(name = "respondant_uuid", insertable = false, updatable = false)
+	@Column(name = "respondant_uuid", insertable = true, updatable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Convert(disableConversion = true)  // hibernate specific mapping
 	@Type(type="pg-uuid") // hibernate specific mapping
@@ -80,7 +82,7 @@ public class Respondant implements Serializable {
 	private Partner partner;
 
 	@Column(name = "respondant_partner_id", insertable = true, updatable = true)
-	private Integer partnerId;
+	private Long partnerId;
 
 	@JsonBackReference
 	@ManyToOne
@@ -99,7 +101,7 @@ public class Respondant implements Serializable {
 	private Long locationId;
 
 	// bi-directional many-to-one association to Person
-	@JsonBackReference
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "respondant_person_id", insertable=false, updatable=false)
 	private Person person;
@@ -119,6 +121,12 @@ public class Respondant implements Serializable {
 	@OneToMany(mappedBy = "respondant", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<RespondantScore> respondantScores = new HashSet<>();
 
+	// bi-directional many-to-one association to Responses
+	@JsonManagedReference
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "respondant", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	private Set<Prediction> predictions = new HashSet<>();
+	
 	// Scoring info
 	@Column(name = "respondant_profile")
 	private String profileRecommendation;
@@ -166,4 +174,11 @@ public class Respondant implements Serializable {
 	@Column(name = "respondant_hire_date")
 	private Date hireDate;
 
+	@PrePersist
+	void generateRespondantUUID() {
+		if(null == respondantUuid) {
+			respondantUuid = UUID.randomUUID();
+			log.debug("Generating respondantUuid randomly PrePersist as {}", respondantUuid);
+		}
+	}
 }

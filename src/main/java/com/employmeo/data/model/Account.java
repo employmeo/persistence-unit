@@ -68,13 +68,13 @@ public class Account implements Serializable {
 	// bi-directional many-to-one association to Survey
 	@JsonIgnore
 	@Fetch(FetchMode.SUBSELECT)
-	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<AccountSurvey> accountSurveys = new HashSet<>();
 
 	// bi-directional many-to-one association to Position
 	@JsonIgnore
 	@Fetch(FetchMode.SUBSELECT)
-	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<Position> positions = new HashSet<>();
 
 	// bi-directional many-to-one association to Position

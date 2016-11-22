@@ -44,4 +44,11 @@ public class PersonServiceImpl implements PersonService  {
 
 		return person;
 	}
+
+	@Override
+	public Person getPersonByAtsId(String atsId) {
+		Person person = personRepository.findByAtsId(atsId);
+		log.debug("Retrieved for atsid {} entity {}", atsId, person);
+		return null;
+	}
 }

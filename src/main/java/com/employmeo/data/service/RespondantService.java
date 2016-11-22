@@ -1,7 +1,10 @@
 package com.employmeo.data.service;
 
-import java.util.Set;
-import java.util.UUID;
+import java.sql.Timestamp;
+import java.util.*;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import org.springframework.data.domain.Page;
 
@@ -12,6 +15,12 @@ import lombok.NonNull;
 public interface RespondantService {
 
 	Respondant getRespondant(@NonNull UUID respondantUuid);
+
+	Respondant getRespondantByAccountSurveyIdAndPayrollId(@NonNull Long accountSurveyId, @NonNull String payrollId);
+	
+	Respondant getRespondantByAtsId(@NonNull String atsId);
+	
+	Respondant getRespondantByAccountIdAndAtsId(@NonNull Long accountId, @NonNull String atsId);
 
 	Respondant save(@NonNull Respondant respondant);
 
@@ -33,4 +42,26 @@ public interface RespondantService {
 
 	Set<Response> getResponses(@NonNull UUID respondantUuid);
 
+	List<Respondant> getAnalysisPendingRespondants();
+
+	Page<Respondant> getBySearchParams(
+			@NonNull Long accountId,
+			@NonNull Integer statusLow,
+			@NonNull Integer statusHigh,
+			Long locationId,
+			Long positionId,
+			@NonNull Timestamp fromDate,
+			@NonNull Timestamp toDate);
+
+	public Page<Respondant> getBySearchParams(
+			@NonNull Long accountId,
+			@NonNull Integer statusLow,
+			@NonNull Integer statusHigh,
+			Long locationId,
+			Long positionId,
+			@NonNull Timestamp fromDate,
+			@NonNull Timestamp toDate,
+			@NonNull @Min(value = 1) Integer pageNumber,
+			@NonNull @Min(value = 1) @Max(value = 100) Integer pageSize
+			);
 }

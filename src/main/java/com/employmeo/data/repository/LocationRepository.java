@@ -4,11 +4,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import com.employmeo.data.model.PredictionModel;
+import com.employmeo.data.model.Location;
 
 @Repository
-public interface PredictionModelRepository extends PagingAndSortingRepository<PredictionModel, Long> {
-
+public interface LocationRepository extends PagingAndSortingRepository<Location, Long> {
+	
 	@Query
-	PredictionModel findByName(String name);
+	public Location findByAccountIdAndAtsId(Long accountId, String atsId);
+	
 }

@@ -74,5 +74,12 @@ public class AccountServiceImpl implements AccountService {
 		return position;
 	}
 
+	@Override
+	public Account getAccountByAtsId(String atsId) {
+		Account account = accountRepository.findByAtsId(atsId);
+		log.debug("Retrieved for ATS id {} entity {}", atsId, account);
+		return account;
+	}
+
 
 }

@@ -2,10 +2,16 @@ package com.employmeo.data.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 
@@ -46,5 +52,9 @@ public class Position implements Serializable {
 	@Column(name = "position_account")
 	private Long accountId;
 
+	@JsonIgnore
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "position", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private Set<PositionPredictionConfiguration> positionPredictionConfigurations = new HashSet<>();
 
 }
