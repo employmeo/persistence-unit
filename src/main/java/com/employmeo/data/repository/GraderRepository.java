@@ -1,5 +1,6 @@
 package com.employmeo.data.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -20,5 +21,8 @@ public interface GraderRepository extends PagingAndSortingRepository<Grader, Lon
 	
 	@Query
 	public Page<Grader> findAllByUserId(Long userId, Pageable pageRequest);
+
+	@Query
+	public List<Grader> findAllByRespondantId(Long respondantId);
 
 }

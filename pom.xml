@@ -22,11 +22,13 @@
 		<surefire-plugin.version>2.19.1</surefire-plugin.version>
 		<javax-validation.version>1.1.0.Final</javax-validation.version>
 		<springdata-jpa.version>1.10.3.RELEASE</springdata-jpa.version>
-		<jersey-jackson.version>2.23.2</jersey-jackson.version>
+		<jersey-jackson.version>2.24.1</jersey-jackson.version>
 		<dbdeploy.version>3.0M3</dbdeploy.version>
 		<dbdeploy.dbms>pgsql</dbdeploy.dbms>
+		<postgres-version>9.4.1208</postgres-version>
+		<!-- Needed for Commons Unit -->
+		<org-json.version>20160810</org-json.version>
 		<sendgrid.version>3.1.0</sendgrid.version>
-		<postgres-version>9.4.1208</postgres-version>		
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -62,11 +64,7 @@
 			<version>${springdata-jpa.version}</version>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>${org-json.version}</version>
-		</dependency>
+
 
 		<!-- Hibernate -->
 		<dependency>
@@ -111,13 +109,31 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- needed for the commons library -->
 		<!-- sendgrid email service -->
 		<dependency>
 		    <groupId>com.sendgrid</groupId>
 		    <artifactId>sendgrid-java</artifactId>
 		    <version>${sendgrid.version}</version>
+		</dependency>	
+		<!-- web rest client and security -->
+		<dependency>
+			<groupId>org.glassfish.jersey.connectors</groupId>
+			<artifactId>jersey-apache-connector</artifactId>
+			<version>${jersey-jackson.version}</version>
 		</dependency>
-
+		<dependency>
+	    	<groupId>org.glassfish.jersey.security</groupId>
+	    	<artifactId>oauth2-client</artifactId>
+	    	<version>${jersey-jackson.version}</version>
+		</dependency>
+		<!-- json manipulate -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>${org-json.version}</version>
+		</dependency>
+		
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

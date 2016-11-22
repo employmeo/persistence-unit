@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.employmeo.data.model.Account;
 
-import lombok.NonNull;
-
 @Repository
 public interface AccountRepository extends PagingAndSortingRepository<Account, Long> {
 	

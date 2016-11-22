@@ -102,5 +102,15 @@ public class GraderServiceImpl implements GraderService {
 		return savedGrade;
 	}
 
+	@Override
+	public List<Grade> getGradesByGraderId(Long graderId) {
+		return gradeRepository.findAllByGraderId(graderId);
+	}
+
+	@Override
+	public List<Grader> getGradersByRespondantId(Long respondantId) {
+		return graderRepository.findAllByRespondantId(respondantId);
+	}
+
 
 }

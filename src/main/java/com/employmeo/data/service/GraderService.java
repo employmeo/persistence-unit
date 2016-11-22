@@ -15,10 +15,14 @@ public interface GraderService {
 
 	Grader getGraderById(@NonNull Long graderId);
 
+	List<Grade> getGradesByGraderId(@NonNull Long graderId);
+	
 	Page<Grader> getGradersByUserId(@NonNull Long userId);
 
 	Page<Grader> getGradersByUserId(@NonNull Long userId, int pageNumber, int pageSize);
 	
+	List<Grader> getGradersByRespondantId(@NonNull Long respondantId);
+
 	List<Question> getQuestionsByGraderUuid(@NonNull UUID uuId);
 
 	List<Question> getQuestionsByGraderId(@NonNull Long graderId);

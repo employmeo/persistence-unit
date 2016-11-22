@@ -3,8 +3,6 @@ package com.talytica.common.service;
 import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +17,9 @@ import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class EmailServiceImpl implements EmailService {
 
@@ -45,8 +46,8 @@ public class EmailServiceImpl implements EmailService {
 	
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
 	private Email FROM_ADDRESS = new Email ("info@talytica.com");
-	private final Logger log = LoggerFactory.getLogger(EmailServiceImpl.class);
-	
+
+	@Override
 	public void sendMessage(String from, String to, String subject, String text, String html) {
 		
 		Email fromEmail = new Email(from);
@@ -63,6 +64,7 @@ public class EmailServiceImpl implements EmailService {
 		return;
 	}
 
+	@Override
 	public void sendEmailInvitation(Respondant respondant) {
 
 		String link = getAssessmentLink(respondant);
@@ -94,6 +96,7 @@ public class EmailServiceImpl implements EmailService {
 		return;
 	}
 	
+	@Override
 	public void sendForgotPass(User user) {
 
 		String link = getForgotPasswordLink(user);
@@ -122,6 +125,7 @@ public class EmailServiceImpl implements EmailService {
 		return;
 	}
 	
+	@Override
 	public void sendResults(Respondant respondant) {
 
 		String fullname = respondant.getPerson().getFirstName() + " " + respondant.getPerson().getLastName();
@@ -170,6 +174,7 @@ public class EmailServiceImpl implements EmailService {
 		});
 	}
 
+	@Override
 	public String getAssessmentLink(Respondant respondant) {
 		String link = null;
 		try {
@@ -182,6 +187,7 @@ public class EmailServiceImpl implements EmailService {
 		return link.toString();
 	}
 
+	@Override
 	public String getPortalLink(Respondant respondant) {
 		String link = null;
 		try {
@@ -194,6 +200,7 @@ public class EmailServiceImpl implements EmailService {
 		return link.toString();
 	}
 
+	@Override
 	public String getRenderLink(Respondant respondant) {
 		String link = null;
 		try {
@@ -205,6 +212,7 @@ public class EmailServiceImpl implements EmailService {
 		return link.toString();
 	}
 
+	@Override
 	public String getForgotPasswordLink(User user) {
 		String link = null;
 		try {
@@ -216,6 +224,7 @@ public class EmailServiceImpl implements EmailService {
 		return link.toString();
 	}
 	
+	@Override
 	public String getVerifyEmailLink(User user) {
 		String link = null;
 		try {

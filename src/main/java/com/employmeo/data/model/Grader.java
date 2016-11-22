@@ -17,6 +17,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -58,6 +59,12 @@ public class Grader implements Serializable {
 	@Column(name = "grader_response_id")
 	private Long responseId;
 	
+	// bi-directional many-to-one association to Question
+	@JsonManagedReference
+	@ManyToOne
+	@JoinColumn(name = "grader_question_id", insertable=false, updatable=false)
+	private Question question;
+	
 	@Column(name = "grader_question_id")
 	private Long questionId;
 	
@@ -70,14 +77,20 @@ public class Grader implements Serializable {
 	@Column(name = "grader_person_id")
 	private Long personId;
 	
-	// bi-directional many-to-one association to Person
-	@JsonManagedReference
+	// bi-directional many-to-one association to User
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "grader_user_id", insertable=false, updatable=false)
 	private User user;
 
 	@Column(name = "grader_user_id")
 	private Long userId;
+	
+	// bi-directional many-to-one association to Respondant
+	@JsonManagedReference
+	@ManyToOne
+	@JoinColumn(name = "grader_respondant_id", insertable=false, updatable=false)
+	private Respondant respondant;
 	
 	@Column(name = "grader_respondant_id")
 	private Long respondantId;
