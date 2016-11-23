@@ -70,7 +70,7 @@ public class PositionProfile extends JSONObject {
 			profile.put("profile_color", uColor);
 			profile.put("profile_highlight", uHighlight);
 			profile.put("profile_overlay", uOverlay);
-			profile.put("profile_icon", "fa-question-circle-o");
+			profile.put("profile_icon", "fa-question");
 			break;
 		}
 

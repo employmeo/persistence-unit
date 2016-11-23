@@ -1,11 +1,8 @@
 package com.talytica.common.service;
 
-import org.springframework.stereotype.Service;
-
 import com.employmeo.data.model.Respondant;
 import com.employmeo.data.model.User;
 
-@Service
 public interface EmailService {
 	
 	public void sendMessage(String from, String to, String subject, String text, String html) ;

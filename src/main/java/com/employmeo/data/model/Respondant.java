@@ -33,6 +33,7 @@ public class Respondant implements Serializable {
 	public static final int STATUS_INVITED = 1;
 	public static final int STATUS_STARTED = 5;
 	public static final int STATUS_COMPLETED = 10;
+	public static final int STATUS_UNGRADED = 11;
 	public static final int STATUS_SCORED = 13;
 	public static final int STATUS_PREDICTED = 15;
 	public static final int STATUS_REJECTED = 16;

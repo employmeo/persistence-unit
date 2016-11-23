@@ -24,7 +24,7 @@ public class CorefactorServiceImpl implements CorefactorService {
 	@Override
 	public Set<Corefactor> getAllCorefactors() {
 		Set<Corefactor> corefactors = Sets.newHashSet(corefactorRepository.findAll());
-		log.debug("Retrieved all {} corefactors", corefactors);
+		log.debug("Retrieved all {} corefactors", corefactors.size());
 
 		return corefactors;
 	}
@@ -32,7 +32,7 @@ public class CorefactorServiceImpl implements CorefactorService {
 	@Override
 	public Corefactor findCorefactorById(@NonNull Long corefactorId) {
 		Corefactor corefactor = corefactorRepository.findOne(corefactorId);
-		log.debug("Retrieved for id {} entity {}", corefactorId, corefactor);
+		log.debug("Retrieved for id {} entity {}", corefactorId, corefactor.getName());
 
 		return corefactor;
 	}
@@ -49,7 +49,7 @@ public class CorefactorServiceImpl implements CorefactorService {
 	@Override
 	public Corefactor getByForeignId(String foreignId) {
 		Corefactor corefactor = corefactorRepository.findByForeignId(foreignId);
-		log.debug("Retrieved for foreignId {}, corefactors :", foreignId, corefactor);
+		log.debug("Retrieved for foreignId {}, corefactor: {}", foreignId, corefactor.getName());
 
 		return corefactor;
 	}
