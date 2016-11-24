@@ -204,10 +204,10 @@ public class EmailServiceImpl implements EmailService {
 	public String getRenderLink(Respondant respondant) {
 		String link = null;
 		try {
-			link = new URL(BASE_PORTAL_URL + "/?&respondant_uuid=" + respondant.getRespondantUuid())
+			link = new URL(BASE_PORTAL_URL + "/?&respondantUuid=" + respondant.getRespondantUuid())
 					.toString();
 		} catch (Exception e) {
-			link = BASE_PORTAL_URL + "/?&respondant_uuid=" + respondant.getRespondantUuid();
+			link = BASE_PORTAL_URL + "/?&respondantUuid=" + respondant.getRespondantUuid();
 		}
 		return link.toString();
 	}
@@ -216,11 +216,10 @@ public class EmailServiceImpl implements EmailService {
 	public String getForgotPasswordLink(User user) {
 		String link = null;
 		try {
-			link = BASE_PORTAL_URL + "/?&component=resetpass&email=" + user.getEmail()
-			+ "&hash=" + user.getPassword();
+			link = BASE_PORTAL_URL + "/?&email=" + user.getEmail() + "&hash=" + user.getPassword();
 		} catch (Exception e) {
-			link = BASE_PORTAL_URL + "/?&component=resetpass&email=" + user.getEmail()
-					+ "&hash=" + user.getPassword();		}
+			link = BASE_PORTAL_URL + "/?&email=" + user.getEmail() + "&hash=" + user.getPassword();
+		}
 		return link.toString();
 	}
 	
@@ -228,11 +227,10 @@ public class EmailServiceImpl implements EmailService {
 	public String getVerifyEmailLink(User user) {
 		String link = null;
 		try {
-			link = BASE_PORTAL_URL + "/?&component=verify&email=" + user.getEmail()
-			+ "&hash=" + user.getPassword();
+			link = BASE_PORTAL_URL + "/?&email=" + user.getEmail() + "&hash=" + user.getPassword();
 		} catch (Exception e) {
-			link = BASE_PORTAL_URL + "/?&component=verify&email=" + user.getEmail()
-					+ "&hash=" + user.getPassword();		}
+			link = BASE_PORTAL_URL + "/?&email=" + user.getEmail() + "&hash=" + user.getPassword();
+			}
 		return link.toString();
 	}
 }
