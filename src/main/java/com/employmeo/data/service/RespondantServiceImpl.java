@@ -230,8 +230,8 @@ public class RespondantServiceImpl implements RespondantService  {
 															Optional<Grader> incompleteGrader = graders.stream()
 																									.filter(g ->
 																										null == g.getStatus() ||
-																										g.getStatus() != Grader.STATUS_COMPLETED ||
-																										g.getStatus() != Grader.STATUS_IGNORED)
+																										(g.getStatus() != Grader.STATUS_COMPLETED &&
+																										g.getStatus() != Grader.STATUS_IGNORED))
 																									.findAny();
 
 															return !incompleteGrader.isPresent();
