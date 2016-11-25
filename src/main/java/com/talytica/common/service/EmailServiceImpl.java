@@ -179,7 +179,7 @@ public class EmailServiceImpl implements EmailService {
 		String link = null;
 		try {
 			link = new URL(
-					BASE_SURVEY_URL + "/&respondant_uuid=" + respondant.getRespondantUuid())
+					BASE_SURVEY_URL + "/?&respondant_uuid=" + respondant.getRespondantUuid())
 							.toString();
 		} catch (Exception e) {
 			link = BASE_SURVEY_URL + "/?&respondant_uuid=" + respondant.getRespondantUuid();
