@@ -17,9 +17,9 @@ public interface RespondantService {
 	Respondant getRespondant(@NonNull UUID respondantUuid);
 
 	Respondant getRespondantByAccountSurveyIdAndPayrollId(@NonNull Long accountSurveyId, @NonNull String payrollId);
-	
+
 	Respondant getRespondantByAtsId(@NonNull String atsId);
-	
+
 	Respondant getRespondantByAccountIdAndAtsId(@NonNull Long accountId, @NonNull String atsId);
 
 	Respondant save(@NonNull Respondant respondant);
@@ -64,4 +64,6 @@ public interface RespondantService {
 			@NonNull @Min(value = 1) Integer pageNumber,
 			@NonNull @Min(value = 1) @Max(value = 100) Integer pageSize
 			);
+
+	public List<Respondant> getGraderBasedScoringPendingRespondants();
 }
