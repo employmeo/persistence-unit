@@ -21,6 +21,10 @@ public interface GraderService {
 
 	Page<Grader> getGradersByUserId(@NonNull Long userId, int pageNumber, int pageSize);
 	
+	Page<Grader> getGradersByUserIdStatusAndDates(@NonNull Long userId, List<Integer> status, Date from, Date to);
+
+	Page<Grader> getGradersByUserIdStatusAndDates(@NonNull Long userId, List<Integer> status, Date from, Date to, int pageNumber, int pageSize);
+	
 	List<Grader> getGradersByRespondantId(@NonNull Long respondantId);
 
 	List<Question> getQuestionsByGraderUuid(@NonNull UUID uuId);
