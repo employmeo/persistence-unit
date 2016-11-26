@@ -22,6 +22,7 @@ import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -116,5 +117,11 @@ public class Grader implements Serializable {
 			log.debug("Generating grader uuId randomly PrePersist as {}", uuId);
 		}	
 		createdDate = new Date();
+	}
+	
+	@JsonProperty("userName")
+	public String getUserName() {
+		if (this.user == null) return null;
+		return this.user.getFirstName() + ' ' + this.user.getLastName();
 	}
 }

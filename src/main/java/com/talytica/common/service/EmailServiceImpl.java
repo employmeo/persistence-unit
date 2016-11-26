@@ -192,10 +192,10 @@ public class EmailServiceImpl implements EmailService {
 		String link = null;
 		try {
 			link = new URL(
-					BASE_PORTAL_URL + "/?&component=respondant_score&respondantUuid=" + respondant.getRespondantUuid())
+					BASE_PORTAL_URL + "/?&component=candidate_detail&respondantUuid=" + respondant.getRespondantUuid())
 							.toString();
 		} catch (Exception e) {
-			link = BASE_PORTAL_URL + "/?&component=respondant_score&respondantUuid=" + respondant.getRespondantUuid();
+			link = BASE_PORTAL_URL + "/?&component=candidate_detail&respondantUuid=" + respondant.getRespondantUuid();
 		}
 		return link.toString();
 	}

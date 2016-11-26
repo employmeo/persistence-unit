@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -58,4 +59,10 @@ public class Grade implements Serializable {
 
 		@Column(name = "grade_question_id", insertable = true, updatable = false)
 		private Long questionId;
+		
+		@JsonProperty("questionText")
+		public String getQuestionText() {
+			if (this.question == null) return null;
+			return this.question.getQuestionText();
+		}
 }
