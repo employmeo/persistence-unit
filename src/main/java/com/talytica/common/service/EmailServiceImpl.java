@@ -3,16 +3,16 @@ package com.talytica.common.service;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.swing.text.MaskFormatter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.employmeo.data.model.AccountSurvey;
 import com.employmeo.data.model.Grader;
 import com.employmeo.data.model.Respondant;
 import com.employmeo.data.model.Survey;
 import com.employmeo.data.model.User;
+import com.employmeo.data.repository.AccountSurveyRepository;
 import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
@@ -67,6 +67,9 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	ExternalLinksService externalLinksService;
 	
+	@Autowired
+	AccountSurveyRepository accountSurveyRepository;
+	
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
 	private Email FROM_ADDRESS = new Email ("info@talytica.com");
 
@@ -106,14 +109,15 @@ public class EmailServiceImpl implements EmailService {
 		String link = externalLinksService.getAssessmentLink(respondant);
 		String body = null;
 
-		if (Survey.TYPE_PHONE == respondant.getAccountSurvey().getSurvey().getSurveyType()) {
+		AccountSurvey as = respondant.getAccountSurvey();	
+		if (Survey.TYPE_PHONE == as.getSurvey().getSurveyType()) {
 		
 			String idnum = respondant.getPayrollId();
-			String phonenum = respondant.getAccountSurvey().getPhoneNumber(); // Phone Number!!
+			String phonenum = as.getPhoneNumber();
 		
 			body = "Dear " + respondant.getPerson().getFirstName() + ",\n" + "\n"
 					+ "You have been invited to take a questionnaire as part of your application to "
-					+ respondant.getAccount().getAccountName() + ".\n"
+					+ as.getAccount().getAccountName() + ".\n"
 					+ "This automated questionairre can be completed over the phone. Please call: \n"
 					+ phonenum + ", and you will be prompted for this ID number: " + idnum;
 			pers.addSubstitution("[PHONE]", phonenum );
@@ -128,7 +132,7 @@ public class EmailServiceImpl implements EmailService {
 		} else {
 			body = "Dear " + respondant.getPerson().getFirstName() + ",\n" + "\n"
 					+ "You have been invited to take a questionnaire as part of your application to "
-					+ respondant.getAccount().getAccountName() + ".\n"
+					+ as.getAccount().getAccountName() + ".\n"
 					+ "This assessment can be completed on a mobile device or in a browser at this link: \n"
 					+ link;
 			if (reminder) {
@@ -145,7 +149,7 @@ public class EmailServiceImpl implements EmailService {
 	
 		pers.addSubstitution("[LINK]", link );
 		pers.addSubstitution("[FNAME]", respondant.getPerson().getFirstName() + " " +respondant.getPerson().getLastName());
-		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
+		pers.addSubstitution("[ACCOUNT_NAME]",as.getAccount().getAccountName());
 		pers.addTo(new Email(respondant.getPerson().getEmail()));		
 
 		email.addPersonalization(pers);
