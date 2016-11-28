@@ -1,6 +1,7 @@
 package com.employmeo.data.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -110,6 +111,17 @@ public class GraderServiceImpl implements GraderService {
 	@Override
 	public List<Grader> getGradersByRespondantId(Long respondantId) {
 		return graderRepository.findAllByRespondantId(respondantId);
+	}
+
+	@Override
+	public Page<Grader> getGradersByUserIdStatusAndDates(Long userId, List<Integer> status, Date from, Date to) {
+		return getGradersByUserIdStatusAndDates(userId, status, from, to, PAGE_ONE, DEFAULT_PAGE_SIZE);
+	}
+
+	@Override
+	public Page<Grader> getGradersByUserIdStatusAndDates(Long userId, List<Integer>  status, Date from, Date to, int pageNumber, int pageSize) {
+		Pageable  pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
+		return graderRepository.findAllByUserIdAndStatusInAndCreatedDateBetween(userId, status, from, to, pageRequest);
 	}
 
 

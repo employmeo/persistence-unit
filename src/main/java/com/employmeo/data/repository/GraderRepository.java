@@ -1,5 +1,6 @@
 package com.employmeo.data.repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,5 +25,11 @@ public interface GraderRepository extends PagingAndSortingRepository<Grader, Lon
 
 	@Query
 	public List<Grader> findAllByRespondantId(Long respondantId);
+	
+	@Query
+	public Page<Grader> findAllByUserIdAndStatusInAndCreatedDateBetween(@NonNull Long userId,
+																  List<Integer> status,
+			                                                      Date from, Date to,
+			                                                      Pageable pageRequest);
 
 }

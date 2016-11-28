@@ -181,5 +181,9 @@ public class Respondant implements Serializable {
 			respondantUuid = UUID.randomUUID();
 			log.debug("Generating respondantUuid randomly PrePersist as {}", respondantUuid);
 		}
+		
+		if(null == payrollId) {
+			payrollId = String.format("%06d", id);
+		}
 	}
 }
