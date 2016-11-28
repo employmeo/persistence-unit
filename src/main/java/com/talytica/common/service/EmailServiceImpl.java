@@ -3,12 +3,15 @@ package com.talytica.common.service;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.swing.text.MaskFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.employmeo.data.model.Grader;
 import com.employmeo.data.model.Respondant;
+import com.employmeo.data.model.Survey;
 import com.employmeo.data.model.User;
 import com.sendgrid.Content;
 import com.sendgrid.Email;
@@ -96,26 +99,50 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	public void sendEmailInvitation(Respondant respondant, boolean reminder){
-		
+	
 		Mail email = new Mail();
 		email.setFrom(FROM_ADDRESS);
+		Personalization pers = new Personalization();
 		String link = externalLinksService.getAssessmentLink(respondant);
-		String body = "Dear " + respondant.getPerson().getFirstName() + ",\n" + "\n"
-				+ "You have been invited to take a questionnaire as part of your application to "
-				+ respondant.getAccount().getAccountName() + ".\n"
-				+ "This assessment can be completed on a mobile device or in a browser at this link: \n"
-				+ link;
+		String body = null;
+
+		if (Survey.TYPE_PHONE == respondant.getAccountSurvey().getSurvey().getSurveyType()) {
+		
+			String idnum = respondant.getPayrollId();
+			String phonenum = respondant.getAccountSurvey().getPhoneNumber(); // Phone Number!!
+		
+			body = "Dear " + respondant.getPerson().getFirstName() + ",\n" + "\n"
+					+ "You have been invited to take a questionnaire as part of your application to "
+					+ respondant.getAccount().getAccountName() + ".\n"
+					+ "This automated questionairre can be completed over the phone. Please call: \n"
+					+ phonenum + ", and you will be prompted for this ID number: " + idnum;
+			pers.addSubstitution("[PHONE]", phonenum );
+			pers.addSubstitution("[IDNUMBER]", idnum );
+			if (reminder) {
+				email.setSubject("Reminder: Complete Voice Application");
+				email.setTemplateId(PHONE_REMINDER_TEMPLATE_ID);
+			} else {
+				email.setSubject("Invitation To Apply");
+				email.setTemplateId(PHONE_INVITE_TEMPLATE_ID);
+			}
+		} else {
+			body = "Dear " + respondant.getPerson().getFirstName() + ",\n" + "\n"
+					+ "You have been invited to take a questionnaire as part of your application to "
+					+ respondant.getAccount().getAccountName() + ".\n"
+					+ "This assessment can be completed on a mobile device or in a browser at this link: \n"
+					+ link;
+			if (reminder) {
+				email.setSubject("Invitation To Apply");
+				email.setTemplateId(INVITE_TEMPLATE_ID);
+			} else {
+				email.setSubject("Reminder: Complete Application");
+				email.setTemplateId(INVITE_REMINDER_TEMPLATE_ID);
+			}
+		}
 		
 		email.addContent(new Content("text/plain", body));
 		email.addContent(new Content("text/html", body));
-		if (reminder) {
-			email.setSubject("Invitation To Apply");
-			email.setTemplateId(INVITE_TEMPLATE_ID);
-		} else {
-			email.setSubject("Reminder: Complete Application");
-			email.setTemplateId(INVITE_REMINDER_TEMPLATE_ID);
-		}
-		Personalization pers = new Personalization();
+	
 		pers.addSubstitution("[LINK]", link );
 		pers.addSubstitution("[FNAME]", respondant.getPerson().getFirstName() + " " +respondant.getPerson().getLastName());
 		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
@@ -197,55 +224,6 @@ public class EmailServiceImpl implements EmailService {
 		asynchSend(email);
 	}
 
-
-
-	@Override
-	public void sendPhoneInvitation(Respondant respondant) {
-		sendPhoneInvitation(respondant,false);
-	}
-
-	@Override
-	public void sendPhoneReminder(Respondant respondant) {
-		sendPhoneInvitation(respondant, true);	
-	}
-
-	public void sendPhoneInvitation(Respondant respondant, boolean reminder){
-		
-		Mail email = new Mail();
-		email.setFrom(FROM_ADDRESS);
-		String link = externalLinksService.getAssessmentLink(respondant);
-		String idnum = respondant.getPayrollId();
-		String phonenum = respondant.getAccountSurvey().getDisplayName(); // Phone Number!!
-		
-		String body = "Dear " + respondant.getPerson().getFirstName() + ",\n" + "\n"
-				+ "You have been invited to take a questionnaire as part of your application to "
-				+ respondant.getAccount().getAccountName() + ".\n"
-				+ "This automated questionairre can be completed over the phone. Please call: \n"
-				+ phonenum + ", and you will be prompted for this ID number: " + idnum;
-		
-		email.addContent(new Content("text/plain", body));
-		email.addContent(new Content("text/html", body));
-		if (reminder) {
-			email.setSubject("Reminder: Complete Voice Application");
-			email.setTemplateId(PHONE_REMINDER_TEMPLATE_ID);
-		} else {
-			email.setSubject("Invitation To Apply");
-			email.setTemplateId(PHONE_INVITE_TEMPLATE_ID);
-		}
-		
-		Personalization pers = new Personalization();
-		pers.addSubstitution("[LINK]", link );
-		pers.addSubstitution("[PHONE]", phonenum );
-		pers.addSubstitution("[IDNUMBER]", idnum );
-		pers.addSubstitution("[FNAME]", respondant.getPerson().getFirstName() + " " +respondant.getPerson().getLastName());
-		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
-		pers.addTo(new Email(respondant.getPerson().getEmail()));		
-
-		email.addPersonalization(pers);
-
-		asynchSend(email);
-	}
-
 	@Override
 	public void sendReferenceRequest(Grader grader) {
 		sendReferenceRequest(grader, false);
@@ -270,7 +248,6 @@ public class EmailServiceImpl implements EmailService {
 				+ "This assessment can be completed on a mobile device or in a browser at this link: \n"
 				+ link;
 		
-		
 		email.addContent(new Content("text/plain", body));
 		email.addContent(new Content("text/html", body));
 		if (reminder) {
@@ -286,7 +263,7 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[APPLICANT]", fullname );
 		pers.addSubstitution("[GRADER_NAME]", grader.getPerson().getFirstName());
 		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
-		pers.addTo(new Email(respondant.getPerson().getEmail()));		
+		pers.addTo(new Email(grader.getPerson().getEmail()));		
 
 		email.addPersonalization(pers);
 

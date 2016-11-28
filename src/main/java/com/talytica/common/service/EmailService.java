@@ -12,10 +12,6 @@ public interface EmailService {
 	
 	public void sendEmailReminder(Respondant respondant);
 	
-	public void sendPhoneInvitation(Respondant respondant);
-	
-	public void sendPhoneReminder(Respondant respondant);
-	
 	public void sendVerifyAccount(User user) ;
 	
 	public void sendForgotPass(User user);

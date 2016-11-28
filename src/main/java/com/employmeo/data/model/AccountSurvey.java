@@ -67,6 +67,9 @@ public class AccountSurvey implements Serializable {
 	@Column(name = "as_status")
 	private Integer accountSurveyStatus;
 	
+	@Column(name = "as_phone_number")
+	private String phoneNumber;
+	
 	@ManyToOne
 	@JoinColumn(name = "as_survey_id", insertable = false, updatable = false)
 	private Survey survey;
