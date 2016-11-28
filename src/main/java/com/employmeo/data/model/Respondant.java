@@ -183,7 +183,7 @@ public class Respondant implements Serializable {
 		}
 		
 		if(null == payrollId) {
-			payrollId = String.format("%06d", id);
+			payrollId = String.format("%06d", new Random().nextInt(999999));
 		}
 	}
 }
