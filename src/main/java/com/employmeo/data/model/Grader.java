@@ -1,6 +1,7 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -13,12 +14,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -101,12 +105,23 @@ public class Grader implements Serializable {
 	
 	@Column(name = "grader_respondant_id")
 	private Long respondantId;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "grader_created_date")
+	private Date createdDate;
 	  
 	@PrePersist
-	void generateUUID() {
+	void generateUUIDandDate()  {
 		if(null == uuId) {
 			uuId = UUID.randomUUID();
 			log.debug("Generating grader uuId randomly PrePersist as {}", uuId);
-		}
+		}	
+		createdDate = new Date();
+	}
+	
+	@JsonProperty("userName")
+	public String getUserName() {
+		if (this.user == null) return null;
+		return this.user.getFirstName() + ' ' + this.user.getLastName();
 	}
 }

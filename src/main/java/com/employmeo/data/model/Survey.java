@@ -24,6 +24,10 @@ public class Survey implements Serializable {
 	@Transient
 	private static final long serialVersionUID = -133035016766293056L;
 
+	public static final int TYPE_WEB = 1;
+	public static final int TYPE_PHONE = 2;
+	public static final int TYPE_MULTI = 3;
+
 	@Id
 	@Basic(optional = false)
 	@Column(name = "survey_id")
