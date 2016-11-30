@@ -1,8 +1,6 @@
 package com.employmeo.data.repository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,17 +17,21 @@ public interface GraderRepository extends PagingAndSortingRepository<Grader, Lon
 
 	@Query
 	Grader findByUuId(@NonNull UUID uuId);
-	
+
 	@Query
 	public Page<Grader> findAllByUserId(Long userId, Pageable pageRequest);
 
 	@Query
 	public List<Grader> findAllByRespondantId(Long respondantId);
-	
-	@Query
+
+	//TODO: Fix Me !!
+	@Query("SELECT g from Grader g WHERE g.userId = ?1 AND g.status IN ?2 AND g.createdDate BETWEEN ?3 and ?4 ORDER BY g.id DESC")
 	public Page<Grader> findAllByUserIdAndStatusInAndCreatedDateBetween(@NonNull Long userId,
 																  List<Integer> status,
-			                                                      Date from, Date to,
+																  //@Temporal(TemporalType.TIMESTAMP) Date from,
+																  //@Temporal(TemporalType.TIMESTAMP) Date to,
+																  Date from,
+																  Date to,
 			                                                      Pageable pageRequest);
 
 }

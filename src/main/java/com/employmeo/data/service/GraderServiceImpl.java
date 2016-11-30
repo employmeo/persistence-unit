@@ -1,25 +1,14 @@
 package com.employmeo.data.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.employmeo.data.model.Criterion;
-import com.employmeo.data.model.Grade;
-import com.employmeo.data.model.Grader;
-import com.employmeo.data.model.Question;
-import com.employmeo.data.repository.CriterionRepository;
-import com.employmeo.data.repository.GradeRepository;
-import com.employmeo.data.repository.GraderRepository;
+import com.employmeo.data.model.*;
+import com.employmeo.data.repository.*;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,22 +16,22 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @Slf4j
 public class GraderServiceImpl implements GraderService {
-	
+
 	private static final int DEFAULT_PAGE_SIZE = 100;
 	private static final int PAGE_ONE = 1;
-	
+
 	@Autowired
 	GraderRepository graderRepository;
-	
+
 	@Autowired
 	GradeRepository gradeRepository;
-	
+
 	@Autowired
 	CriterionRepository criterionRepository;
-	
+
 	@Autowired
 	QuestionService questionService;
-	
+
 	@Override
 	public Grader getGraderByUuid(UUID uuId) {
 		return graderRepository.findByUuId(uuId);
@@ -55,14 +44,14 @@ public class GraderServiceImpl implements GraderService {
 
 	@Override
 	public Page<Grader> getGradersByUserId(Long userId) {
-		
+
 		return getGradersByUserId(userId, PAGE_ONE, DEFAULT_PAGE_SIZE);
 	}
-	
+
 	@Override
 	public Page<Grader> getGradersByUserId(Long userId, int pageNumber, int pageSize) {
 		Pageable  pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
-		
+
 		return graderRepository.findAllByUserId(userId, pageRequest);
 	}
 
@@ -71,11 +60,11 @@ public class GraderServiceImpl implements GraderService {
 		Grader grader = graderRepository.findByUuId(uuId);
 		return getCriteriaByQuestionId(grader.getQuestionId());
 	}
-	
+
 	@Override
 	public List<Question> getCriteriaByQuestionId(Long questionId) {
 		List<Criterion> criteria =  criterionRepository.findAllBySurveyQuestionIdOrderBySequenceAsc(questionId);
-		List<Question> questions = new ArrayList<Question>();
+		List<Question> questions = new ArrayList<>();
 		for (Criterion criterion : criteria) {
 			Question question = questionService.getQuestionById(criterion.getGraderQuestionId());
 			questions.add(question);
@@ -121,6 +110,7 @@ public class GraderServiceImpl implements GraderService {
 	@Override
 	public Page<Grader> getGradersByUserIdStatusAndDates(Long userId, List<Integer>  status, Date from, Date to, int pageNumber, int pageSize) {
 		Pageable  pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
+		log.debug("Finding graders for userId {} and statuses {} between dates {} and {}", userId, status, from, to);
 		return graderRepository.findAllByUserIdAndStatusInAndCreatedDateBetween(userId, status, from, to, pageRequest);
 	}
 
