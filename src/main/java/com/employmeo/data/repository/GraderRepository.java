@@ -25,7 +25,7 @@ public interface GraderRepository extends PagingAndSortingRepository<Grader, Lon
 	public List<Grader> findAllByRespondantId(Long respondantId);
 
 	//TODO: Fix Me !!
-	@Query("SELECT g from Grader g WHERE g.userId = ?1 AND g.status IN ?2 AND g.createdDate BETWEEN ?3 and ?4 ORDER BY g.id DESC")
+	@Query("SELECT g from Grader g WHERE g.userId = ?1 AND g.status IN ?2 AND g.createdDate BETWEEN ?3 and ?4")
 	public Page<Grader> findAllByUserIdAndStatusInAndCreatedDateBetween(@NonNull Long userId,
 																  List<Integer> status,
 																  //@Temporal(TemporalType.TIMESTAMP) Date from,

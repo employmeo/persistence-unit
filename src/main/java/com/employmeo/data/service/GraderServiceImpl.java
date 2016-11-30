@@ -109,9 +109,12 @@ public class GraderServiceImpl implements GraderService {
 
 	@Override
 	public Page<Grader> getGradersByUserIdStatusAndDates(Long userId, List<Integer>  status, Date from, Date to, int pageNumber, int pageSize) {
-		Pageable  pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
+		Pageable  pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
 		log.debug("Finding graders for userId {} and statuses {} between dates {} and {}", userId, status, from, to);
-		return graderRepository.findAllByUserIdAndStatusInAndCreatedDateBetween(userId, status, from, to, pageRequest);
+		Page<Grader> graders = graderRepository.findAllByUserIdAndStatusInAndCreatedDateBetween(userId, status, from, to, pageRequest);
+		log.debug("Returning {} graders", graders.getNumberOfElements());
+
+		return graders;
 	}
 
 
