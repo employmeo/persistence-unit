@@ -11,4 +11,6 @@ public interface CorefactorRepository extends PagingAndSortingRepository<Corefac
 
 	@Query
 	Corefactor findByForeignId(String foreignId);
+
+
 }

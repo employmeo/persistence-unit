@@ -1,15 +1,17 @@
 package com.employmeo.data.service;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employmeo.data.model.Corefactor;
 import com.employmeo.data.repository.CorefactorRepository;
 
-import jersey.repackaged.com.google.common.collect.Sets;
+import jersey.repackaged.com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,8 +24,8 @@ public class CorefactorServiceImpl implements CorefactorService {
 	private CorefactorRepository corefactorRepository;
 
 	@Override
-	public Set<Corefactor> getAllCorefactors() {
-		Set<Corefactor> corefactors = Sets.newHashSet(corefactorRepository.findAll());
+	public List<Corefactor> getAllCorefactors() {
+		List<Corefactor> corefactors = Lists.newArrayList(corefactorRepository.findAll(new Sort(Direction.ASC, "id")));
 		log.debug("Retrieved all {} corefactors", corefactors.size());
 
 		return corefactors;
@@ -52,6 +54,12 @@ public class CorefactorServiceImpl implements CorefactorService {
 		log.debug("Retrieved for foreignId {}, corefactor: {}", foreignId, corefactor.getName());
 
 		return corefactor;
+	}
+
+	@Override
+	public void delete(Long corefactorId) {
+		corefactorRepository.delete(corefactorId);
+		log.debug("Deleted corefactor {}", corefactorId);
 	}
 
 }
