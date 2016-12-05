@@ -1,14 +1,14 @@
 package com.employmeo.data.service;
 
-import java.util.Set;
+import java.util.List;
 
 import com.employmeo.data.model.Corefactor;
 
 public interface CorefactorService {
 
-	Set<Corefactor> getAllCorefactors();
+	List<Corefactor> getAllCorefactors();
 	Corefactor findCorefactorById(Long corefactorId);
 	Corefactor getByForeignId(String foreignId);
 	Corefactor save(Corefactor corefactor);
-
+	void delete(Long corefactorId);
 }

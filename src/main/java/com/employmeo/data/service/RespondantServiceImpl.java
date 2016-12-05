@@ -2,6 +2,7 @@ package com.employmeo.data.service;
 
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -31,6 +32,8 @@ public class RespondantServiceImpl implements RespondantService  {
 	private ResponseRepository responseRepository;
 	@Autowired
 	private QuestionRepository questionRepository;
+	@Autowired
+	GraderRepository graderRepository;
 
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
 	private static final Integer DEFAULT_PAGE_SIZE = 100;
@@ -50,19 +53,19 @@ public class RespondantServiceImpl implements RespondantService  {
 		log.debug("Respondant account survey {} and payrollId {}", accountSurveyId, payrollId);
 		return respondantRepository.findByAccountSurveyIdAndPayrollId(accountSurveyId, payrollId);
 	}
-	
+
 	@Override
 	public Respondant getRespondantByAtsId(String atsId) {
 		log.debug("Respondant by atsId {}", atsId);
 		return respondantRepository.findByAtsId(atsId);
 	}
-	
+
 	@Override
 	public Respondant getRespondantByAccountIdAndAtsId(Long accountId, String atsId) {
 		log.debug("Respondant account {} and atsId {}", accountId, atsId);
 		return respondantRepository.findByAccountIdAndAtsId(accountId, atsId);
 	}
-	
+
 	@Override
 	public Respondant save(@NonNull Respondant respondant) {
 		Respondant savedRespondant = respondantRepository.save(respondant);
@@ -199,7 +202,7 @@ public class RespondantServiceImpl implements RespondantService  {
 		} else {
 			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		}
-		
+
 
 
 	    return respondants;
@@ -211,6 +214,33 @@ public class RespondantServiceImpl implements RespondantService  {
 		List<Respondant> scoringEligibleRespondants = respondantRepository.findAllByRespondantStatusInOrderByFinishTimeDesc(scoringEligibleRespondantStatuses);
 
 		log.debug("Returning {} scoring eligible respondants", scoringEligibleRespondants.size());
+		return scoringEligibleRespondants;
+	}
+
+	@Override
+	public List<Respondant> getGraderBasedScoringPendingRespondants() {
+		List<Integer> ungradedRespondantStatuses = Arrays.asList(Respondant.STATUS_UNGRADED);
+		List<Respondant> ungradedRespondants = respondantRepository.findAllByRespondantStatusInOrderByFinishTimeDesc(ungradedRespondantStatuses);
+		log.debug("Found {} respondants in ungraded status", ungradedRespondants.size());
+
+		List<Respondant> scoringEligibleRespondants = ungradedRespondants.stream()
+														.filter(ungradedRespondant -> {
+															List<Grader> graders = graderRepository.findAllByRespondantId(ungradedRespondant.getId());
+
+															Optional<Grader> incompleteGrader = graders.stream()
+																									.filter(g ->
+																										null == g.getStatus() ||
+																										(g.getStatus() != Grader.STATUS_COMPLETED &&
+																										g.getStatus() != Grader.STATUS_IGNORED))
+																									.findAny();
+
+															return !incompleteGrader.isPresent();
+														})
+														.collect(Collectors.toList());
+
+		scoringEligibleRespondants.forEach(eligibleRespondant -> log.debug("Eligible respondant with all graders fulfilled: {}", eligibleRespondant.getId()));
+
+		log.debug("Found {} respondants who are ungraded, with all graders fulfilled", scoringEligibleRespondants.size());
 		return scoringEligibleRespondants;
 	}
 }

@@ -32,7 +32,9 @@ public class Respondant implements Serializable {
 
 	public static final int STATUS_INVITED = 1;
 	public static final int STATUS_STARTED = 5;
+	public static final int STATUS_REMINDED = 6;
 	public static final int STATUS_COMPLETED = 10;
+	public static final int STATUS_UNGRADED = 11;
 	public static final int STATUS_SCORED = 13;
 	public static final int STATUS_PREDICTED = 15;
 	public static final int STATUS_REJECTED = 16;
@@ -179,6 +181,10 @@ public class Respondant implements Serializable {
 		if(null == respondantUuid) {
 			respondantUuid = UUID.randomUUID();
 			log.debug("Generating respondantUuid randomly PrePersist as {}", respondantUuid);
+		}
+		
+		if(null == payrollId) {
+			payrollId = String.format("%06d", new Random().nextInt(999999));
 		}
 	}
 }
