@@ -47,9 +47,19 @@ public class Question implements Serializable {
 
 	@Column(name = "QUESTION_TYPE")
 	private Integer questionType;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "QUESTION_TYPE", insertable = false, updatable = false)
+	private QuestionType type;
 
 	@Column(name = "QUESTION_COREFACTOR_ID")
 	private Integer corefactorId;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "QUESTION_COREFACTOR_ID", insertable = false, updatable = false)
+	private Corefactor corefactor;
 
 	@Column(name = "QUESTION_DIRECTION")
 	private Integer direction;
@@ -77,5 +87,15 @@ public class Question implements Serializable {
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "question")
 	private Set<SurveyQuestion> surveyQuestions = new HashSet<>();
+	
+	@JsonProperty("type")
+	public String getType() {
+		return type.getName();
+	}
+	
+	@JsonProperty("corefactorName")
+	public String getCorefactorName() {
+		return corefactor.getName();
+	}
 
 }
