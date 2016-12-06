@@ -8,6 +8,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ public class AccountSurvey implements Serializable {
 	private Long accountId;
 
 	@Column(name = "as_display_name")
-	private String displayName;
+	private String overRideDisplayName;
 
 	@Column(name = "as_price")
 	private Double price;
@@ -62,7 +63,7 @@ public class AccountSurvey implements Serializable {
 	private String thankyouMedia;
 
 	@Column(name = "as_redirect_page")
-	private String redirectPage;
+	private String overRideRedirectPage;
 
 	@Column(name = "as_status")
 	private Integer accountSurveyStatus;
@@ -84,4 +85,17 @@ public class AccountSurvey implements Serializable {
 			log.debug("Generating account survey uuId randomly PrePersist as {}", uuId);
 		}
 	}
+			
+	@JsonProperty("displayName")
+	public String getDisplayName(){
+		if (null != this.overRideDisplayName) return this.overRideDisplayName;
+		return this.survey.getName();
+	}
+	
+	@JsonProperty("redirectPage")
+	public String getRedirectPage(){
+		if (null != this.overRideRedirectPage) return this.overRideRedirectPage;
+		return this.account.getDefaultRedirect();
+	}
+
 }

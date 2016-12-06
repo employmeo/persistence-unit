@@ -30,7 +30,7 @@ public class LinearRegressionConfig implements Serializable {
 	private Long modelId;
 
 	@Column(name = "corefactor_id")
-	private Integer corefactorId;
+	private Long corefactorId;
 
 	@Column(name = "coefficient")
 	private Double coefficient;
