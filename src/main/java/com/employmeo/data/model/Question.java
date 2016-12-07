@@ -37,7 +37,7 @@ public class Question implements Serializable {
 	private String description;
 
 	@Column(name = "QUESTION_DISPLAY_ID")
-	private Long displayId;
+	private Long displayId = 1l;//Defaulted to 1
 
 	@Column(name = "QUESTION_TEXT")
 	private String questionText;
@@ -90,12 +90,14 @@ public class Question implements Serializable {
 	
 	@JsonProperty("type")
 	public String getType() {
-		return type.getName();
+		if(type != null) return type.getName();
+		return null;
 	}
 	
 	@JsonProperty("corefactorName")
 	public String getCorefactorName() {
-		return corefactor.getName();
+		if (corefactor !=null) return corefactor.getName();
+		return null;
 	}
 
 }
