@@ -153,7 +153,8 @@ public class EmailServiceImpl implements EmailService {
 		email.addContent(new Content("text/html", body));
 	
 		pers.addSubstitution("[LINK]", link );
-		pers.addSubstitution("[FNAME]", respondant.getPerson().getFirstName() + " " +respondant.getPerson().getLastName());
+		pers.addSubstitution("[FNAME]", respondant.getPerson().getFirstName());
+		pers.addSubstitution("[FULL_NAME]", respondant.getPerson().getFirstName() + " " +respondant.getPerson().getLastName());
 		pers.addSubstitution("[ACCOUNT_NAME]",as.getAccount().getAccountName());
 		pers.addTo(new Email(respondant.getPerson().getEmail()));		
 

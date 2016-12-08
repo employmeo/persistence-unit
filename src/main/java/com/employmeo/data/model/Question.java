@@ -37,7 +37,7 @@ public class Question implements Serializable {
 	private String description;
 
 	@Column(name = "QUESTION_DISPLAY_ID")
-	private Long displayId;
+	private Long displayId = 1l;//Defaulted to 1
 
 	@Column(name = "QUESTION_TEXT")
 	private String questionText;
@@ -47,9 +47,19 @@ public class Question implements Serializable {
 
 	@Column(name = "QUESTION_TYPE")
 	private Integer questionType;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "QUESTION_TYPE", insertable = false, updatable = false)
+	private QuestionType type;
 
 	@Column(name = "QUESTION_COREFACTOR_ID")
 	private Integer corefactorId;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "QUESTION_COREFACTOR_ID", insertable = false, updatable = false)
+	private Corefactor corefactor;
 
 	@Column(name = "QUESTION_DIRECTION")
 	private Integer direction;
@@ -77,5 +87,17 @@ public class Question implements Serializable {
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "question")
 	private Set<SurveyQuestion> surveyQuestions = new HashSet<>();
+	
+	@JsonProperty("type")
+	public String getType() {
+		if(type != null) return type.getName();
+		return null;
+	}
+	
+	@JsonProperty("corefactorName")
+	public String getCorefactorName() {
+		if (corefactor !=null) return corefactor.getName();
+		return null;
+	}
 
 }

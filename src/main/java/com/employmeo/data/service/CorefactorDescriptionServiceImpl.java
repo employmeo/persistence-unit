@@ -51,7 +51,7 @@ public class CorefactorDescriptionServiceImpl implements CorefactorDescriptionSe
 	@Override
 	public void delete(Long id) {
 		corefactorDescriptionRepository.delete(id);
-		log.debug("Deleted corefactorDescription {}", id);
+		log.info("Deleted corefactorDescription {}", id);
 	}
 
 

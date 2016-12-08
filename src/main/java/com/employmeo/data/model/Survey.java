@@ -40,10 +40,10 @@ public class Survey implements Serializable {
 	private String description;
 
 	@Column(name = "survey_status")
-	private Integer surveyStatus;
+	private Integer surveyStatus = 1;
 
 	@Column(name = "survey_type")
-	private Integer surveyType;
+	private Integer surveyType = TYPE_WEB;
 
 	@Column(name = "survey_list_price")
 	private Double listPrice;

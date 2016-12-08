@@ -25,5 +25,11 @@ public interface SurveyService {
 	SurveyQuestion save(@NonNull SurveyQuestion surveyQuestion);
 
 	SurveyQuestion getSurveyQuestionById(@NonNull Long surveyQuestionId);
+	
+	void removeQuestion(Long sqId);
+	
+	void removeSection(SurveySectionPK id);
+	
+	void delete(Long surveyId);
 
 }

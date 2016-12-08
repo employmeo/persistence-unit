@@ -24,7 +24,7 @@ public class SurveySection implements Serializable {
 	private SurveySectionPK id;
 
 	@Column(name="ss_all_required")
-	private Boolean allRequired;
+	private Boolean allRequired = false;
 
 	@Column(name="ss_instructions")
 	private String instructions;
@@ -33,7 +33,7 @@ public class SurveySection implements Serializable {
 	private Integer questionsPerPage;
 
 	@Column(name="ss_time_seconds")
-	private Integer timeSeconds;
+	private Integer timeSeconds = 0;
 
 	// bi-directional many-to-one association to Survey
 	@JsonBackReference
