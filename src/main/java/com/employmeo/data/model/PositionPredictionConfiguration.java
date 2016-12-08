@@ -57,7 +57,16 @@ public class PositionPredictionConfiguration implements Serializable {
 
 	@Column(name = "target_threshold")
 	private BigDecimal targetThreshold;
+	
+	@Column(name = "prediction_mean")
+	private Double mean;
+	
+	@Column(name = "prediction_stdev")
+	private Double stDev;
 
+	@Column(name = "prediction_pop_size")
+	private Long popSize;
+	
 	@Column(name = "active")
 	private Boolean active;
 

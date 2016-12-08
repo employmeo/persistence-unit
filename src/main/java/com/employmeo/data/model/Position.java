@@ -51,7 +51,10 @@ public class Position implements Serializable {
 
 	@Column(name = "position_account")
 	private Long accountId;
-
+	
+	@Column(name = "position_ats_id")
+	private String atsId;
+	
 	@JsonIgnore
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "position", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
