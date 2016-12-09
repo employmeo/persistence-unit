@@ -37,6 +37,9 @@ public class Person implements Serializable {
 
 	@Column(name = "person_lname")
 	private String lastName;
+	
+	@Column(name = "person_phone")
+	private String phone;
 
 	@Column(name = "person_ssn")
 	private String ssn;
