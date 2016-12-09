@@ -43,7 +43,7 @@ public class Position implements Serializable {
 	@Column(name = "position_target_tenure")
 	private BigDecimal targetTenure;
 
-	@Column(name = "position_atsid")
+	@Column(name = "position_ats_id")
 	private String atsId;
 	
 	// bi-directional many-to-one association to Account

@@ -64,7 +64,7 @@ public class Respondant implements Serializable {
 	@Column(name = "respondant_account_id", insertable = true, updatable = false)
 	private Long accountId;
 
-	@Column(name = "respondant_created_date", insertable = false, updatable = false)
+	@Column(name = "respondant_created_date", insertable = true, updatable = false)
 	private Date createdDate;
 
 	@Column(name = "respondant_status")

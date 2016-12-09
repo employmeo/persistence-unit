@@ -31,7 +31,7 @@ public class Question implements Serializable {
 
 	// Integer ?????
 	@Column(name = "MODIFIED_DATE")
-	private Integer modifiedDate;
+	private Integer modifiedDate = 0;
 
 	@Column(name = "QUESTION_DESCRIPTION")
 	private String description;
