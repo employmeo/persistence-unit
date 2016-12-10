@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.employmeo.data.model.GraderConfig;
 import com.employmeo.data.model.User;
+import com.employmeo.data.repository.GraderConfigRepository;
 import com.employmeo.data.repository.UserRepository;
 
 import jersey.repackaged.com.google.common.collect.Sets;
@@ -20,6 +22,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	GraderConfigRepository graderConfigRepository;
 
 	@Override
 	public Set<User> getAllUsers() {
@@ -56,5 +61,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Set<User> getUsersForAccount(Long accountId) {
 		return userRepository.findAllByUserAccountId(accountId);
+	}
+
+	@Override
+	public Set<GraderConfig> getGraderConfigs(Long userId) {
+		return graderConfigRepository.findAllByUserId(userId);
 	}	
 }

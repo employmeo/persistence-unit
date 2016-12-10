@@ -28,6 +28,9 @@ public class GraderServiceImpl implements GraderService {
 
 	@Autowired
 	CriterionRepository criterionRepository;
+	
+	@Autowired
+	RespondantService respondantService;
 
 	@Autowired
 	QuestionService questionService;
@@ -115,6 +118,20 @@ public class GraderServiceImpl implements GraderService {
 		log.debug("Returning {} graders", graders.getNumberOfElements());
 
 		return graders;
+	}
+
+	@Override
+	public List<Question> getSummaryCriteriaByGraderId(Long graderId) {
+		Grader grader = graderRepository.findOne(graderId);
+		Set<Response> responses = respondantService.getGradeableResponses(grader.getRespondantId());
+		List<Question> criteria = new ArrayList<Question>();
+		for (Response response : responses) {
+			List<Question> extraCriteria = getCriteriaByQuestionId(response.getQuestionId());
+			for (Question question : extraCriteria) {
+				if (!criteria.contains(question)) criteria.add(question);
+			}
+		}
+		return criteria;
 	}
 
 

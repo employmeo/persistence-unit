@@ -18,4 +18,6 @@ public interface ExternalLinksService {
 	
 	public String getReferenceEmailLink(Grader grader);
 	
+	public String getGraderEmailLink(Grader grader);
+	
 }

@@ -1,5 +1,6 @@
 package com.employmeo.data.service;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employmeo.data.model.AccountSurvey;
+import com.employmeo.data.model.GraderConfig;
 import com.employmeo.data.repository.AccountSurveyRepository;
+import com.employmeo.data.repository.GraderConfigRepository;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 public class AccountSurveyServiceImpl implements AccountSurveyService {
 	@Autowired
 	private AccountSurveyRepository accountSurveyRepository;
+	
+	@Autowired
+	private GraderConfigRepository graderConfigRepository;
 
 	@Override
 	public AccountSurvey getAccountSurveyById(@NonNull Long accountSurveyId) {
@@ -31,8 +37,12 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 	public AccountSurvey getAccountSurveyByUuid(UUID asUuid) {
 		AccountSurvey accountSurvey = accountSurveyRepository.findByUuId(asUuid);
 		log.debug("Account Survey by uuid {} : {}", asUuid, accountSurvey);
-
 		return accountSurvey;
+	}
+
+	@Override
+	public Set<GraderConfig> getGraderConfigsForSurvey(Long asId) {
+		return graderConfigRepository.findAllByAsid(asId);
 	}
 
 

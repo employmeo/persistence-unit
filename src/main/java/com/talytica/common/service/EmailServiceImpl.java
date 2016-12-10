@@ -283,15 +283,49 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Override
 	public void sendQuickReference(Grader grader) {
-		// TODO Auto-generated method stub
+		sendGraderRequest(grader, false);
 		
 	}
 
 	@Override
 	public void sendQuickReferenceReminder(Grader grader) {
-		// TODO Auto-generated method stub
+		sendGraderRequest(grader, true);
 		
 	}
+	
+	
+	public void sendGraderRequest(Grader grader, boolean reminder){	
+		Mail email = new Mail();
+		email.setFrom(FROM_ADDRESS);
+		String link = externalLinksService.getGraderEmailLink(grader);
+		Respondant respondant = grader.getRespondant();
+		String fullname = respondant.getPerson().getFirstName() + " " + respondant.getPerson().getLastName();
+		String body = "Dear " + grader.getUser().getFirstName() + ",\n" + "\n"
+				+ fullname + " has completed an assessment that requires evaluation as part of their application to "
+				+ respondant.getAccount().getAccountName() + ".\n"
+				+ "Please visit the Talytica portal at this link: \n"
+				+ link;
+		
+		email.addContent(new Content("text/plain", body));
+		email.addContent(new Content("text/html", body));
+		if (reminder) {
+			email.setSubject("Reminder: " + fullname + "'s Assessment requires evaluation");
+			email.setTemplateId(GRADER_NOTIFICATION_TEMPLATE_ID);
+		} else {
+			email.setSubject("Assessment completed: " + fullname);
+			email.setTemplateId(GRADER_NOTIFICATION_TEMPLATE_ID);
+		}
+		
+		Personalization pers = new Personalization();
+		pers.addSubstitution("[LINK]", link );
+		pers.addSubstitution("[FULL_NAME]", fullname );
+		pers.addTo(new Email(grader.getPerson().getEmail()));		
+
+		email.addPersonalization(pers);
+
+		asynchSend(email);
+	}	
+	
 	
 	private void asynchSend(Mail email) {
 		
@@ -314,5 +348,17 @@ public class EmailServiceImpl implements EmailService {
 			      }
 			}
 		});
+	}
+
+	@Override
+	public void sendGraderRequest(Grader grader) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendGraderReminder(Grader grader) {
+		// TODO Auto-generated method stub
+		
 	}
 }
