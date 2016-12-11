@@ -250,13 +250,15 @@ public class RespondantServiceImpl implements RespondantService  {
 		Set<Response> allresponses = respondant.getResponses();
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> gradeables = new HashSet<Response>();
-		
 		for (SurveyQuestion sq : questionset) {
-			if (AUDIO_COREFACTOR == sq.getQuestion().getQuestionType()) {
+			if (AUDIO_COREFACTOR == sq.getQuestion().getCorefactorId()) {
 			    Optional<Response> response = allresponses.stream().filter(resp -> sq.getQuestionId().equals(resp.getQuestionId())).findFirst();
-			    if (response.isPresent()) gradeables.add(response.get());
+			    if (response.isPresent()) {
+			    	gradeables.add(response.get());
+			    }
 			}
 		}
+		log.debug("Returning {} gradeables for respondant {}", gradeables.size(), respondantId);
 		return gradeables;
 	}
 }

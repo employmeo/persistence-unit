@@ -283,16 +283,28 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Override
 	public void sendQuickReference(Grader grader) {
+		sendQuickReference(grader, false);
+	}
+
+	@Override
+	public void sendQuickReferenceReminder(Grader grader) {
+		sendQuickReference(grader, true);
+	}
+	
+	public void sendQuickReference(Grader grader, boolean reminder) {
+		// TODO: Fill out with one click reference
+	}
+	
+	@Override
+	public void sendGraderRequest(Grader grader) {
 		sendGraderRequest(grader, false);
 		
 	}
 
 	@Override
-	public void sendQuickReferenceReminder(Grader grader) {
-		sendGraderRequest(grader, true);
-		
+	public void sendGraderReminder(Grader grader) {
+		sendGraderRequest(grader, true);	
 	}
-	
 	
 	public void sendGraderRequest(Grader grader, boolean reminder){	
 		Mail email = new Mail();
@@ -319,7 +331,7 @@ public class EmailServiceImpl implements EmailService {
 		Personalization pers = new Personalization();
 		pers.addSubstitution("[LINK]", link );
 		pers.addSubstitution("[FULL_NAME]", fullname );
-		pers.addTo(new Email(grader.getPerson().getEmail()));		
+		pers.addTo(new Email(grader.getUser().getEmail()));		
 
 		email.addPersonalization(pers);
 
@@ -350,15 +362,4 @@ public class EmailServiceImpl implements EmailService {
 		});
 	}
 
-	@Override
-	public void sendGraderRequest(Grader grader) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendGraderReminder(Grader grader) {
-		// TODO Auto-generated method stub
-		
-	}
 }

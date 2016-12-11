@@ -123,14 +123,25 @@ public class GraderServiceImpl implements GraderService {
 	@Override
 	public List<Question> getSummaryCriteriaByGraderId(Long graderId) {
 		Grader grader = graderRepository.findOne(graderId);
-		Set<Response> responses = respondantService.getGradeableResponses(grader.getRespondantId());
 		List<Question> criteria = new ArrayList<Question>();
-		for (Response response : responses) {
-			List<Question> extraCriteria = getCriteriaByQuestionId(response.getQuestionId());
-			for (Question question : extraCriteria) {
-				if (!criteria.contains(question)) criteria.add(question);
+		if (Grader.TYPE_SUMMARY_USER == grader.getType()) {
+			Set<Response> responses = respondantService.getGradeableResponses(grader.getRespondantId());
+			for (Response response : responses) {
+				List<Question> extraCriteria = getCriteriaByQuestionId(response.getQuestionId());
+				log.debug("Found {} criteria for response {}", extraCriteria.size(), response.getId());
+				for (Question question : extraCriteria) {
+					if (!criteria.contains(question)) {
+						log.debug("Added {}", question);
+						criteria.add(question);
+					} else {
+						log.debug("Skipped {}", question);
+					}
+				}
 			}
+		} else {
+			criteria = getCriteriaByQuestionId(grader.getQuestionId());
 		}
+		log.debug("Returning {} criteria for grader", criteria.size(), graderId);
 		return criteria;
 	}
 
