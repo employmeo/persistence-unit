@@ -94,6 +94,13 @@ public class SurveyServiceImpl implements SurveyService  {
 	}
 
 	@Override
+	public Iterable<SurveyQuestion> save(Iterable<SurveyQuestion> surveyQuestions) {
+		Iterable<SurveyQuestion> savedSurveyQuestions = surveyQuestionRepository.save(surveyQuestions);
+		log.debug("Saved multiple surveyQuestions");
+		return savedSurveyQuestions;
+	}
+	
+	@Override
 	public SurveyQuestion getSurveyQuestionById(@NonNull Long surveyQuestionId) {
 		SurveyQuestion surveyQuestion = surveyQuestionRepository.findOne(surveyQuestionId);
 		log.debug("Retrieved for id {} entity {}", surveyQuestionId, surveyQuestion);

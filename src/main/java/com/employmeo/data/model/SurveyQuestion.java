@@ -41,8 +41,7 @@ public class SurveyQuestion implements Serializable {
 	@Column(name = "SQ_QUESTION_ID")
 	private Long questionId;
 
-	// bi-directional many-to-one association to Question
-	@JsonManagedReference
+	// bi-directional many-to-one association to Question (removed json managed reference)
 	@ManyToOne
 	@JoinColumn(name = "SQ_QUESTION_ID", insertable=false, updatable=false)
 	private Question question;

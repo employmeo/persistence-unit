@@ -64,6 +64,7 @@ public class Respondant implements Serializable {
 	@Column(name = "respondant_account_id", insertable = true, updatable = false)
 	private Long accountId;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "respondant_created_date", insertable = true, updatable = false)
 	private Date createdDate;
 
@@ -180,6 +181,11 @@ public class Respondant implements Serializable {
 	void generateRespondantUUID() {
 		if(null == respondantUuid) {
 			respondantUuid = UUID.randomUUID();
+			log.debug("Generating respondantUuid randomly PrePersist as {}", respondantUuid);
+		}
+		
+		if(null == createdDate) {
+			createdDate = new Date();
 			log.debug("Generating respondantUuid randomly PrePersist as {}", respondantUuid);
 		}
 		
