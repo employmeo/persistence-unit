@@ -96,4 +96,15 @@ public class ExternalLinksServiceImpl implements ExternalLinksService {
 		}
 		return link.toString();
 	}
+
+	@Override
+	public String getGraderEmailLink(Grader grader) {
+		String link = null;
+		try {
+			link = new URL(BASE_PORTAL_URL + "/?&component=grading").toString();
+		} catch (Exception e) {
+			link = BASE_PORTAL_URL + "/?&component=grading";
+		}
+		return link.toString();
+	}
 }

@@ -43,6 +43,8 @@ public interface RespondantService {
 	Set<Response> getResponses(@NonNull UUID respondantUuid);
 
 	List<Respondant> getAnalysisPendingRespondants();
+	
+	Set<Response> getGradeableResponses(@NonNull Long respondantId);
 
 	Page<Respondant> getBySearchParams(
 			@NonNull Long accountId,

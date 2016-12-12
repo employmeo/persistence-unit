@@ -29,7 +29,7 @@ public class QuestionServiceImpl implements QuestionService  {
 	@Override
 	public Set<Question> getAllQuestions() {
 		Set<Question> questions = Sets.newHashSet(questionRepository.findAll());
-		log.debug("Retrieved all {} questions", questions);
+		log.debug("Retrieved all {} questions", questions.size());
 
 		return questions;
 	}
@@ -38,22 +38,20 @@ public class QuestionServiceImpl implements QuestionService  {
 	public Question save(@NonNull Question question) {
 		Question savedQuestion = questionRepository.save(question);
 		log.debug("Saved question {}", question);
-
 		return savedQuestion;
 	}
 
 	@Override
 	public Question getQuestionById(@NonNull Long questionId) {
 		Question question = questionRepository.findOne(questionId);
-		log.debug("Retrieved for id {} entity {}", questionId, question);
-
+		log.debug("Retrieved question by id {}", questionId);
 		return question;
 	}
 
 	@Override
 	public Set<Answer> getAllAnswers() {
 		Set<Answer> answers = Sets.newHashSet(answerRepository.findAll());
-		log.debug("Retrieved all {} answers", answers);
+		log.debug("Retrieved all {} answers", answers.size());
 
 		return answers;
 	}

@@ -23,6 +23,8 @@ public interface SurveyService {
 	Set<SurveyQuestion> getAllSurveyQuestions();
 
 	SurveyQuestion save(@NonNull SurveyQuestion surveyQuestion);
+	
+	Iterable<SurveyQuestion> save(@NonNull Iterable<SurveyQuestion> surveyQuestions);
 
 	SurveyQuestion getSurveyQuestionById(@NonNull Long surveyQuestionId);
 	

@@ -17,8 +17,8 @@ import lombok.*;
 @Table(name = "questions")
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(exclude={"answers","responses","surveyQuestions"})
-@ToString(exclude={"answers","responses","surveyQuestions"})
+@EqualsAndHashCode(exclude={"answers","responses"})
+@ToString(exclude={"answers","responses"})
 public class Question implements Serializable {
 
 	@Transient
@@ -82,12 +82,6 @@ public class Question implements Serializable {
 	@OneToMany(mappedBy = "question")
 	private Set<Response> responses = new HashSet<>();
 
-	// bi-directional many-to-one association to SurveyQuestion
-	@JsonBackReference
-	@Fetch(FetchMode.SUBSELECT)
-	@OneToMany(mappedBy = "question")
-	private Set<SurveyQuestion> surveyQuestions = new HashSet<>();
-	
 	@JsonProperty("type")
 	public String getType() {
 		if(type != null) return type.getName();
