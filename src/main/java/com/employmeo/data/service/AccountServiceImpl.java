@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employmeo.data.model.Account;
+import com.employmeo.data.model.Location;
 import com.employmeo.data.model.Position;
 import com.employmeo.data.repository.AccountRepository;
+import com.employmeo.data.repository.LocationRepository;
 import com.employmeo.data.repository.PositionRepository;
 
 import jersey.repackaged.com.google.common.collect.Sets;
@@ -24,6 +26,8 @@ public class AccountServiceImpl implements AccountService {
 	private AccountRepository accountRepository;
 	@Autowired
 	private PositionRepository positionRepository;
+	@Autowired
+	private LocationRepository locationRepository;
 
 
 	@Override
@@ -79,6 +83,21 @@ public class AccountServiceImpl implements AccountService {
 		Account account = accountRepository.findByAtsId(atsId);
 		log.debug("Retrieved for ATS id {} entity {}", atsId, account);
 		return account;
+	}
+
+	@Override
+	public Position getPositionByAtsId(Long accountId, String atsId) {
+		return positionRepository.findByAccountIdAndAtsId(accountId, atsId);
+	}
+
+	@Override
+	public Location getLocationById(Long locationId) {
+		return locationRepository.findOne(locationId);
+	}
+
+	@Override
+	public Location getLocationByAtsId(Long accountId, String atsId) {
+		return locationRepository.findByAccountIdAndAtsId(accountId, atsId);
 	}
 
 

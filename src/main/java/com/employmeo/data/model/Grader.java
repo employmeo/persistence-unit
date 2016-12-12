@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,7 +41,8 @@ public class Grader implements Serializable {
 	public static final int STATUS_COMPLETED = 10;
 	public static final int STATUS_IGNORED = 20;
 	public static final int TYPE_USER = 1;
-	public static final int TYPE_PERSON = 2;
+	public static final int TYPE_SUMMARY_USER = 2;
+	public static final int TYPE_PERSON = 100;
 	
 	@Transient
 	private static final long serialVersionUID = -8654344203277805503L;
@@ -106,9 +108,16 @@ public class Grader implements Serializable {
 	@Column(name = "grader_respondant_id")
 	private Long respondantId;
 	
+	@Column(name = "grader_notes")
+	private String notes;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "grader_created_date")
 	private Date createdDate;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "grader_modified_date")
+	private Date modifiedDate;
 	  
 	@PrePersist
 	void generateUUIDandDate()  {
@@ -119,6 +128,10 @@ public class Grader implements Serializable {
 		createdDate = new Date();
 	}
 	
+	@PreUpdate
+	void generateModdDate()  {
+		modifiedDate = new Date();
+	}	
 	@JsonProperty("userName")
 	public String getUserName() {
 		if (this.user == null) return null;

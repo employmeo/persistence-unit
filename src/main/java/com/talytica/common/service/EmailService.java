@@ -25,6 +25,10 @@ public interface EmailService {
 	public void sendQuickReference(Grader grader);
 
 	public void sendQuickReferenceReminder(Grader grader);
+	
+	public void sendGraderRequest(Grader grader);
+
+	public void sendGraderReminder(Grader grader);
 
 	
 }

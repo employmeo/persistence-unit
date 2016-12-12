@@ -153,7 +153,8 @@ public class EmailServiceImpl implements EmailService {
 		email.addContent(new Content("text/html", body));
 	
 		pers.addSubstitution("[LINK]", link );
-		pers.addSubstitution("[FNAME]", respondant.getPerson().getFirstName() + " " +respondant.getPerson().getLastName());
+		pers.addSubstitution("[FNAME]", respondant.getPerson().getFirstName());
+		pers.addSubstitution("[FULL_NAME]", respondant.getPerson().getFirstName() + " " +respondant.getPerson().getLastName());
 		pers.addSubstitution("[ACCOUNT_NAME]",as.getAccount().getAccountName());
 		pers.addTo(new Email(respondant.getPerson().getEmail()));		
 
@@ -282,15 +283,61 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Override
 	public void sendQuickReference(Grader grader) {
-		// TODO Auto-generated method stub
-		
+		sendQuickReference(grader, false);
 	}
 
 	@Override
 	public void sendQuickReferenceReminder(Grader grader) {
-		// TODO Auto-generated method stub
+		sendQuickReference(grader, true);
+	}
+	
+	public void sendQuickReference(Grader grader, boolean reminder) {
+		// TODO: Fill out with one click reference
+	}
+	
+	@Override
+	public void sendGraderRequest(Grader grader) {
+		sendGraderRequest(grader, false);
 		
 	}
+
+	@Override
+	public void sendGraderReminder(Grader grader) {
+		sendGraderRequest(grader, true);	
+	}
+	
+	public void sendGraderRequest(Grader grader, boolean reminder){	
+		Mail email = new Mail();
+		email.setFrom(FROM_ADDRESS);
+		String link = externalLinksService.getGraderEmailLink(grader);
+		Respondant respondant = grader.getRespondant();
+		String fullname = respondant.getPerson().getFirstName() + " " + respondant.getPerson().getLastName();
+		String body = "Dear " + grader.getUser().getFirstName() + ",\n" + "\n"
+				+ fullname + " has completed an assessment that requires evaluation as part of their application to "
+				+ respondant.getAccount().getAccountName() + ".\n"
+				+ "Please visit the Talytica portal at this link: \n"
+				+ link;
+		
+		email.addContent(new Content("text/plain", body));
+		email.addContent(new Content("text/html", body));
+		if (reminder) {
+			email.setSubject("Reminder: " + fullname + "'s Assessment requires evaluation");
+			email.setTemplateId(GRADER_NOTIFICATION_TEMPLATE_ID);
+		} else {
+			email.setSubject("Assessment completed: " + fullname);
+			email.setTemplateId(GRADER_NOTIFICATION_TEMPLATE_ID);
+		}
+		
+		Personalization pers = new Personalization();
+		pers.addSubstitution("[LINK]", link );
+		pers.addSubstitution("[FULL_NAME]", fullname );
+		pers.addTo(new Email(grader.getUser().getEmail()));		
+
+		email.addPersonalization(pers);
+
+		asynchSend(email);
+	}	
+	
 	
 	private void asynchSend(Mail email) {
 		
@@ -314,4 +361,5 @@ public class EmailServiceImpl implements EmailService {
 			}
 		});
 	}
+
 }

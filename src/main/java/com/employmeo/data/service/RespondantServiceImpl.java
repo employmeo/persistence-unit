@@ -37,8 +37,8 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
 	private static final Integer DEFAULT_PAGE_SIZE = 100;
-
-
+	private static final int AUDIO_COREFACTOR = 42;
+	//private static final int REFERENCE_COREFACTOR = 43;
 
 	@Override
 	public Respondant getRespondant(@NonNull UUID respondantUuid) {
@@ -242,5 +242,23 @@ public class RespondantServiceImpl implements RespondantService  {
 
 		log.debug("Found {} respondants who are ungraded, with all graders fulfilled", scoringEligibleRespondants.size());
 		return scoringEligibleRespondants;
+	}
+
+	@Override
+	public Set<Response> getGradeableResponses(Long respondantId) {
+		Respondant respondant = respondantRepository.findOne(respondantId);
+		Set<Response> allresponses = respondant.getResponses();
+		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
+		Set<Response> gradeables = new HashSet<Response>();
+		for (SurveyQuestion sq : questionset) {
+			if (AUDIO_COREFACTOR == sq.getQuestion().getCorefactorId()) {
+			    Optional<Response> response = allresponses.stream().filter(resp -> sq.getQuestionId().equals(resp.getQuestionId())).findFirst();
+			    if (response.isPresent()) {
+			    	gradeables.add(response.get());
+			    }
+			}
+		}
+		log.debug("Returning {} gradeables for respondant {}", gradeables.size(), respondantId);
+		return gradeables;
 	}
 }

@@ -25,7 +25,6 @@ public class SurveyServiceImpl implements SurveyService  {
 	@Autowired
 	private SurveyQuestionRepository surveyQuestionRepository;
 
-
 	@Override
 	public Set<Survey> getAllSurveys() {
 		Set<Survey> surveys = Sets.newHashSet(surveyRepository.findAll());
@@ -95,10 +94,43 @@ public class SurveyServiceImpl implements SurveyService  {
 	}
 
 	@Override
+	public Iterable<SurveyQuestion> save(Iterable<SurveyQuestion> surveyQuestions) {
+		Iterable<SurveyQuestion> savedSurveyQuestions = surveyQuestionRepository.save(surveyQuestions);
+		log.debug("Saved multiple surveyQuestions");
+		return savedSurveyQuestions;
+	}
+	
+	@Override
 	public SurveyQuestion getSurveyQuestionById(@NonNull Long surveyQuestionId) {
 		SurveyQuestion surveyQuestion = surveyQuestionRepository.findOne(surveyQuestionId);
 		log.debug("Retrieved for id {} entity {}", surveyQuestionId, surveyQuestion);
 
 		return surveyQuestion;
 	}
+
+	@Override
+	public void removeQuestion(Long sqId) {
+		SurveyQuestion sq = surveyQuestionRepository.findOne(sqId);
+		Survey survey = getSurveyById(sq.getSurveyId());
+		survey.getSurveyQuestions().remove(sq);
+		surveyQuestionRepository.delete(sqId);
+		log.info("Deleted survey question {}", sqId);		
+	}
+
+	@Override
+	public void removeSection(SurveySectionPK id) {
+
+    	Survey survey = getSurveyById(id.getSurveyId());
+    	SurveySection surveySection = getSurveySectionById(id);
+    	survey.getSurveySections().remove(surveySection);
+		surveySectionRepository.delete(id);
+		log.info("Deleted survey section {}", id);	
+	}
+
+	@Override
+	public void delete(Long surveyId) {
+		surveyRepository.delete(surveyId);
+		log.info("Deleted survey {}", surveyId);		
+	}
+
 }

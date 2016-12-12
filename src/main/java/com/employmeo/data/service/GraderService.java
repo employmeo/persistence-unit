@@ -36,5 +36,7 @@ public interface GraderService {
 	Grade saveGrade(Grade grade);
 	
 	List<Question> getCriteriaByQuestionId(@NonNull Long questionId);
+	
+	List<Question> getSummaryCriteriaByGraderId(@NonNull Long graderId);
 
 }

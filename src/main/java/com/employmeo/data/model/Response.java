@@ -1,6 +1,8 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -50,5 +52,23 @@ public class Response implements Serializable {
 
 	@Column(name = "response_question_id", insertable = true, updatable = false)
 	private Long questionId;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "response_created", insertable = true, updatable = false)
+	private Date created;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "response_updated")
+	private Date updated;
+	
+	@PrePersist
+	void setCreated() {
+		created = new Date();
+	}
+	
+	@PreUpdate
+	void setUpdated() {
+		updated = new Date();
+	}
 
 }

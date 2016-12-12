@@ -20,15 +20,17 @@ public class SurveyQuestion implements Serializable {
 	private static final long serialVersionUID = -7227663971810034513L;
 
 	@Id
-	@Basic(optional = false)
+	//@Basic(optional = false)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="sq_id_seq")
+    @SequenceGenerator(name="sq_id_seq", sequenceName="survey_questions_sq_id_seq", allocationSize=1)
 	@Column(name = "SQ_ID")
 	private Long id;
 
 	@Column(name = "SQ_DEPENDENCY")
-	private Boolean dependency;
+	private Boolean dependency = false;
 
 	@Column(name = "SQ_REQUIRED")
-	private Boolean required;
+	private Boolean required = true;
 
 	@Column(name = "SQ_SEQUENCE")
 	private Integer sequence;
@@ -36,14 +38,13 @@ public class SurveyQuestion implements Serializable {
 	@Column(name = "SQ_PAGE")
 	private Integer page;
 
-	// bi-directional many-to-one association to Question
-	@JsonManagedReference
-	@ManyToOne
-	@JoinColumn(name = "SQ_QUESTION_ID")
-	private Question question;
-
-	@Column(name = "SQ_QUESTION_ID", insertable=false, updatable=false)
+	@Column(name = "SQ_QUESTION_ID")
 	private Long questionId;
+
+	// bi-directional many-to-one association to Question (removed json managed reference)
+	@ManyToOne
+	@JoinColumn(name = "SQ_QUESTION_ID", insertable=false, updatable=false)
+	private Question question;
 
 	// bi-directional many-to-one association to Survey
 	@JsonBackReference
