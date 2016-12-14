@@ -38,6 +38,9 @@ public class Answer implements Serializable {
 
 	@Column(name = "ANSWER_VALUE")
 	private Integer answerValue;
+	
+	@Column(name = "ANSWER_COREFACTOR_ID")
+	private Long corefactorId;
 
 	// bi-directional many-to-one association to Question
 	@JsonBackReference

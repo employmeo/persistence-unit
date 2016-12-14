@@ -23,6 +23,9 @@ public class SurveySection implements Serializable {
 	@JsonUnwrapped
 	private SurveySectionPK id;
 
+	@Column(name="ss_name")
+	private String name;
+
 	@Column(name="ss_all_required")
 	private Boolean allRequired = false;
 
