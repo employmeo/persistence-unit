@@ -54,7 +54,7 @@ public class Question implements Serializable {
 	private QuestionType type;
 
 	@Column(name = "QUESTION_COREFACTOR_ID")
-	private Integer corefactorId;
+	private Long corefactorId;
 	
 	@JsonIgnore
 	@ManyToOne
