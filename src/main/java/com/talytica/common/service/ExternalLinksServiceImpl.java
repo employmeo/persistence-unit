@@ -89,8 +89,7 @@ public class ExternalLinksServiceImpl implements ExternalLinksService {
 		String link = null;
 		try {
 			link = new URL(
-					BASE_SURVEY_URL + "/?&graderUuid=" + grader.getUuId())
-							.toString();
+					BASE_SURVEY_URL + "/?&graderUuid=" + grader.getUuId()).toString();
 		} catch (Exception e) {
 			link = BASE_SURVEY_URL + "/?&graderUuid=" + grader.getUuId();
 		}
@@ -104,6 +103,18 @@ public class ExternalLinksServiceImpl implements ExternalLinksService {
 			link = new URL(BASE_PORTAL_URL + "/?&component=grading").toString();
 		} catch (Exception e) {
 			link = BASE_PORTAL_URL + "/?&component=grading";
+		}
+		return link.toString();
+	}
+
+	@Override
+	public String getReferenceDeclineLink(Grader grader) {
+		String link = null;
+		try {
+			link = new URL(
+					BASE_SURVEY_URL + "/survey/1/grader/" + grader.getUuId()+"/decline").toString();
+		} catch (Exception e) {
+			link = BASE_SURVEY_URL + "/survey/1/grader/" + grader.getUuId()+"/decline";
 		}
 		return link.toString();
 	}

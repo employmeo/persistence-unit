@@ -31,6 +31,9 @@ public class SurveySection implements Serializable {
 
 	@Column(name="ss_instructions")
 	private String instructions;
+	
+	@Column(name="ss_top_instructions")
+	private String topInstructions;
 
 	@Column(name="ss_questions_per_page")
 	private Integer questionsPerPage;

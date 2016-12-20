@@ -59,6 +59,12 @@ public class AccountSurvey implements Serializable {
 	@Column(name = "as_thankyou_text")
 	private String thankyouText;
 
+	@Column(name = "as_static_link_view")
+	private String staticLinkView;
+
+	@Column(name = "as_invite_template_id")
+	private String inviteTemplateId;
+	
 	@Column(name = "as_thankyou_media")
 	private String thankyouMedia;
 

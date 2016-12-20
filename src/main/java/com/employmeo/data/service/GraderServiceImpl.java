@@ -74,7 +74,13 @@ public class GraderServiceImpl implements GraderService {
 		}
 		return questions;
 	}
-
+	
+	@Override
+	public List<Criterion> getCriteriaListByQuestionId(Long questionId) {
+		List<Criterion> criteria =  criterionRepository.findAllBySurveyQuestionIdOrderBySequenceAsc(questionId);
+		return criteria;
+	}
+	
 	@Override
 	public List<Question> getQuestionsByGraderId(Long graderId) {
 		Grader grader = graderRepository.findOne(graderId);
