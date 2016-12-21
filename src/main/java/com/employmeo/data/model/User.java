@@ -58,6 +58,9 @@ public class User implements Serializable {
 	@Column(name = "USER_TYPE")
 	private Integer userType;
 
+	@Column(name = "USER_ATS_ID")
+	private String atsId;
+	
 	// bi-directional many-to-one association to Account
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)

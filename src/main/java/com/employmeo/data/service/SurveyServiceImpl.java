@@ -28,7 +28,7 @@ public class SurveyServiceImpl implements SurveyService  {
 	@Override
 	public Set<Survey> getAllSurveys() {
 		Set<Survey> surveys = Sets.newHashSet(surveyRepository.findAll());
-		log.debug("Retrieved all {} surveys", surveys);
+		log.debug("Retrieved all {} surveys", surveys.size());
 
 		return surveys;
 	}
@@ -36,7 +36,7 @@ public class SurveyServiceImpl implements SurveyService  {
 	@Override
 	public Survey save(@NonNull Survey survey) {
 		Survey savedSurvey = surveyRepository.save(survey);
-		log.debug("Saved survey {}", survey);
+		log.debug("Saved survey {}", survey.getName());
 
 		return savedSurvey;
 	}
@@ -44,7 +44,7 @@ public class SurveyServiceImpl implements SurveyService  {
 	@Override
 	public Survey getSurveyById(@NonNull Long surveyId) {
 		Survey survey = surveyRepository.findOne(surveyId);
-		log.debug("Retrieved for id {} entity {}", surveyId, survey);
+		log.debug("Retrieved for id {} entity {}", surveyId, survey.getName());
 
 		return survey;
 	}
@@ -54,7 +54,7 @@ public class SurveyServiceImpl implements SurveyService  {
 	@Override
 	public Set<SurveySection> getAllSurveySections() {
 		Set<SurveySection> surveySections = Sets.newHashSet(surveySectionRepository.findAll());
-		log.debug("Retrieved all {} surveySections", surveySections);
+		log.debug("Retrieved all {} surveySections", surveySections.size());
 
 		return surveySections;
 	}
@@ -62,7 +62,7 @@ public class SurveyServiceImpl implements SurveyService  {
 	@Override
 	public SurveySection save(@NonNull SurveySection surveySection) {
 		SurveySection savedSurveySection = surveySectionRepository.save(surveySection);
-		log.debug("Saved surveySection {}", surveySection);
+		log.debug("Saved surveySection {}", surveySection.getName());
 
 		return savedSurveySection;
 	}
@@ -70,7 +70,7 @@ public class SurveyServiceImpl implements SurveyService  {
 	@Override
 	public SurveySection getSurveySectionById(@NonNull SurveySectionPK surveySectionPK) {
 		SurveySection surveySection = surveySectionRepository.findOne(surveySectionPK);
-		log.debug("Retrieved for id {} entity {}", surveySectionPK, surveySection);
+		log.debug("Retrieved for id {} entity {}", surveySectionPK, surveySection.getName());
 
 		return surveySection;
 	}
@@ -80,7 +80,7 @@ public class SurveyServiceImpl implements SurveyService  {
 	@Override
 	public Set<SurveyQuestion> getAllSurveyQuestions() {
 		Set<SurveyQuestion> surveyQuestions = Sets.newHashSet(surveyQuestionRepository.findAll());
-		log.debug("Retrieved all {} surveyQuestions", surveyQuestions);
+		log.debug("Retrieved all {} surveyQuestions", surveyQuestions.size());
 
 		return surveyQuestions;
 	}

@@ -54,7 +54,7 @@ public class Question implements Serializable {
 	private QuestionType type;
 
 	@Column(name = "QUESTION_COREFACTOR_ID")
-	private Integer corefactorId;
+	private Long corefactorId;
 	
 	@JsonIgnore
 	@ManyToOne
@@ -69,6 +69,9 @@ public class Question implements Serializable {
 
 	@Column(name = "question_foreign_source")
 	private String foreignSource;
+	
+	@Column(name = "question_scoring_model")
+	private String scoringModel;
 
 	// bi-directional many-to-one association to Answer
 	@JsonManagedReference

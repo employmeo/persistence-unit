@@ -186,11 +186,12 @@ public class Respondant implements Serializable {
 		
 		if(null == createdDate) {
 			createdDate = new Date();
-			log.debug("Generating respondantUuid randomly PrePersist as {}", respondantUuid);
+			log.debug("Generating create date as {}", createdDate);
 		}
 		
 		if(null == payrollId) {
 			payrollId = String.format("%06d", new Random().nextInt(999999));
+			log.debug("Random numeric identifier create date as {}", payrollId);
 		}
 	}
 }

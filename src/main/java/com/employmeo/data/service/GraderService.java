@@ -17,6 +17,8 @@ public interface GraderService {
 
 	List<Grade> getGradesByGraderId(@NonNull Long graderId);
 	
+	List<Grade> getAllGradesByRespondantId(Long respondantId);
+	
 	Page<Grader> getGradersByUserId(@NonNull Long userId);
 
 	Page<Grader> getGradersByUserId(@NonNull Long userId, int pageNumber, int pageSize);
@@ -36,6 +38,8 @@ public interface GraderService {
 	Grade saveGrade(Grade grade);
 	
 	List<Question> getCriteriaByQuestionId(@NonNull Long questionId);
+	
+	List<Criterion> getCriteriaListByQuestionId(Long questionId);
 	
 	List<Question> getSummaryCriteriaByGraderId(@NonNull Long graderId);
 

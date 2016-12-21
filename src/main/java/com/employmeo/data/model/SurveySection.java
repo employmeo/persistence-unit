@@ -23,11 +23,17 @@ public class SurveySection implements Serializable {
 	@JsonUnwrapped
 	private SurveySectionPK id;
 
+	@Column(name="ss_name")
+	private String name;
+
 	@Column(name="ss_all_required")
 	private Boolean allRequired = false;
 
 	@Column(name="ss_instructions")
 	private String instructions;
+	
+	@Column(name="ss_top_instructions")
+	private String topInstructions;
 
 	@Column(name="ss_questions_per_page")
 	private Integer questionsPerPage;
