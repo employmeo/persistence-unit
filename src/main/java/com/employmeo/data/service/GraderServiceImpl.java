@@ -74,7 +74,13 @@ public class GraderServiceImpl implements GraderService {
 		}
 		return questions;
 	}
-
+	
+	@Override
+	public List<Criterion> getCriteriaListByQuestionId(Long questionId) {
+		List<Criterion> criteria =  criterionRepository.findAllBySurveyQuestionIdOrderBySequenceAsc(questionId);
+		return criteria;
+	}
+	
 	@Override
 	public List<Question> getQuestionsByGraderId(Long graderId) {
 		Grader grader = graderRepository.findOne(graderId);
@@ -105,6 +111,16 @@ public class GraderServiceImpl implements GraderService {
 		return graderRepository.findAllByRespondantId(respondantId);
 	}
 
+	@Override
+	public List<Grade> getAllGradesByRespondantId(Long respondantId) {
+		List<Grade> allGrades = new ArrayList<Grade>();
+		List<Grader> graders = graderRepository.findAllByRespondantId(respondantId);
+		for (Grader grader : graders) {
+			allGrades.addAll(gradeRepository.findAllByGraderId(grader.getId()));
+		}
+		return allGrades;
+	}
+	
 	@Override
 	public Page<Grader> getGradersByUserIdStatusAndDates(Long userId, List<Integer> status, Date from, Date to) {
 		return getGradersByUserIdStatusAndDates(userId, status, from, to, PAGE_ONE, DEFAULT_PAGE_SIZE);

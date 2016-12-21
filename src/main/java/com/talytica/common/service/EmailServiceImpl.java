@@ -50,12 +50,12 @@ public class EmailServiceImpl implements EmailService {
 	private String RESULTS_TEMPLATE_ID;
 	
 	@Value("8e5983ac-913d-4370-8ea9-312ff8665f39")
-	private String GRADER_NOTIFICATION_TEMPLATE_ID; // Not programmed yet
+	private String GRADER_NOTIFICATION_TEMPLATE_ID; 
 
-	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d") // Not Created Yet
+	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") 
 	private String REFERENCE_TEMPLATE_ID;
 	
-	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d") // Not Created Yet
+	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac")
 	private String REFERENCE_REMINDER_TEMPLATE_ID;
 
 	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d") // Not Created Yet
@@ -250,7 +250,9 @@ public class EmailServiceImpl implements EmailService {
 		Mail email = new Mail();
 		email.setFrom(FROM_ADDRESS);
 		String link = externalLinksService.getReferenceEmailLink(grader);
+		String declineLink = externalLinksService.getReferenceDeclineLink(grader);
 		Respondant respondant = grader.getRespondant();
+		String positionName = respondant.getPosition().getPositionName();
 		String fullname = respondant.getPerson().getFirstName() + " " + respondant.getPerson().getLastName();
 		String body = "Dear " + grader.getPerson().getFirstName() + ",\n" + "\n"
 				+ "You have been requested by: " + fullname + " to provide input on their application to "
@@ -270,7 +272,9 @@ public class EmailServiceImpl implements EmailService {
 		
 		Personalization pers = new Personalization();
 		pers.addSubstitution("[LINK]", link );
+		pers.addSubstitution("[DECLINE_LINK]", declineLink );
 		pers.addSubstitution("[APPLICANT]", fullname );
+		pers.addSubstitution("[POSITION_NAME]", positionName );
 		pers.addSubstitution("[GRADER_NAME]", grader.getPerson().getFirstName());
 		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
 		pers.addTo(new Email(grader.getPerson().getEmail()));		
