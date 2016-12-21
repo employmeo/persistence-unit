@@ -112,6 +112,16 @@ public class GraderServiceImpl implements GraderService {
 	}
 
 	@Override
+	public List<Grade> getAllGradesByRespondantId(Long respondantId) {
+		List<Grade> allGrades = new ArrayList<Grade>();
+		List<Grader> graders = graderRepository.findAllByRespondantId(respondantId);
+		for (Grader grader : graders) {
+			allGrades.addAll(gradeRepository.findAllByGraderId(grader.getId()));
+		}
+		return allGrades;
+	}
+	
+	@Override
 	public Page<Grader> getGradersByUserIdStatusAndDates(Long userId, List<Integer> status, Date from, Date to) {
 		return getGradersByUserIdStatusAndDates(userId, status, from, to, PAGE_ONE, DEFAULT_PAGE_SIZE);
 	}

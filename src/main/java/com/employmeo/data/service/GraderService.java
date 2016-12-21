@@ -17,6 +17,8 @@ public interface GraderService {
 
 	List<Grade> getGradesByGraderId(@NonNull Long graderId);
 	
+	List<Grade> getAllGradesByRespondantId(Long respondantId);
+	
 	Page<Grader> getGradersByUserId(@NonNull Long userId);
 
 	Page<Grader> getGradersByUserId(@NonNull Long userId, int pageNumber, int pageSize);
