@@ -133,4 +133,10 @@ public class SurveyServiceImpl implements SurveyService  {
 		log.info("Deleted survey {}", surveyId);		
 	}
 
+	@Override
+	public Set<Survey> getAllAvailableSurveys(Integer availability) {
+		log.debug("Getting Surveys for Availability level: {}",availability);
+		return surveyRepository.findByAvailabilityLessThan(availability);
+	}
+
 }

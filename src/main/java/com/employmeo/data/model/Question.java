@@ -51,7 +51,7 @@ public class Question implements Serializable {
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "QUESTION_TYPE", insertable = false, updatable = false)
-	private QuestionType type;
+	private QuestionType typeObject;
 
 	@Column(name = "QUESTION_COREFACTOR_ID")
 	private Long corefactorId;
@@ -87,7 +87,7 @@ public class Question implements Serializable {
 
 	@JsonProperty("type")
 	public String getType() {
-		if(type != null) return type.getName();
+		if(typeObject != null) return typeObject.getName();
 		return null;
 	}
 	

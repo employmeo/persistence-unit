@@ -8,6 +8,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.*;
@@ -18,12 +19,17 @@ import lombok.extern.slf4j.Slf4j;
 @Table(name = "account_surveys")
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(exclude={"account","survey"})
-@ToString(exclude={"account","survey"})
+@EqualsAndHashCode(exclude={"account","survey","benchmark"})
+@ToString(exclude={"account","survey","benchmark"})
 public class AccountSurvey implements Serializable {
 
 	@Transient
 	private static final long serialVersionUID = 7399707522994002079L;
+
+	public static final int TYPE_APPLICANT = 100;
+	public static final int TYPE_BENCHMARK = 200;
+	public static final int STATUS_ACTIVE = 1;
+	public static final int STATUS_DISABLED = 99;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,6 +64,9 @@ public class AccountSurvey implements Serializable {
 
 	@Column(name = "as_thankyou_text")
 	private String thankyouText;
+	
+	@Column(name = "as_permalink")
+	private String permalink;
 
 	@Column(name = "as_static_link_view")
 	private String staticLinkView;
@@ -72,8 +81,11 @@ public class AccountSurvey implements Serializable {
 	private String overRideRedirectPage;
 
 	@Column(name = "as_status")
-	private Integer accountSurveyStatus;
+	private Integer accountSurveyStatus = STATUS_ACTIVE;
 	
+	@Column(name = "as_type")
+	private Integer type;
+
 	@Column(name = "as_phone_number")
 	private String phoneNumber;
 	
@@ -83,6 +95,14 @@ public class AccountSurvey implements Serializable {
 
 	@Column(name = "as_survey_id")
 	private Long surveyId;
+	
+	@JsonBackReference
+	@ManyToOne
+	@JoinColumn(name = "as_benchmark_id", insertable = false, updatable = false)
+	private Benchmark benchmark;
+
+	@Column(name = "as_benchmark_id")
+	private Long benchmarkId;
 	
 	@PrePersist
 	void generateUUID() {

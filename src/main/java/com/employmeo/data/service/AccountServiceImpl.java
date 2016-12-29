@@ -1,5 +1,6 @@
 package com.employmeo.data.service;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employmeo.data.model.Account;
+import com.employmeo.data.model.Benchmark;
 import com.employmeo.data.model.Location;
 import com.employmeo.data.model.Position;
 import com.employmeo.data.repository.AccountRepository;
+import com.employmeo.data.repository.BenchmarkRepository;
 import com.employmeo.data.repository.LocationRepository;
 import com.employmeo.data.repository.PositionRepository;
 
@@ -28,6 +31,8 @@ public class AccountServiceImpl implements AccountService {
 	private PositionRepository positionRepository;
 	@Autowired
 	private LocationRepository locationRepository;
+	@Autowired
+	private BenchmarkRepository benchmarkRepository;
 
 
 	@Override
@@ -54,6 +59,13 @@ public class AccountServiceImpl implements AccountService {
 		return account;
 	}
 
+	@Override
+	public Account getAccountByName(@NonNull String accountName) {
+		Account account = accountRepository.findByAccountName(accountName);
+		log.debug("Retrieved for id {} entity {}", accountName, account);
+		return account;
+	}
+	
 	@Override
 	public Set<Position> getAllPositions() {
 		Set<Position> positions = Sets.newHashSet(positionRepository.findAll());
@@ -98,6 +110,48 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Location getLocationByAtsId(Long accountId, String atsId) {
 		return locationRepository.findByAccountIdAndAtsId(accountId, atsId);
+	}
+
+	@Override
+	public Location save(Location location) {
+		Location savedLocation = locationRepository.save(location);
+		log.debug("Saved location {}", location);
+		return savedLocation;
+	}
+
+	@Override
+	public Benchmark save(@NonNull Benchmark benchmark) {
+		Benchmark savedBenchmark = benchmarkRepository.save(benchmark);
+		log.debug("Saved benchmark {}", savedBenchmark);
+
+		return savedBenchmark;
+	}
+
+	@Override
+	public List<Benchmark> getBenchmarksByPositionId(@NonNull Long positionId) {
+		List<Benchmark> benchmarks = benchmarkRepository.findAllByPositionId(positionId);
+		log.debug("Retrieved for id {} entity {}", positionId, benchmarks);
+		return benchmarks;
+	}
+
+	@Override
+	public List<Benchmark> getBenchmarksByAccountId(Long accountId) {
+		List<Benchmark> benchmarks = benchmarkRepository.findAllByAccountId(accountId);
+		log.debug("Retrieved for id {} entity {}", accountId, benchmarks);
+		return benchmarks;
+	}
+	
+	@Override
+	public List<Benchmark> getIncompleteBenchmarksByAccountId(Long accountId) {
+		List<Benchmark> benchmarks = benchmarkRepository.findAllByAccountIdAndStatusLessThan(accountId, Benchmark.STATUS_COMPLETED);
+		log.debug("Retrieved for id {} entity {}", accountId, benchmarks);
+		return benchmarks;
+	}
+	
+	@Override
+	public Benchmark getBenchmarkById(Long benchmarkId) {
+		Benchmark benchmark = benchmarkRepository.findOne(benchmarkId);
+		return benchmark;
 	}
 
 

@@ -30,6 +30,7 @@ public class Respondant implements Serializable {
 	@Transient
 	private static final long serialVersionUID = 808486275173441348L;
 
+	public static final int STATUS_CREATED = 0;
 	public static final int STATUS_INVITED = 1;
 	public static final int STATUS_STARTED = 5;
 	public static final int STATUS_REMINDED = 6;
@@ -43,6 +44,10 @@ public class Respondant implements Serializable {
 	public static final int STATUS_HIRED = 20;
 	public static final int STATUS_QUIT = 30;
 	public static final int STATUS_TERMINATED = 40;
+	
+	public static final int TYPE_APPLICANT = 1;
+	public static final int TYPE_BENCHMARK = 100;
+	public static final int TYPE_PRIOR_DATA = 200;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,6 +75,9 @@ public class Respondant implements Serializable {
 
 	@Column(name = "respondant_status")
 	private Integer respondantStatus = Respondant.STATUS_INVITED;
+	
+	@Column(name = "respondant_type")
+	private Integer type = Respondant.TYPE_APPLICANT;
 
 	@JsonBackReference
 	@ManyToOne
@@ -177,6 +185,9 @@ public class Respondant implements Serializable {
 	@Column(name = "respondant_hire_date")
 	private Date hireDate;
 
+	@Column(name = "respondant_benchmark_id")
+	private Long benchmarkId;
+	
 	@PrePersist
 	void generateRespondantUUID() {
 		if(null == respondantUuid) {

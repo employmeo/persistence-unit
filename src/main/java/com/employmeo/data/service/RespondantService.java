@@ -30,6 +30,8 @@ public interface RespondantService {
 
 	Page<Respondant> getByAccountId(@NonNull Long accountId);
 
+	Set<Respondant> getByBenchmarkId(@NonNull Long benchmarkId);
+	
 	Set<RespondantScore> getAllRespondantScores();
 
 	RespondantScore save(@NonNull RespondantScore respondantScore);
@@ -52,6 +54,7 @@ public interface RespondantService {
 			@NonNull Integer statusHigh,
 			Long locationId,
 			Long positionId,
+			@NonNull Integer type,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate);
 
@@ -61,6 +64,7 @@ public interface RespondantService {
 			@NonNull Integer statusHigh,
 			Long locationId,
 			Long positionId,
+			@NonNull Integer type,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate,
 			@NonNull @Min(value = 1) Integer pageNumber,

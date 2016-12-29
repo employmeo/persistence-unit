@@ -164,6 +164,7 @@ public class RespondantServiceImpl implements RespondantService  {
 			@NonNull Integer statusHigh,
 			Long locationId,
 			Long positionId,
+			@NonNull Integer type,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate) {
 
@@ -171,6 +172,7 @@ public class RespondantServiceImpl implements RespondantService  {
 				   statusLow, statusHigh,
 				   locationId,
 				   positionId,
+				   type,
 				   fromDate, toDate,
 				   DEFAULT_PAGE_NUMBER,
 				   DEFAULT_PAGE_SIZE);
@@ -183,6 +185,7 @@ public class RespondantServiceImpl implements RespondantService  {
 			@NonNull Integer statusHigh,
 			Long locationId,
 			Long positionId,
+			@NonNull Integer type,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate,
 			@NonNull @Min(value = 1) Integer pageNumber,
@@ -194,13 +197,13 @@ public class RespondantServiceImpl implements RespondantService  {
 		Page<Respondant> respondants = null;
 
 		if ((locationId != null) && (positionId != null)) {
-			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, positionId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		} else if ((locationId == null) && (positionId == null)) {
-			respondants = respondantRepository.findAllByAccountIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, statusLow, statusHigh, fromDate, toDate, pageRequest);
+			respondants = respondantRepository.findAllByAccountIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		} else if (locationId == null) {
-			respondants = respondantRepository.findAllByAccountIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);
+			respondants = respondantRepository.findAllByAccountIdAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, positionId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		} else {
-			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, statusLow, statusHigh, fromDate, toDate, pageRequest);
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		}
 
 
@@ -260,5 +263,10 @@ public class RespondantServiceImpl implements RespondantService  {
 		}
 		log.debug("Returning {} gradeables for respondant {}", gradeables.size(), respondantId);
 		return gradeables;
+	}
+
+	@Override
+	public Set<Respondant> getByBenchmarkId(Long benchmarkId) {
+		return respondantRepository.findAllByBenchmarkId(benchmarkId);
 	}
 }

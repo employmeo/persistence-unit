@@ -28,6 +28,13 @@ public class Survey implements Serializable {
 	public static final int TYPE_PHONE = 2;
 	public static final int TYPE_MULTI = 3;
 
+	public static final int AVAIL_FREE = 100;
+	public static final int AVAIL_SMB_TURN = 200;
+	public static final int AVAIL_SMB_PERF = 300;
+	public static final int AVAIL_SMB_CULT = 400;
+	public static final int AVAIL_CUSTOM = 500;
+	public static final int AVAIL_NONE = 999;
+	
 	@Id
 	@Basic(optional = false)
 	@Column(name = "survey_id")
@@ -42,6 +49,9 @@ public class Survey implements Serializable {
 	@Column(name = "survey_status")
 	private Integer surveyStatus = 1;
 
+	@Column(name = "survey_availability")
+	private Integer availability = AVAIL_NONE;
+	
 	@Column(name = "survey_type")
 	private Integer surveyType = TYPE_WEB;
 
