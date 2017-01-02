@@ -18,7 +18,7 @@ import lombok.*;
 public class Outcome implements Serializable {
 
 	@Transient
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7780462963353935634L;
 
 	@EmbeddedId
 	@JsonUnwrapped

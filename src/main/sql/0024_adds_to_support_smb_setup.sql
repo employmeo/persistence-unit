@@ -5,7 +5,7 @@ ALTER TABLE employmeo.surveys ADD survey_availability integer;
 
 CREATE TABLE employmeo.benchmarks
 (
-  benchmark_id bigint NOT NULL DEFAULT nextval('employmeo.benchmark_benchmark_id_seq'::regclass),
+  benchmark_id bigserial,
   benchmark_account_id bigint,
   benchmark_survey_id bigint,
   benchmark_position_id bigint,

@@ -31,19 +31,19 @@ public class EmailServiceImpl implements EmailService {
 	@Value("be0791d3-a047-4cbb-9b06-a79450822c46")
 	private String INVITE_TEMPLATE_ID;
 	
-	@Value("be0791d3-a047-4cbb-9b06-a79450822c46") // Not Created Yet
+	@Value("be0791d3-a047-4cbb-9b06-a79450822c46")  // Use Above
 	private String INVITE_REMINDER_TEMPLATE_ID;
 	
 	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d")
 	private String PHONE_INVITE_TEMPLATE_ID;
 	
-	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d") // Not Created Yet
+	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d")  // Use Above
 	private String PHONE_REMINDER_TEMPLATE_ID;
 		
 	@Value("dfae3d61-007a-4991-a8f3-f46290313859")
 	private String FORGOT_PASSWORD_TEMPLATE_ID;
 	
-	@Value("dfae3d61-007a-4991-a8f3-f46290313859") // Not Created Yet
+	@Value("6d624c56-e765-4419-882a-6baa44bf02bc")
 	private String NEW_ACCOUNT_TEMPLATE_ID;	
 
 	@Value("ff02e214-d13a-45ad-837e-9159f42a7180")
@@ -55,16 +55,15 @@ public class EmailServiceImpl implements EmailService {
 	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") 
 	private String REFERENCE_TEMPLATE_ID;
 	
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac")
+	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Use Above
 	private String REFERENCE_REMINDER_TEMPLATE_ID;
 
-	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d") // Not Created Yet
+	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Not Created Yet
 	private String QUICKREF_TEMPLATE_ID;
 	
-	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d") // Not Created Yet
+	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Use Above
 	private String QUICKREF_REMINDER_TEMPLATE_ID;
 	
-
 	
 	@Value("${com.talytica.apis.sendgrid}")
 	private String SG_API;
@@ -141,14 +140,15 @@ public class EmailServiceImpl implements EmailService {
 					+ "This assessment can be completed on a mobile device or in a browser at this link: \n"
 					+ link;
 			if (reminder) {
-				email.setSubject("Reminder: Complete Application");
+				email.setSubject("Reminder: Complete Questionnaire");
 				email.setTemplateId(INVITE_REMINDER_TEMPLATE_ID);
 			} else {
-				email.setSubject("Invitation To Apply");
+				email.setSubject("Invitation from " + as.getAccount().getAccountName());
 				email.setTemplateId(INVITE_TEMPLATE_ID);
 			}
 		}
-		
+		// replace template if there is a custom template set on account survey.
+		if ((as.getInviteTemplateId() != null) && !as.getInviteTemplateId().isEmpty()) email.setTemplateId(as.getInviteTemplateId());
 		email.addContent(new Content("text/plain", body));
 		email.addContent(new Content("text/html", body));
 	

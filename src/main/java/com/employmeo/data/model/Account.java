@@ -27,14 +27,16 @@ public class Account implements Serializable {
 	public static final int STATUS_NEW = 1; // (not set up yet - e.g., no pos / survey, etc)
 	public static final int STATUS_BENCHMARKING = 50;
 	public static final int STATUS_READY = 100;
-	public static final int STATUS_CLOSED = 201;
-	public static final int STATUS_HOLD = 210;
+	public static final int STATUS_HOLD = 500;
+	public static final int STATUS_CLOSED = 1000;
 	
 	public static final int TYPE_DEMO = 1;
 	public static final int TYPE_TRIAL_SMB = 100;
-	public static final int TYPE_PAID_SMB = 200;
-	public static final int TYPE_ENTERPRISE = 300;
-	public static final int TYPE_INTEGRATED = 400;
+	public static final int TYPE_CIRCLE = 200;
+	public static final int TYPE_TRIANGLE = 300;
+	public static final int TYPE_SQUARE = 400;
+	public static final int TYPE_ENTERPRISE = 500;
+	public static final int TYPE_INTEGRATED = 600;
 	public static final int TYPE_MASTER = 0;
 	
 	@Id

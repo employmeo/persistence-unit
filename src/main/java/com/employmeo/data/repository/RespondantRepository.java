@@ -33,6 +33,9 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	
 	@Query
 	public Set<Respondant> findAllByBenchmarkId(Long benchmarkId);
+	
+	@Query
+	public Set<Respondant> findAllByBenchmarkIdAndRespondantStatusGreaterThan(Long benchmarkId, Integer status);
 
 	@Query
 	public Page<Respondant> findAllByAccountIdAndLocationId(Long accountId, Long locationId, Pageable  pageRequest);

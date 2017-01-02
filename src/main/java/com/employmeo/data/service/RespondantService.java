@@ -32,6 +32,8 @@ public interface RespondantService {
 
 	Set<Respondant> getByBenchmarkId(@NonNull Long benchmarkId);
 	
+	Set<Respondant> getCompletedForBenchmarkId(@NonNull Long benchmarkId);
+	
 	Set<RespondantScore> getAllRespondantScores();
 
 	RespondantScore save(@NonNull RespondantScore respondantScore);
@@ -72,4 +74,11 @@ public interface RespondantService {
 			);
 
 	public List<Respondant> getGraderBasedScoringPendingRespondants();
+	
+	public Outcome save(@NonNull Outcome outcome);
+	
+	public Outcome addOutcomeToRespondant(@NonNull Respondant respondant, @NonNull Long targetId, Boolean value);
+	
+	public Set<Outcome> getOutcomesForRespondant(@NonNull Long respondantId);
+	
 }

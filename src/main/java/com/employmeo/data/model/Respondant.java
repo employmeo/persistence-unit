@@ -48,6 +48,8 @@ public class Respondant implements Serializable {
 	public static final int TYPE_APPLICANT = 1;
 	public static final int TYPE_BENCHMARK = 100;
 	public static final int TYPE_PRIOR_DATA = 200;
+	public static final int TYPE_SAMPLE = 300;
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

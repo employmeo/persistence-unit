@@ -81,6 +81,12 @@ public class Benchmark implements Serializable {
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "benchmark", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<AccountSurvey> accountSurveys = new HashSet<>();
+	
+	// bi-directional many-to-one association to AccountSurveys
+	@JsonManagedReference
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "benchmark", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	private Set<Population> populations = new HashSet<>();
 
 	@PrePersist
 	void generateCreatedDate() {

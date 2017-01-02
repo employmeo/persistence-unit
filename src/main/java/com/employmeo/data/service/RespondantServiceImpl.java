@@ -33,7 +33,9 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Autowired
 	private QuestionRepository questionRepository;
 	@Autowired
-	GraderRepository graderRepository;
+	private GraderRepository graderRepository;
+	@Autowired
+	private OutcomeRepository outcomeRepository;
 
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
 	private static final Integer DEFAULT_PAGE_SIZE = 100;
@@ -266,7 +268,33 @@ public class RespondantServiceImpl implements RespondantService  {
 	}
 
 	@Override
+	public Outcome save(Outcome outcome) {
+		return outcomeRepository.save(outcome);
+	}
+
+	@Override
+	public Outcome addOutcomeToRespondant(Respondant respondant, Long targetId, Boolean value) {
+		OutcomePK id = new OutcomePK();
+		id.setRespondantId(respondant.getId());
+		id.setPredictionTargetId(targetId);
+		Outcome outcome = new Outcome();
+		outcome.setId(id);
+		outcome.setValue(value);
+		return save(outcome);
+	}
+
+	@Override
+	public Set<Outcome> getOutcomesForRespondant(Long respondantId) {
+		return outcomeRepository.findAllByRespondantId(respondantId);
+	}
+	
+	@Override
 	public Set<Respondant> getByBenchmarkId(Long benchmarkId) {
 		return respondantRepository.findAllByBenchmarkId(benchmarkId);
+	}
+
+	@Override
+	public Set<Respondant> getCompletedForBenchmarkId(Long benchmarkId) {
+		return respondantRepository.findAllByBenchmarkIdAndRespondantStatusGreaterThan(benchmarkId, Respondant.STATUS_COMPLETED-1);
 	}
 }
