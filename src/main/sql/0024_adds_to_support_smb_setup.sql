@@ -1,8 +1,3 @@
-ALTER TABLE employmeo.account_surveys ADD as_permalink text;
-ALTER TABLE employmeo.account_surveys ADD as_type integer;
-ALTER TABLE employmeo.respondants ADD respondant_type integer;
-ALTER TABLE employmeo.surveys ADD survey_availability integer;
-
 CREATE TABLE employmeo.benchmarks
 (
   benchmark_id bigserial,
@@ -16,7 +11,7 @@ CREATE TABLE employmeo.benchmarks
   benchmark_completed_date timestamp with time zone,
   benchmark_participant_count integer,
   CONSTRAINT benchmark_pkey PRIMARY KEY (benchmark_id),
-  CONSTRAINT benchmark_benchmakr_position_id_fkey FOREIGN KEY (benchmakr_position_id)
+  CONSTRAINT benchmark_benchmark_position_id_fkey FOREIGN KEY (benchmark_position_id)
       REFERENCES employmeo.positions (position_id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT benchmark_benchmark_account_id_fkey FOREIGN KEY (benchmark_account_id)
@@ -30,8 +25,16 @@ WITH (
   OIDS=FALSE
 );  
   
-ALTER TABLE employmeo.respondants ADD respondant_benchmark_id bigint;
+ALTER TABLE employmeo.account_surveys ADD as_permalink text;
+ALTER TABLE employmeo.account_surveys ADD as_type integer;
 ALTER TABLE employmeo.account_surveys ADD as_benchmark_id bigint;
+ALTER TABLE employmeo.surveys ADD survey_availability integer;
+ALTER TABLE employmeo.respondants ADD respondant_type integer;
+ALTER TABLE employmeo.respondants ADD respondant_benchmark_id bigint;
+
+UPDATE employmeo.respondants set respondant_type = 1;
+UPDATE employmeo.account_surveys set as_type = 100;
+UPDATE employmeo.surveys set survey_availability = 999;
 
 --//@UNDO
 

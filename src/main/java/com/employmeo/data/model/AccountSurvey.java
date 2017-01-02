@@ -8,7 +8,6 @@ import javax.persistence.*;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.*;
@@ -84,7 +83,7 @@ public class AccountSurvey implements Serializable {
 	private Integer accountSurveyStatus = STATUS_ACTIVE;
 	
 	@Column(name = "as_type")
-	private Integer type;
+	private Integer type = TYPE_APPLICANT;
 
 	@Column(name = "as_phone_number")
 	private String phoneNumber;
