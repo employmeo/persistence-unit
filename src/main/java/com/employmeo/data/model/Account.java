@@ -30,14 +30,6 @@ public class Account implements Serializable {
 	public static final int STATUS_HOLD = 500;
 	public static final int STATUS_CLOSED = 1000;
 	
-	public static final int TYPE_DEMO = 1;
-	public static final int TYPE_TRIAL_SMB = 100;
-	public static final int TYPE_CIRCLE = 200;
-	public static final int TYPE_TRIANGLE = 300;
-	public static final int TYPE_SQUARE = 400;
-	public static final int TYPE_ENTERPRISE = 500;
-	public static final int TYPE_INTEGRATED = 600;
-	public static final int TYPE_MASTER = 0;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,7 +58,7 @@ public class Account implements Serializable {
 	private Integer accountStatus;
 
 	@Column(name = "account_type")
-	private Integer accountType;
+	private Integer accountTypeId;
 
 	@Column(name = "account_ats_id")
 	private String atsId;
@@ -116,4 +108,15 @@ public class Account implements Serializable {
 	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<BillingItem> billingItems = new HashSet<>();
 
+    public AccountType getAccountType() {
+        return AccountType.getAccountType(this.accountTypeId);
+    }
+
+    public void setAccountType(AccountType accountType) {
+        if (accountType == null) {
+            this.accountTypeId = null;
+        } else {
+            this.accountTypeId = accountType.getTypeId();
+        }
+    }	
 }
