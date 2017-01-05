@@ -1,15 +1,18 @@
 package com.employmeo.data.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
 public enum AccountType {
-	DEMO(1),
-	TRIAL(2),
-	SUBSCRIBER(3);
+	DEMO(1, "Demo"),
+	TRIAL(2, "Trial"),
+	SUBSCRIBER(3, "Subscriber");
 
+	@Getter
 	private Integer typeId;
-
-	private AccountType(Integer typeId) {
-		this.typeId = typeId;
-	}
+	@Getter
+	private String label;
 
 	public static AccountType getAccountType(Integer typeId) {
         if (typeId == null) {
@@ -23,8 +26,5 @@ public enum AccountType {
         }
         throw new IllegalArgumentException("No such AccountType configured for id " + typeId);
     }
-
-    public Integer getTypeId() {
-        return typeId;
-    }
+    
 }

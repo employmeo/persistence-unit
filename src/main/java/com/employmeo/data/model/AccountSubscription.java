@@ -63,4 +63,16 @@ public class AccountSubscription implements Serializable {
 
 	@Column(name = "created_date")
 	private Date createdDate;	
+	
+    public PlanStatus getPlanStatus() {
+        return PlanStatus.getStatus(this.planStatusId);
+    }
+
+    public void setPlanStatus(PlanStatus planStatus) {
+        if (planStatus == null) {
+            this.planStatusId = null;
+        } else {
+            this.planStatusId = planStatus.getStatusId();
+        }
+    }		
 }

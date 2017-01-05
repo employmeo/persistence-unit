@@ -35,7 +35,7 @@ INSERT INTO employmeo.subscription_plan (
 
 CREATE TABLE IF NOT EXISTS employmeo.account_subscription
 (
-  subscription_plan_id bigserial NOT NULL PRIMARY KEY,
+  account_subscription_id bigserial NOT NULL PRIMARY KEY,
   account_id bigint NOT NULL,
   plan_id bigint NOT NULL,
   start_date date,

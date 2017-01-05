@@ -47,7 +47,7 @@ public class SubscriptionPlan implements Serializable {
 	private Integer termValue;
 
 	@Column(name = "term_unit")
-	private Integer termUnit;
+	private String termUnit;
 	
 	@Column(name = "total_cost")
 	private Double totalCost;
@@ -77,5 +77,6 @@ public class SubscriptionPlan implements Serializable {
 	private Boolean active;
 
 	@Column(name = "created_date")
-	private Date createdDate;	
+	private Date createdDate;
+		
 }

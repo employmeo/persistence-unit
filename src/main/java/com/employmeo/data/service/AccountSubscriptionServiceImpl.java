@@ -1,23 +1,20 @@
 package com.employmeo.data.service;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Range;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.employmeo.data.model.Account;
 import com.employmeo.data.model.AccountSubscription;
-import com.employmeo.data.model.Benchmark;
-import com.employmeo.data.model.Location;
-import com.employmeo.data.model.Position;
+import com.employmeo.data.model.PlanStatus;
+import com.employmeo.data.model.SubscriptionPlan;
 import com.employmeo.data.repository.AccountSubscriptionRepository;
-import com.employmeo.data.repository.BenchmarkRepository;
-import com.employmeo.data.repository.LocationRepository;
-import com.employmeo.data.repository.PositionRepository;
 
 import jersey.repackaged.com.google.common.collect.Lists;
-import jersey.repackaged.com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,6 +25,9 @@ public class AccountSubscriptionServiceImpl implements AccountSubscriptionServic
 
 	@Autowired
 	private AccountSubscriptionRepository accountSubscriptionRepository;
+	
+	@Autowired
+	private SubscriptionPlanService subscriptionPlanService;
 
 
 	@Override
@@ -60,6 +60,38 @@ public class AccountSubscriptionServiceImpl implements AccountSubscriptionServic
 		log.debug("Retrieved for accountId {} accountSubscriptions {}", accountId, accountSubscriptions);
 
 		return accountSubscriptions;
+	}
+
+	@Override
+	public AccountSubscription setDefaultTrialPlan(@NonNull Account account) {
+		SubscriptionPlan defaultTrialPlan = subscriptionPlanService.getDefaultTrialPlan();		
+		AccountSubscription accountSubscription = createAccountSubscription(account, defaultTrialPlan);
+		
+		return accountSubscription;
+	}
+
+	private AccountSubscription createAccountSubscription(@NonNull Account account, @NonNull SubscriptionPlan subscriptionPlan) {
+		Range<Date> subscriptionTerm = subscriptionPlanService.getSubscriptionTerm(subscriptionPlan);
+		
+		AccountSubscription accountSubscription = new AccountSubscription();
+		accountSubscription.setAccountId(account.getId());
+		accountSubscription.setPlanId(subscriptionPlan.getId());
+		if(null != subscriptionTerm) {
+			accountSubscription.setStartDate(subscriptionTerm.getLowerBound());
+			accountSubscription.setEndDate(subscriptionTerm.getUpperBound());
+		}
+		accountSubscription.setAllowableAssessments(subscriptionPlan.getAllowableAssessments());
+		accountSubscription.setAllowableBenchmarks(subscriptionPlan.getAllowableBenchmarks());
+		accountSubscription.setScoredRespondantsMonthlyLimit(subscriptionPlan.getScoredRespondantsMonthlyLimit());
+		accountSubscription.setScoredRespondantsTotalLimit(subscriptionPlan.getScoredRespondantsTotalLimit());
+		accountSubscription.setPlanStatus(PlanStatus.EFFECTIVE);
+		accountSubscription.setActive(true);
+		accountSubscription.setCreatedDate(new Date());
+		
+		AccountSubscription savedAccountSubscription = accountSubscriptionRepository.save(accountSubscription);
+		log.debug("Saved new accountSubscription {}", savedAccountSubscription);
+		
+		return savedAccountSubscription;
 	}
 
 

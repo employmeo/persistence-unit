@@ -2,6 +2,7 @@ package com.employmeo.data.service;
 
 import java.util.List;
 
+import com.employmeo.data.model.Account;
 import com.employmeo.data.model.AccountSubscription;
 
 import lombok.NonNull;
@@ -17,5 +18,7 @@ public interface AccountSubscriptionService {
 	AccountSubscription getAccountSubscriptionById(@NonNull Long accountSubscriptionId);
 	
 	AccountSubscription save(@NonNull AccountSubscription accountSubscription);
+	
+	AccountSubscription setDefaultTrialPlan(@NonNull Account account);
 	
 }
