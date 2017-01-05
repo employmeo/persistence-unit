@@ -44,8 +44,6 @@ public class Benchmark implements Serializable {
 	@Column(name = "benchmark_account_id")
 	private Long accountId;
 		
-	// bi-directional many-to-one association to Position
-	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "benchmark_position_id", insertable=false, updatable=false)
 	private Position position;
@@ -77,13 +75,13 @@ public class Benchmark implements Serializable {
 	private Integer participantCount;
 	
 	// bi-directional many-to-one association to AccountSurveys
-	@JsonManagedReference
+	@JsonManagedReference(value="as-benchmark")
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "benchmark", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<AccountSurvey> accountSurveys = new HashSet<>();
 	
 	// bi-directional many-to-one association to AccountSurveys
-	@JsonManagedReference
+	@JsonManagedReference(value="pop-benchmark")
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "benchmark", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<Population> populations = new HashSet<>();

@@ -24,12 +24,12 @@ public class Outcome implements Serializable {
 	@JsonUnwrapped
 	private OutcomePK id;
 
-	@JsonBackReference
+	@JsonBackReference(value="out-respondant")
 	@ManyToOne
 	@JoinColumn(name = "outcome_respondant_id", insertable = false, updatable = false)
 	private Respondant respondant;
 
-	@JsonBackReference
+	@JsonBackReference(value="out-target")
 	@ManyToOne
 	@JoinColumn(name = "outcome_target_id", insertable = false, updatable = false)
 	private PredictionTarget predictionTarget;

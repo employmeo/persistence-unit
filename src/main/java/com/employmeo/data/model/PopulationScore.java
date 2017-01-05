@@ -24,12 +24,12 @@ public class PopulationScore implements Serializable {
 	@JsonUnwrapped
 	private PopulationScorePK id;
 
-	@JsonBackReference
+	@JsonBackReference(value="ps-population")
 	@ManyToOne
 	@JoinColumn(name = "ps_population_id", insertable = false, updatable = false)
 	private Population population;
 	
-	@JsonBackReference
+	@JsonBackReference(value="ps-corefactor")
 	@ManyToOne
 	@JoinColumn(name = "ps_corefactor_id", insertable = false, updatable = false)
 	private Corefactor corefactor;

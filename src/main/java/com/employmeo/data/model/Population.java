@@ -37,7 +37,6 @@ public class Population implements Serializable {
 	private String name;
 		
 	// bi-directional many-to-one association to Prediction Target
-	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "population_target_id", insertable=false, updatable=false)
 	private PredictionTarget target;
@@ -48,8 +47,8 @@ public class Population implements Serializable {
 	@Column(name = "population_target_value")
 	private Boolean targetValue;
 	
-	// bi-directional many-to-one association to Prediction Target
-	@JsonBackReference
+	// bi-directional many-to-one association to Benchmark
+	@JsonBackReference(value="pop-benchmark")
 	@ManyToOne
 	@JoinColumn(name = "population_benchmark_id", insertable=false, updatable=false)
 	private Benchmark benchmark;
@@ -68,7 +67,7 @@ public class Population implements Serializable {
 	private Date createdDate;
 
 	// bi-directional many-to-one association to PopulationScores
-	@JsonManagedReference
+	@JsonManagedReference(value="ps-population")
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "population", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<PopulationScore> populationScores = new HashSet<>();

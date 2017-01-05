@@ -136,7 +136,7 @@ public class SurveyServiceImpl implements SurveyService  {
 	@Override
 	public Set<Survey> getAllAvailableSurveys(Integer availability) {
 		log.debug("Getting Surveys for Availability level: {}",availability);
-		return surveyRepository.findByAvailabilityLessThan(availability);
+		return surveyRepository.findByAvailabilityLessThanOrderByAvailabilityAsc(availability);
 	}
 
 }

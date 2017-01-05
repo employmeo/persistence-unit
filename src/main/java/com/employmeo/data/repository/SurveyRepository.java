@@ -12,5 +12,5 @@ import com.employmeo.data.model.Survey;
 public interface SurveyRepository extends PagingAndSortingRepository<Survey, Long> {
 	
 	@Query
-	Set<Survey> findByAvailabilityLessThan(Integer availability);
+	Set<Survey> findByAvailabilityLessThanOrderByAvailabilityAsc(Integer availability);
 }

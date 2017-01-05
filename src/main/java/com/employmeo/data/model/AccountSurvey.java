@@ -41,7 +41,6 @@ public class AccountSurvey implements Serializable {
 	@Type(type="pg-uuid") // hibernate specific mapping
 	private UUID uuId;
 
-	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "as_account_id", insertable = false, updatable = false)
 	private Account account;
@@ -95,7 +94,7 @@ public class AccountSurvey implements Serializable {
 	@Column(name = "as_survey_id")
 	private Long surveyId;
 	
-	@JsonBackReference
+	@JsonBackReference(value="as-benchmark")
 	@ManyToOne
 	@JoinColumn(name = "as_benchmark_id", insertable = false, updatable = false)
 	private Benchmark benchmark;

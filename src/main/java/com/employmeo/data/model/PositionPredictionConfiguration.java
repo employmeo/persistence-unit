@@ -31,7 +31,7 @@ public class PositionPredictionConfiguration implements Serializable {
 	@Column(name = "position_prediction_config_id")
 	private Long positionPredictionConfigId;
 
-	@JsonBackReference
+	@JsonBackReference(value="cfg-position")
 	@ManyToOne
 	@JoinColumn(name = "position_id", insertable=false, updatable=false)
 	private Position position;
@@ -47,7 +47,7 @@ public class PositionPredictionConfiguration implements Serializable {
 	@Column(name = "prediction_target_id")
 	private Long predictionTargetId;
 
-	@JsonBackReference
+	@JsonBackReference(value="cfg-model")
 	@ManyToOne
 	@JoinColumn(name = "model_id", insertable=false, updatable=false)
 	private PredictionModel predictionModel;
