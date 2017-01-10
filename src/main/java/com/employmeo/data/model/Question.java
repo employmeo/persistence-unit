@@ -76,7 +76,7 @@ public class Question implements Serializable {
 	// bi-directional many-to-one association to Answer
 	@JsonManagedReference
 	@Fetch(FetchMode.SUBSELECT)
-	@OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private Set<Answer> answers = new HashSet<>();
 
 	// bi-directional many-to-one association to Response

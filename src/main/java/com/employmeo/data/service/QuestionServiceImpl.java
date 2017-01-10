@@ -71,4 +71,16 @@ public class QuestionServiceImpl implements QuestionService  {
 
 		return answer;
 	}
+
+	@Override
+	public void deleteQuestion(Long questionId) {
+		questionRepository.delete(questionId);
+		log.debug("Deleted question {}", questionId);	
+	}
+
+	@Override
+	public void deleteAnswer(Long answerId) {
+		answerRepository.delete(answerId);
+		log.debug("Deleted answer {}", answerId);
+	}
 }
