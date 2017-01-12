@@ -5,6 +5,7 @@ import java.net.URL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.employmeo.data.model.AccountSurvey;
 import com.employmeo.data.model.Grader;
 import com.employmeo.data.model.Respondant;
 import com.employmeo.data.model.User;
@@ -33,6 +34,19 @@ public class ExternalLinksServiceImpl implements ExternalLinksService {
 							.toString();
 		} catch (Exception e) {
 			link = BASE_SURVEY_URL + "/?&respondant_uuid=" + respondant.getRespondantUuid();
+		}
+		return link.toString();
+	}
+	
+	@Override
+	public String getAssessmentLink(AccountSurvey accountSurvey) {
+		String link = null;
+		try {
+			link = new URL(
+					BASE_SURVEY_URL + "/?&asUuid=" + accountSurvey.getUuId())
+							.toString();
+		} catch (Exception e) {
+			link = BASE_SURVEY_URL + "/?&asUuid=" + accountSurvey.getUuId();
 		}
 		return link.toString();
 	}

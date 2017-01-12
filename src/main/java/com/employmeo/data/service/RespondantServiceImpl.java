@@ -33,7 +33,9 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Autowired
 	private QuestionRepository questionRepository;
 	@Autowired
-	GraderRepository graderRepository;
+	private GraderRepository graderRepository;
+	@Autowired
+	private OutcomeRepository outcomeRepository;
 
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
 	private static final Integer DEFAULT_PAGE_SIZE = 100;
@@ -164,6 +166,7 @@ public class RespondantServiceImpl implements RespondantService  {
 			@NonNull Integer statusHigh,
 			Long locationId,
 			Long positionId,
+			@NonNull Integer type,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate) {
 
@@ -171,6 +174,7 @@ public class RespondantServiceImpl implements RespondantService  {
 				   statusLow, statusHigh,
 				   locationId,
 				   positionId,
+				   type,
 				   fromDate, toDate,
 				   DEFAULT_PAGE_NUMBER,
 				   DEFAULT_PAGE_SIZE);
@@ -183,6 +187,7 @@ public class RespondantServiceImpl implements RespondantService  {
 			@NonNull Integer statusHigh,
 			Long locationId,
 			Long positionId,
+			@NonNull Integer type,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate,
 			@NonNull @Min(value = 1) Integer pageNumber,
@@ -194,13 +199,13 @@ public class RespondantServiceImpl implements RespondantService  {
 		Page<Respondant> respondants = null;
 
 		if ((locationId != null) && (positionId != null)) {
-			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, positionId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		} else if ((locationId == null) && (positionId == null)) {
-			respondants = respondantRepository.findAllByAccountIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, statusLow, statusHigh, fromDate, toDate, pageRequest);
+			respondants = respondantRepository.findAllByAccountIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		} else if (locationId == null) {
-			respondants = respondantRepository.findAllByAccountIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, positionId, statusLow, statusHigh, fromDate, toDate, pageRequest);
+			respondants = respondantRepository.findAllByAccountIdAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, positionId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		} else {
-			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, statusLow, statusHigh, fromDate, toDate, pageRequest);
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		}
 
 
@@ -260,5 +265,36 @@ public class RespondantServiceImpl implements RespondantService  {
 		}
 		log.debug("Returning {} gradeables for respondant {}", gradeables.size(), respondantId);
 		return gradeables;
+	}
+
+	@Override
+	public Outcome save(Outcome outcome) {
+		return outcomeRepository.save(outcome);
+	}
+
+	@Override
+	public Outcome addOutcomeToRespondant(Respondant respondant, Long targetId, Boolean value) {
+		OutcomePK id = new OutcomePK();
+		id.setRespondantId(respondant.getId());
+		id.setPredictionTargetId(targetId);
+		Outcome outcome = new Outcome();
+		outcome.setId(id);
+		outcome.setValue(value);
+		return save(outcome);
+	}
+
+	@Override
+	public Set<Outcome> getOutcomesForRespondant(Long respondantId) {
+		return outcomeRepository.findAllByRespondantId(respondantId);
+	}
+	
+	@Override
+	public Set<Respondant> getByBenchmarkId(Long benchmarkId) {
+		return respondantRepository.findAllByBenchmarkId(benchmarkId);
+	}
+
+	@Override
+	public Set<Respondant> getCompletedForBenchmarkId(Long benchmarkId) {
+		return respondantRepository.findAllByBenchmarkIdAndRespondantStatusGreaterThan(benchmarkId, Respondant.STATUS_COMPLETED-1);
 	}
 }

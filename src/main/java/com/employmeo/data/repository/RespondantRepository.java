@@ -2,6 +2,7 @@ package com.employmeo.data.repository;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -29,6 +30,12 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	
 	@Query
 	public Page<Respondant> findAllByAccountId(Long accountId, Pageable  pageRequest);
+	
+	@Query
+	public Set<Respondant> findAllByBenchmarkId(Long benchmarkId);
+	
+	@Query
+	public Set<Respondant> findAllByBenchmarkIdAndRespondantStatusGreaterThan(Long benchmarkId, Integer status);
 
 	@Query
 	public Page<Respondant> findAllByAccountIdAndLocationId(Long accountId, Long locationId, Pageable  pageRequest);
@@ -40,16 +47,16 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	public Page<Respondant> findAllByAccountIdAndRespondantStatusIn(Long accountId, List<Integer> respondantStatuses, Pageable  pageRequest);
 
 	@Query
-	public Page<Respondant> findAllByAccountIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+	public Page<Respondant> findAllByAccountIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Integer type, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 
 	@Query
-	public Page<Respondant> findAllByAccountIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long positionId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+	public Page<Respondant> findAllByAccountIdAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long positionId, Integer type, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 
 	@Query
-	public Page<Respondant> findAllByAccountIdAndLocationIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long locationId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+	public Page<Respondant> findAllByAccountIdAndLocationIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long locationId, Integer type, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 
 	@Query
-	public Page<Respondant> findAllByAccountIdAndLocationIdAndPositionIdAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long locationId, Long positionId, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+	public Page<Respondant> findAllByAccountIdAndLocationIdAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long locationId, Long positionId, Integer type, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 
 	@Query
 	public List<Respondant> findAllByRespondantStatusInOrderByFinishTimeDesc(List<Integer> scoringEligibleRespondantStatuses);

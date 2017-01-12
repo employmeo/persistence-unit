@@ -9,6 +9,8 @@ import lombok.NonNull;
 public interface SurveyService {
 
 	Set<Survey> getAllSurveys();
+	
+	Set<Survey> getAllAvailableSurveys(Integer availability);
 
 	Survey save(@NonNull Survey survey);
 

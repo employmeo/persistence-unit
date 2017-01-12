@@ -45,5 +45,10 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 		return graderConfigRepository.findAllByAsid(asId);
 	}
 
+	@Override
+	public AccountSurvey save(AccountSurvey accountSurvey) {
+		log.debug("saving Account Survey {}", accountSurvey);
+		return accountSurveyRepository.save(accountSurvey);
+	}
 
 }

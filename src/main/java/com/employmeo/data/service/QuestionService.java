@@ -20,5 +20,9 @@ public interface QuestionService {
 	Answer save(@NonNull Answer answer);
 
 	Answer getAnswerById(@NonNull Long answerId);
+	
+	void deleteQuestion(Long questionId);
+	
+	void deleteAnswer(Long answerId);
 
 }

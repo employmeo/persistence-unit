@@ -30,6 +30,10 @@ public interface RespondantService {
 
 	Page<Respondant> getByAccountId(@NonNull Long accountId);
 
+	Set<Respondant> getByBenchmarkId(@NonNull Long benchmarkId);
+	
+	Set<Respondant> getCompletedForBenchmarkId(@NonNull Long benchmarkId);
+	
 	Set<RespondantScore> getAllRespondantScores();
 
 	RespondantScore save(@NonNull RespondantScore respondantScore);
@@ -52,6 +56,7 @@ public interface RespondantService {
 			@NonNull Integer statusHigh,
 			Long locationId,
 			Long positionId,
+			@NonNull Integer type,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate);
 
@@ -61,6 +66,7 @@ public interface RespondantService {
 			@NonNull Integer statusHigh,
 			Long locationId,
 			Long positionId,
+			@NonNull Integer type,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate,
 			@NonNull @Min(value = 1) Integer pageNumber,
@@ -68,4 +74,11 @@ public interface RespondantService {
 			);
 
 	public List<Respondant> getGraderBasedScoringPendingRespondants();
+	
+	public Outcome save(@NonNull Outcome outcome);
+	
+	public Outcome addOutcomeToRespondant(@NonNull Respondant respondant, @NonNull Long targetId, Boolean value);
+	
+	public Set<Outcome> getOutcomesForRespondant(@NonNull Long respondantId);
+	
 }

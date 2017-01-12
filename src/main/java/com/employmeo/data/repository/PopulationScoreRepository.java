@@ -6,11 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import com.employmeo.data.model.Survey;
+import com.employmeo.data.model.PopulationScore;
 
 @Repository
-public interface SurveyRepository extends PagingAndSortingRepository<Survey, Long> {
-	
+public interface PopulationScoreRepository extends PagingAndSortingRepository<PopulationScore, Long> {
+  
 	@Query
-	Set<Survey> findByAvailabilityLessThanOrderByAvailabilityAsc(Integer availability);
+	public Set<PopulationScore> findAllByPopulationId(Long populationId);
+	
 }
