@@ -25,4 +25,6 @@ public interface ExternalLinksService {
 
 	public String getReferenceDeclineLink(Grader grader);
 	
+	public String getCallMeLink(Respondant respondant);
+	
 }

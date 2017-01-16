@@ -10,9 +10,6 @@ import com.employmeo.data.model.Grader;
 import com.employmeo.data.model.Respondant;
 import com.employmeo.data.model.User;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class ExternalLinksServiceImpl implements ExternalLinksService {
 	
@@ -132,4 +129,20 @@ public class ExternalLinksServiceImpl implements ExternalLinksService {
 		}
 		return link.toString();
 	}
+	
+	@Override
+	public String getCallMeLink(Respondant respondant) {
+		String link = null;
+		try {
+			link = new URL(BASE_SURVEY_URL + "/survey/1/twilio/" + 
+							respondant.getAccountSurveyId()+"/findbyid?&Digits=" +
+							respondant.getPayrollId()).toString();
+		} catch (Exception e) {
+			link = BASE_SURVEY_URL + "/survey/1/twilio/" + 
+					respondant.getAccountSurveyId()+"/findbyid?&Digits=" +
+					respondant.getPayrollId();
+		}
+		return link.toString();
+	}	
+	
 }
