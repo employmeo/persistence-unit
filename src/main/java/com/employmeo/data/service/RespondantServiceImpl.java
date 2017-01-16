@@ -142,7 +142,7 @@ public class RespondantServiceImpl implements RespondantService  {
 			lastExistingResponse.setResponseMedia(response.getResponseMedia());
 			lastExistingResponse.setResponseValue(response.getResponseValue());
 			
-			responseRepository.save(lastExistingResponse);
+			savedResponse = responseRepository.save(lastExistingResponse);
 			log.debug("Duplicate response submission - merged results for {} with existing responseId {}", response, lastExistingResponse.getId());
 		}
 
