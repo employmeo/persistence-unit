@@ -126,8 +126,25 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	@Override
 	public Response saveResponse(@NonNull Response response) {
-		Response savedResponse = responseRepository.save(response);
-		log.debug("Saved response {}", response);
+		Response savedResponse = null;
+		
+		// guard against duplicate submissions.
+		// Doing a pre-check instead of letting constraint violation bubble up to the Controller - 
+		// which would mark the Tx rollback only, and then proceeding with a merged save thereafter.
+		List<Response> savedResponses = responseRepository.findAllByRespondantIdAndQuestionIdOrderByCreatedDesc(response.getRespondantId(), response.getQuestionId());
+		
+		if(savedResponses.isEmpty()) {
+			savedResponse = responseRepository.save(response);
+			log.debug("Saved response {}", response);
+		} else {
+			Response lastExistingResponse = savedResponses.iterator().next();
+			lastExistingResponse.setResponseText(response.getResponseText());
+			lastExistingResponse.setResponseMedia(response.getResponseMedia());
+			lastExistingResponse.setResponseValue(response.getResponseValue());
+			
+			responseRepository.save(lastExistingResponse);
+			log.debug("Duplicate response submission - merged results for {} with existing responseId {}", response, lastExistingResponse.getId());
+		}
 
 		return savedResponse;
 	}
