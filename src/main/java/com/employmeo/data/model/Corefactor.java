@@ -62,6 +62,9 @@ public class Corefactor implements Serializable {
 
 	@Column(name = "cf_display_group")
 	private String displayGroup;
+	
+	@Column(name = "cf_parent_id")
+	private Long parentId;	
 
 	@JsonManagedReference
 	@Fetch(FetchMode.SUBSELECT)
