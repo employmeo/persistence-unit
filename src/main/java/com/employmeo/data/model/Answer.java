@@ -50,4 +50,7 @@ public class Answer implements Serializable {
 
 	@Column(name = "ANSWER_QUESTION_ID")
 	private Long questionId;
+	
+	@Column(name = "ANSWER_DIRECTION")
+	private Integer direction;	
 }
