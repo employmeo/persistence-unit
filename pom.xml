@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.employmeo</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.0.20</version>
+	<version>0.0.22</version>
 	<name>Employmeo Persistence Unit</name>
 	<description>Employmeo persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
