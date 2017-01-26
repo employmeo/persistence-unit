@@ -3,6 +3,8 @@ package com.talytica.common.service;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -67,6 +69,12 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Value("${com.talytica.apis.sendgrid}")
 	private String SG_API;
+	
+	@Value("${email.delivery.override.enabled:false}")
+	private Boolean emailDeliveryOverrideEnabled;
+	
+	@Value("${email.delivery.override.address:email-delivery-overrides@talytica.com}")
+	private String deliveryOverrideAddress;
 
 	@Autowired
 	ExternalLinksService externalLinksService;
@@ -76,12 +84,21 @@ public class EmailServiceImpl implements EmailService {
 	
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
 	private Email FROM_ADDRESS = new Email ("info@talytica.com");
+	
+	@PostConstruct
+	private void reportDeliveryConfiguration() {
+		if(emailDeliveryOverrideEnabled) {
+			log.warn("Email delivery OVERRIDE ENABLED !! - Emails will be diverted to: {}", deliveryOverrideAddress);
+		} else {
+			log.warn("Emails will be DELIVERED to target recipients - no overrides enabled !");
+		}
+	}
 
 	@Override
 	public void sendMessage(String from, String to, String subject, String text, String html) {
 		
 		Email fromEmail = new Email(from);
-		Email toEmail = new Email(to);
+		Email toEmail = getEmailDeliveryAddress(to);
 		Content textContent = new Content("text/plain", text);
 		Mail email = new Mail(fromEmail, subject, toEmail, textContent);
 		if (html != null) {
@@ -92,6 +109,19 @@ public class EmailServiceImpl implements EmailService {
 		asynchSend(email);
 	
 		return;
+	}
+	
+	private Email getEmailDeliveryAddress(String to) {
+		String deliveryAddress = null;
+		
+		if(! emailDeliveryOverrideEnabled) {
+			deliveryAddress = to;
+		} else {
+			log.warn("Email delivery diverted to: {} instead of actual: {}", deliveryOverrideAddress, to);
+			deliveryAddress = deliveryOverrideAddress;
+		}
+		
+		return new Email(deliveryAddress);
 	}
 
 	@Override
@@ -156,7 +186,7 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[FNAME]", respondant.getPerson().getFirstName());
 		pers.addSubstitution("[FULL_NAME]", respondant.getPerson().getFirstName() + " " +respondant.getPerson().getLastName());
 		pers.addSubstitution("[ACCOUNT_NAME]",as.getAccount().getAccountName());
-		pers.addTo(new Email(respondant.getPerson().getEmail()));		
+		pers.addTo(getEmailDeliveryAddress(respondant.getPerson().getEmail()));		
 
 		email.addPersonalization(pers);
 
@@ -202,7 +232,7 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[LINK]", link );
 		pers.addSubstitution("[FNAME]", user.getFirstName());
 		pers.addSubstitution("[ACCOUNT_NAME]",user.getAccount().getAccountName());	
-		pers.addTo(new Email(user.getEmail()));		
+		pers.addTo(getEmailDeliveryAddress(user.getEmail()));		
 		
 		email.addPersonalization(pers);
 		asynchSend(email);
@@ -228,7 +258,7 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[LINK]", link );
 		pers.addSubstitution("[FULL_NAME]", fullname);
 		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
-		pers.addTo(new Email(respondant.getEmailRecipient()));		
+		pers.addTo(getEmailDeliveryAddress(respondant.getEmailRecipient()));		
 		
 		email.addPersonalization(pers);
 		asynchSend(email);
@@ -277,7 +307,7 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[POSITION_NAME]", positionName );
 		pers.addSubstitution("[GRADER_NAME]", grader.getPerson().getFirstName());
 		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
-		pers.addTo(new Email(grader.getPerson().getEmail()));		
+		pers.addTo(getEmailDeliveryAddress(grader.getPerson().getEmail()));		
 
 		email.addPersonalization(pers);
 
@@ -335,7 +365,7 @@ public class EmailServiceImpl implements EmailService {
 		Personalization pers = new Personalization();
 		pers.addSubstitution("[LINK]", link );
 		pers.addSubstitution("[FULL_NAME]", fullname );
-		pers.addTo(new Email(grader.getUser().getEmail()));		
+		pers.addTo(getEmailDeliveryAddress(grader.getUser().getEmail()));		
 
 		email.addPersonalization(pers);
 
@@ -344,7 +374,6 @@ public class EmailServiceImpl implements EmailService {
 	
 	
 	private void asynchSend(Mail email) {
-		
 	    SendGrid sg = new SendGrid(SG_API);
 	    Request request = new Request();
         request.method = Method.POST;
