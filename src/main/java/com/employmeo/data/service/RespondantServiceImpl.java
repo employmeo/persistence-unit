@@ -39,7 +39,7 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
 	private static final Integer DEFAULT_PAGE_SIZE = 100;
-	private static final int AUDIO_COREFACTOR = 42;
+	private static final String AUDIO_SCORING = "audio";
 	//private static final int REFERENCE_COREFACTOR = 43;
 
 	@Override
@@ -273,7 +273,7 @@ public class RespondantServiceImpl implements RespondantService  {
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> gradeables = new HashSet<Response>();
 		for (SurveyQuestion sq : questionset) {
-			if (AUDIO_COREFACTOR == sq.getQuestion().getCorefactorId()) {
+			if (AUDIO_SCORING == sq.getQuestion().getScoringModel()) {
 			    Optional<Response> response = allresponses.stream().filter(resp -> sq.getQuestionId().equals(resp.getQuestionId())).findFirst();
 			    if (response.isPresent()) {
 			    	gradeables.add(response.get());
