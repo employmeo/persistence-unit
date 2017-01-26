@@ -101,14 +101,17 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Override
 	public void sendEmailReminder(Respondant respondant) {
-		sendEmailInvitation(respondant, true);
-		
+		sendEmailInvitation(respondant, true);	
 	}
 	
-	public void sendEmailInvitation(Respondant respondant, boolean reminder){
-	
+	public void sendEmailInvitation(Respondant respondant, boolean reminder){	
 		Mail email = new Mail();
-		email.setFrom(FROM_ADDRESS);
+		if (respondant.getAccount().getDefaultEmail() != null) {
+			email.setFrom(new Email("info@talytica.com", respondant.getAccount().getAccountName()));
+			email.setReplyTo(new Email(respondant.getAccount().getDefaultEmail()));
+		} else {
+			email.setFrom(FROM_ADDRESS);			
+		}
 		Personalization pers = new Personalization();
 		String link = externalLinksService.getAssessmentLink(respondant);
 		String body = null;
@@ -156,6 +159,7 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[FNAME]", respondant.getPerson().getFirstName());
 		pers.addSubstitution("[FULL_NAME]", respondant.getPerson().getFirstName() + " " +respondant.getPerson().getLastName());
 		pers.addSubstitution("[ACCOUNT_NAME]",as.getAccount().getAccountName());
+		if (respondant.getPosition() != null) pers.addSubstitution("JOB_TITLE]", respondant.getPosition().getPositionName());		
 		pers.addTo(new Email(respondant.getPerson().getEmail()));		
 
 		email.addPersonalization(pers);
@@ -248,7 +252,13 @@ public class EmailServiceImpl implements EmailService {
 
 	public void sendReferenceRequest(Grader grader, boolean reminder){	
 		Mail email = new Mail();
-		email.setFrom(FROM_ADDRESS);
+
+		if (grader.getRespondant().getAccount().getDefaultEmail() != null) {
+			email.setFrom(new Email("info@talytica.com", grader.getRespondant().getAccount().getAccountName()));
+			email.setReplyTo(new Email(grader.getRespondant().getAccount().getDefaultEmail()));
+		} else {
+			email.setFrom(FROM_ADDRESS);		
+		}
 		String link = externalLinksService.getReferenceEmailLink(grader);
 		String declineLink = externalLinksService.getReferenceDeclineLink(grader);
 		Respondant respondant = grader.getRespondant();
