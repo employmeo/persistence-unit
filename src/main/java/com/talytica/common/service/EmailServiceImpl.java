@@ -76,6 +76,9 @@ public class EmailServiceImpl implements EmailService {
 	@Value("${email.delivery.override.address:email-delivery-overrides@talytica.com}")
 	private String deliveryOverrideAddress;
 
+	@Value("info@notifications.talytica.com")
+	private String EMAIL_ADDRESS;
+	
 	@Autowired
 	ExternalLinksService externalLinksService;
 	
@@ -83,7 +86,7 @@ public class EmailServiceImpl implements EmailService {
 	AccountSurveyRepository accountSurveyRepository;
 	
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
-	private Email FROM_ADDRESS = new Email ("info@talytica.com");
+	private Email FROM_ADDRESS = new Email (EMAIL_ADDRESS);
 	
 	@PostConstruct
 	private void reportDeliveryConfiguration() {
@@ -137,7 +140,7 @@ public class EmailServiceImpl implements EmailService {
 	public void sendEmailInvitation(Respondant respondant, boolean reminder){	
 		Mail email = new Mail();
 		if (respondant.getAccount().getDefaultEmail() != null) {
-			email.setFrom(new Email("info@talytica.com", respondant.getAccount().getAccountName()));
+			email.setFrom(new Email(EMAIL_ADDRESS, respondant.getAccount().getAccountName()));
 			email.setReplyTo(new Email(respondant.getAccount().getDefaultEmail()));
 		} else {
 			email.setFrom(FROM_ADDRESS);			
@@ -284,7 +287,7 @@ public class EmailServiceImpl implements EmailService {
 		Mail email = new Mail();
 
 		if (grader.getRespondant().getAccount().getDefaultEmail() != null) {
-			email.setFrom(new Email("info@talytica.com", grader.getRespondant().getAccount().getAccountName()));
+			email.setFrom(new Email(EMAIL_ADDRESS, grader.getRespondant().getAccount().getAccountName()));
 			email.setReplyTo(new Email(grader.getRespondant().getAccount().getDefaultEmail()));
 		} else {
 			email.setFrom(FROM_ADDRESS);		
