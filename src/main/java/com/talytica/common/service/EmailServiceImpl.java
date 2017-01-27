@@ -76,7 +76,7 @@ public class EmailServiceImpl implements EmailService {
 	@Value("${email.delivery.override.address:email-delivery-overrides@talytica.com}")
 	private String deliveryOverrideAddress;
 
-	@Value("info@notifications.talytica.com")
+	@Value("info@talytica.com")
 	private String EMAIL_ADDRESS;
 	
 	@Autowired
