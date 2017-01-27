@@ -86,7 +86,7 @@ public class EmailServiceImpl implements EmailService {
 	AccountSurveyRepository accountSurveyRepository;
 	
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
-	private Email FROM_ADDRESS = new Email (EMAIL_ADDRESS);
+	private Email FROM_ADDRESS = new Email ("info@talytica.com");
 	
 	@PostConstruct
 	private void reportDeliveryConfiguration() {
