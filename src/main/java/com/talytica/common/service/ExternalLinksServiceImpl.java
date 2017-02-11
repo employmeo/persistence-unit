@@ -143,6 +143,17 @@ public class ExternalLinksServiceImpl implements ExternalLinksService {
 					respondant.getPayrollId();
 		}
 		return link.toString();
+	}
+
+	@Override
+	public String getCallStatusLink() {
+		String link = null;
+		try {
+			link = new URL(BASE_SURVEY_URL + "/survey/1/twilio/status").toString();
+		} catch (Exception e) {
+			link = BASE_SURVEY_URL + "/survey/1/twilio/status";
+		}
+		return link.toString();
 	}	
 	
 }

@@ -273,7 +273,7 @@ public class RespondantServiceImpl implements RespondantService  {
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> gradeables = new HashSet<Response>();
 		for (SurveyQuestion sq : questionset) {
-			if (AUDIO_SCORING == sq.getQuestion().getScoringModel()) {
+			if (AUDIO_SCORING.equalsIgnoreCase(sq.getQuestion().getScoringModel())) {
 			    Optional<Response> response = allresponses.stream().filter(resp -> sq.getQuestionId().equals(resp.getQuestionId())).findFirst();
 			    if (response.isPresent()) {
 			    	gradeables.add(response.get());
