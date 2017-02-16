@@ -53,7 +53,12 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public Respondant getRespondantByAccountSurveyIdAndPayrollId(@NonNull Long accountSurveyId, @NonNull String payrollId) {
 		log.debug("Respondant account survey {} and payrollId {}", accountSurveyId, payrollId);
-		return respondantRepository.findByAccountSurveyIdAndPayrollId(accountSurveyId, payrollId);
+		
+		List<Respondant> rs = respondantRepository.findAllByAccountSurveyIdAndPayrollIdOrderByCreatedDateDesc(accountSurveyId, payrollId);
+		for (Respondant resp : rs) {
+			if (resp.getRespondantStatus() < Respondant.STATUS_SCORED) return resp;
+		}
+		return null;
 	}
 
 	@Override
