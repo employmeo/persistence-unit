@@ -23,6 +23,9 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	public Respondant findByAccountSurveyIdAndPayrollId(Long accountSurveyId, String payrollId);
 	
 	@Query
+	public List<Respondant> findAllByAccountSurveyIdAndPayrollIdOrderByCreatedDateDesc(Long accountSurveyId, String payrollId);
+	
+	@Query
 	public Respondant findByAtsId(String atsId);
 	
 	@Query
