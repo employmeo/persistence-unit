@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import com.employmeo.data.model.Person;
+import com.employmeo.data.model.Position;
 import com.employmeo.data.model.Respondant;
 
 @Repository
@@ -31,6 +33,9 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	@Query
 	public Respondant findByAccountIdAndAtsId(Long accountId, String atsId);
 	
+	@Query
+	public Respondant findByPersonIdAndPositionId(Long personId, Long positionId);
+
 	@Query
 	public Page<Respondant> findAllByAccountId(Long accountId, Pageable  pageRequest);
 	

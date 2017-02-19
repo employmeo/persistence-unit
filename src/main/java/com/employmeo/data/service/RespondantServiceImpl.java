@@ -319,4 +319,9 @@ public class RespondantServiceImpl implements RespondantService  {
 	public Set<Respondant> getCompletedForBenchmarkId(Long benchmarkId) {
 		return respondantRepository.findAllByBenchmarkIdAndRespondantStatusGreaterThan(benchmarkId, Respondant.STATUS_COMPLETED-1);
 	}
+
+	@Override
+	public Respondant getRespondantByPersonAndPosition(Person person, Position position) {		
+		return respondantRepository.findByPersonIdAndPositionId(person.getId(), position.getId());
+	}
 }
