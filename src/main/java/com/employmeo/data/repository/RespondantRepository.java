@@ -23,7 +23,7 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	public Respondant findByAccountSurveyIdAndPayrollId(Long accountSurveyId, String payrollId);
 	
 	@Query
-	public List<Respondant> findAllByAccountSurveyIdAndPayrollIdOrderByCreatedDateDesc(Long accountSurveyId, String payrollId);
+	public List<Respondant> findAllByAccountSurveyIdAndPayrollIdOrderByRespondantStatusDescCreatedDateDesc(Long accountSurveyId, String payrollId);
 	
 	@Query
 	public Respondant findByAtsId(String atsId);
@@ -31,6 +31,9 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	@Query
 	public Respondant findByAccountIdAndAtsId(Long accountId, String atsId);
 	
+	@Query
+	public Respondant findByPersonIdAndPositionId(Long personId, Long positionId);
+
 	@Query
 	public Page<Respondant> findAllByAccountId(Long accountId, Pageable  pageRequest);
 	

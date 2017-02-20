@@ -28,5 +28,7 @@ public interface ExternalLinksService {
 	public String getCallMeLink(Respondant respondant);
 
 	public String getCallStatusLink();
+	
+	public String getIntegrationEcho();
 
 }

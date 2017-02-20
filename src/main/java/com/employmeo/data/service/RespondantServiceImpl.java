@@ -54,7 +54,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	public Respondant getRespondantByAccountSurveyIdAndPayrollId(@NonNull Long accountSurveyId, @NonNull String payrollId) {
 		log.debug("Respondant account survey {} and payrollId {}", accountSurveyId, payrollId);
 		
-		List<Respondant> rs = respondantRepository.findAllByAccountSurveyIdAndPayrollIdOrderByCreatedDateDesc(accountSurveyId, payrollId);
+		List<Respondant> rs = respondantRepository.findAllByAccountSurveyIdAndPayrollIdOrderByRespondantStatusDescCreatedDateDesc(accountSurveyId, payrollId);
 		for (Respondant resp : rs) {
 			if (resp.getRespondantStatus() < Respondant.STATUS_SCORED) return resp;
 		}
@@ -318,5 +318,10 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public Set<Respondant> getCompletedForBenchmarkId(Long benchmarkId) {
 		return respondantRepository.findAllByBenchmarkIdAndRespondantStatusGreaterThan(benchmarkId, Respondant.STATUS_COMPLETED-1);
+	}
+
+	@Override
+	public Respondant getRespondantByPersonAndPosition(Person person, Position position) {		
+		return respondantRepository.findByPersonIdAndPositionId(person.getId(), position.getId());
 	}
 }

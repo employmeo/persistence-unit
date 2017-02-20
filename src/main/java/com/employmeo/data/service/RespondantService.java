@@ -26,6 +26,8 @@ public interface RespondantService {
 
 	Respondant getRespondantById(@NonNull Long respondantId);
 
+	Respondant getRespondantByPersonAndPosition(Person person, Position position);
+
 	Page<Respondant> getByAccountId(@NonNull Long accountId, @NonNull Integer pageNumber, @NonNull Integer pageSize);
 
 	Page<Respondant> getByAccountId(@NonNull Long accountId);

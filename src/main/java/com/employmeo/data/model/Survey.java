@@ -45,6 +45,9 @@ public class Survey implements Serializable {
 
 	@Column(name = "survey_description")
 	private String description;
+	
+	@Column(name = "survey_oneliner")
+	private String oneLiner;
 
 	@Column(name = "survey_status")
 	private Integer surveyStatus = 1;
