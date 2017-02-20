@@ -32,6 +32,9 @@ public class PredictionModel implements Serializable {
 	@Column(name = "model_name")
 	private String name;
 
+	@Column(name = "model_foreign_id")
+	private String foreignId;
+
 	@Column(name = "model_type")
 	private String modelTypeValue;
 

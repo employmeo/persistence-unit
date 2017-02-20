@@ -3,7 +3,8 @@ package com.employmeo.data.model;
 import lombok.*;
 
 public enum PredictionModelType {
-	LINEAR_REGRESSION("linear_regression");
+	LINEAR_REGRESSION("linear_regression"),
+	BIGML_MODEL("bigml_model");
 
 	@Getter
 	private String value;
