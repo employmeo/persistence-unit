@@ -10,11 +10,8 @@ import com.employmeo.data.model.*;
 import com.employmeo.data.repository.PopulationRepository;
 import com.employmeo.data.repository.PopulationScoreRepository;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
 @Transactional
-@Slf4j
 public class PopulationServiceImpl implements PopulationService {
 	
 	@Autowired

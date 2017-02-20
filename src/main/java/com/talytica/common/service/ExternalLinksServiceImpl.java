@@ -154,6 +154,17 @@ public class ExternalLinksServiceImpl implements ExternalLinksService {
 			link = BASE_SURVEY_URL + "/survey/1/twilio/status";
 		}
 		return link.toString();
+	}
+
+	@Override
+	public String getIntegrationEcho() {
+		String link = null;
+		try {
+			link = new URL(BASE_SERVICE_URL + "/integration/echo").toString();
+		} catch (Exception e) {
+			link = BASE_SERVICE_URL + "/integration/echo";
+		}
+		return link.toString();
 	}	
 	
 }

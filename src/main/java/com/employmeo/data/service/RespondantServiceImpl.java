@@ -54,7 +54,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	public Respondant getRespondantByAccountSurveyIdAndPayrollId(@NonNull Long accountSurveyId, @NonNull String payrollId) {
 		log.debug("Respondant account survey {} and payrollId {}", accountSurveyId, payrollId);
 		
-		List<Respondant> rs = respondantRepository.findAllByAccountSurveyIdAndPayrollIdOrderByCreatedDateDesc(accountSurveyId, payrollId);
+		List<Respondant> rs = respondantRepository.findAllByAccountSurveyIdAndPayrollIdOrderByRespondantStatusDescCreatedDateDesc(accountSurveyId, payrollId);
 		for (Respondant resp : rs) {
 			if (resp.getRespondantStatus() < Respondant.STATUS_SCORED) return resp;
 		}
