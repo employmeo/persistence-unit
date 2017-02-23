@@ -69,5 +69,10 @@ public class Response implements Serializable {
 	void setUpdated() {
 		updated = new Date();
 	}
+	
+	public Date getLastModDate() {
+		if (updated != null) return updated;
+		return created;
+	}
 
 }
