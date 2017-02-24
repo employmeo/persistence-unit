@@ -3,6 +3,7 @@ package com.employmeo.data.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class CorefactorServiceImpl implements CorefactorService {
 	private CorefactorRepository corefactorRepository;
 
 	@Override
+	@Cacheable(value="allcorefactors")
 	public List<Corefactor> getAllCorefactors() {
 		List<Corefactor> corefactors = Lists.newArrayList(corefactorRepository.findAll(new Sort(Direction.ASC, "id")));
 		log.debug("Retrieved all {} corefactors", corefactors.size());
@@ -32,6 +34,7 @@ public class CorefactorServiceImpl implements CorefactorService {
 	}
 
 	@Override
+	@Cacheable(value="corefactors")
 	public Corefactor findCorefactorById(@NonNull Long corefactorId) {
 		Corefactor corefactor = corefactorRepository.findOne(corefactorId);
 		log.debug("Retrieved for id {} entity {}", corefactorId, corefactor.getName());

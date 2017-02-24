@@ -20,8 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @Table(name = "populations")
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(exclude={"benchmark","target"})
-@ToString(exclude={"benchmark","target"})
+@EqualsAndHashCode(exclude={"benchmark","target","populationScores"})
+@ToString(exclude={"benchmark","target","populationScores"})
 @Slf4j
 public class Population implements Serializable {
 

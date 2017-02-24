@@ -4,6 +4,7 @@ import lombok.*;
 
 public enum PredictionModelType {
 	LINEAR_REGRESSION("linear_regression"),
+	BIGML_ENSEMBLE("bigml_ensemble"),
 	BIGML_MODEL("bigml_model");
 
 	@Getter
