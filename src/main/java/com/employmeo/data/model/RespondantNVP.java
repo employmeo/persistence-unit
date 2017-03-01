@@ -26,6 +26,9 @@ public class RespondantNVP implements Serializable{
 		@Column(name = "nvp_name")
 		private String name;
 
+		@Column(name = "nvp_name_id")
+		private Long nameId;
+
 		@Column(name = "nvp_value")
 		private String value;
 

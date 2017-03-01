@@ -26,6 +26,9 @@ public class PositionPredictionConfiguration implements Serializable {
 	@Transient
 	private static final long serialVersionUID = 93934417467941938L;
 
+	public static final int TRIGGER_POINT_CREATION = 0;
+	public static final int TRIGGER_POINT_ASSESSMENT = 10;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "position_prediction_config_id")
@@ -69,6 +72,13 @@ public class PositionPredictionConfiguration implements Serializable {
 	
 	@Column(name = "active")
 	private Boolean active;
+
+	@Column(name = "display_priority")
+	private Integer displayPriority;
+	
+	@Column(name = "prediction_trigger_point")
+	private Integer triggerPoint;
+	
 
 	@Column(name = "created_date", insertable = true, updatable = false)
 	private Date createdDate;

@@ -30,6 +30,7 @@ public class Respondant implements Serializable {
 	@Transient
 	private static final long serialVersionUID = 808486275173441348L;
 
+	public static final int STATUS_PRESCREEN = -20;
 	public static final int STATUS_CREATED = 0;
 	public static final int STATUS_INVITED = 1;
 	public static final int STATUS_STARTED = 5;

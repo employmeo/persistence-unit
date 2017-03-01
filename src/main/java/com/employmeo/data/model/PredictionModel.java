@@ -62,7 +62,13 @@ public class PredictionModel implements Serializable {
 
 	@Column(name = "created_date", insertable = false, updatable = false)
 	private Date createdDate;
-
+	
+	@Column(name = "prediction_model_prep")
+	private String prep;
+	
+	@Column(name = "prediction_model_prep_name")
+	private String prepName;
+	
 	public PredictionModelType getModelType() {
 		return PredictionModelType.getByValue(this.modelTypeValue);
 	}
