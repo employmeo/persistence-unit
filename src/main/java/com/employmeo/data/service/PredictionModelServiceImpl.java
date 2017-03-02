@@ -1,6 +1,7 @@
 package com.employmeo.data.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.employmeo.data.model.*;
 import com.employmeo.data.repository.LinearRegressionConfigRepository;
 import com.employmeo.data.repository.PredictionModelRepository;
+import com.employmeo.data.repository.PredictionTargetRepository;
 
+import jersey.repackaged.com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +23,10 @@ public class PredictionModelServiceImpl implements PredictionModelService{
 
 	@Autowired
 	private PredictionModelRepository predictionModelRepository;
+	
+	@Autowired
+	private PredictionTargetRepository predictionTargetRepository;
+	
 	@Autowired
 	private LinearRegressionConfigRepository linearRegressionConfigRepository;
 
@@ -55,6 +62,41 @@ public class PredictionModelServiceImpl implements PredictionModelService{
 		log.debug("PredictionModel for modelName {} : {}", modelId, predictionModel);
 
 		return predictionModel;
+	}
+
+	@Override
+	public Set<PredictionModel> getAllPredictionModels() {
+		return Sets.newHashSet(predictionModelRepository.findAll());
+	}
+	
+	@Override
+	public void delete(PredictionModel model) {
+		predictionModelRepository.delete(model);		
+	}
+
+	@Override
+	public PredictionModel save(PredictionModel model) {
+		return predictionModelRepository.save(model);	
+	}
+
+	@Override
+	public PredictionTarget getTargetById(Long targetId) {
+		return predictionTargetRepository.findOne(targetId);
+	}
+
+	@Override
+	public PredictionTarget save(PredictionTarget target) {
+		return predictionTargetRepository.save(target);
+	}
+
+	@Override
+	public void delete(PredictionTarget target) {
+		predictionTargetRepository.delete(target);		
+	}
+
+	@Override
+	public Set<PredictionTarget> getAllPredictionTargets() {
+		return Sets.newHashSet(predictionTargetRepository.findAll());
 	}
 
 }

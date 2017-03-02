@@ -11,11 +11,14 @@ import com.employmeo.data.model.Account;
 import com.employmeo.data.model.Benchmark;
 import com.employmeo.data.model.Location;
 import com.employmeo.data.model.Position;
+import com.employmeo.data.model.User;
 import com.employmeo.data.repository.AccountRepository;
 import com.employmeo.data.repository.BenchmarkRepository;
 import com.employmeo.data.repository.LocationRepository;
 import com.employmeo.data.repository.PositionRepository;
+import com.employmeo.data.repository.UserRepository;
 
+import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,8 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	private AccountRepository accountRepository;
+	@Autowired
+	private UserRepository userRepository;
 	@Autowired
 	private PositionRepository positionRepository;
 	@Autowired
@@ -66,6 +71,14 @@ public class AccountServiceImpl implements AccountService {
 		return account;
 	}
 	
+
+	@Override
+	public Set<User> getUsersForAccount(Long accountId) {
+		return userRepository.findAllByUserAccountId(accountId);
+	}
+
+	
+	
 	@Override
 	public Set<Position> getAllPositions() {
 		Set<Position> positions = Sets.newHashSet(positionRepository.findAll());
@@ -101,6 +114,9 @@ public class AccountServiceImpl implements AccountService {
 	public Position getPositionByAtsId(Long accountId, String atsId) {
 		return positionRepository.findByAccountIdAndAtsId(accountId, atsId);
 	}
+	
+	
+	
 
 	@Override
 	public Location getLocationById(Long locationId) {
@@ -119,6 +135,9 @@ public class AccountServiceImpl implements AccountService {
 		return savedLocation;
 	}
 
+	
+	
+	
 	@Override
 	public Benchmark save(@NonNull Benchmark benchmark) {
 		Benchmark savedBenchmark = benchmarkRepository.save(benchmark);
@@ -147,12 +166,16 @@ public class AccountServiceImpl implements AccountService {
 		log.debug("Retrieved for id {} entity {}", accountId, benchmarks);
 		return benchmarks;
 	}
+
+	@Override
+	public List<Benchmark> getAllBenchmarks() {
+		return  Lists.newArrayList(benchmarkRepository.findAll());
+	}
 	
 	@Override
 	public Benchmark getBenchmarkById(Long benchmarkId) {
 		Benchmark benchmark = benchmarkRepository.findOne(benchmarkId);
 		return benchmark;
 	}
-
 
 }

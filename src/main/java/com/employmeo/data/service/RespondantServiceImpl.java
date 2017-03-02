@@ -339,21 +339,27 @@ public class RespondantServiceImpl implements RespondantService  {
 	
 	@Override
 	public RespondantNVP save(RespondantNVP nvp) {		
+		setNVPNameId(nvp);
+		return respondantNVPRepository.save(nvp);
+	}
+
+	private void setNVPNameId(RespondantNVP nvp) {
 		if (null == nvp.getNameId()) {
 			NVPName nameId = nvpNameRepository.findByName(nvp.getName());
 			if (null == nameId) {
 				NVPName newNameId = new NVPName();
 				newNameId.setName(nvp.getName());
 				nameId = nvpNameRepository.save(newNameId);
-				log.debug("New NVP ID#{} added for: {}",nameId.getId(),nameId.getName());
+				log.info("New NVP ID#{} added for: {}",nameId.getId(),nameId.getName());
 			}
+			log.debug("Using ID#{} for: {}",nameId.getId(),nameId.getName());
 			nvp.setNameId(nameId.getId());
-		}		
-		return respondantNVPRepository.save(nvp);
+		}
 	}
-
+	
 	@Override
 	public Iterable<RespondantNVP> save(Iterable<RespondantNVP> nvps) {
+		nvps.forEach(nvp -> setNVPNameId(nvp));
 		return respondantNVPRepository.save(nvps);
 	}
 
@@ -363,6 +369,7 @@ public class RespondantServiceImpl implements RespondantService  {
 		nvp.setName(name);
 		nvp.setValue(value);
 		nvp.setRespondantId(respondant.getId());
+		setNVPNameId(nvp);
 		return respondantNVPRepository.save(nvp);
 	}
 
