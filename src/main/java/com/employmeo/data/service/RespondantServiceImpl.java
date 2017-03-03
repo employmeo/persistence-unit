@@ -29,6 +29,10 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Autowired
 	private RespondantScoreRepository respondantScoreRepository;
 	@Autowired
+	private RespondantNVPRepository respondantNVPRepository;
+	@Autowired
+	private NVPNameRepository nvpNameRepository;
+	@Autowired
 	private ResponseRepository responseRepository;
 	@Autowired
 	private QuestionRepository questionRepository;
@@ -245,6 +249,29 @@ public class RespondantServiceImpl implements RespondantService  {
 	}
 
 	@Override
+	public Set<Respondant> getByBenchmarkId(Long benchmarkId) {
+		return respondantRepository.findAllByBenchmarkId(benchmarkId);
+	}
+
+	@Override
+	public Set<Respondant> getCompletedForBenchmarkId(Long benchmarkId) {
+		return respondantRepository.findAllByBenchmarkIdAndRespondantStatusGreaterThan(benchmarkId, Respondant.STATUS_COMPLETED-1);
+	}
+
+	@Override
+	public Respondant getRespondantByPersonAndPosition(Person person, Position position) {		
+		return respondantRepository.findByPersonIdAndPositionId(person.getId(), position.getId());
+	}
+	
+	@Override
+	public List<Respondant> getAllRespondantsByStatus(Integer status) {
+		List<Integer> statuses = Arrays.asList(status);
+		List<Respondant> respondants = respondantRepository.findAllByRespondantStatusInOrderByFinishTimeDesc(statuses);		
+		log.debug("Returning {} respondants for status {}", respondants.size(), status);
+		return respondants;
+	}
+	
+	@Override
 	public List<Respondant> getGraderBasedScoringPendingRespondants() {
 		List<Integer> ungradedRespondantStatuses = Arrays.asList(Respondant.STATUS_UNGRADED);
 		List<Respondant> ungradedRespondants = respondantRepository.findAllByRespondantStatusInOrderByFinishTimeDesc(ungradedRespondantStatuses);
@@ -311,17 +338,43 @@ public class RespondantServiceImpl implements RespondantService  {
 	}
 	
 	@Override
-	public Set<Respondant> getByBenchmarkId(Long benchmarkId) {
-		return respondantRepository.findAllByBenchmarkId(benchmarkId);
+	public RespondantNVP save(RespondantNVP nvp) {		
+		setNVPNameId(nvp);
+		return respondantNVPRepository.save(nvp);
+	}
+
+	private void setNVPNameId(RespondantNVP nvp) {
+		if (null == nvp.getNameId()) {
+			NVPName nameId = nvpNameRepository.findByName(nvp.getName());
+			if (null == nameId) {
+				NVPName newNameId = new NVPName();
+				newNameId.setName(nvp.getName());
+				nameId = nvpNameRepository.save(newNameId);
+				log.info("New NVP ID#{} added for: {}",nameId.getId(),nameId.getName());
+			}
+			log.debug("Using ID#{} for: {}",nameId.getId(),nameId.getName());
+			nvp.setNameId(nameId.getId());
+		}
+	}
+	
+	@Override
+	public Iterable<RespondantNVP> save(Iterable<RespondantNVP> nvps) {
+		nvps.forEach(nvp -> setNVPNameId(nvp));
+		return respondantNVPRepository.save(nvps);
 	}
 
 	@Override
-	public Set<Respondant> getCompletedForBenchmarkId(Long benchmarkId) {
-		return respondantRepository.findAllByBenchmarkIdAndRespondantStatusGreaterThan(benchmarkId, Respondant.STATUS_COMPLETED-1);
+	public RespondantNVP addNVPToRespondant(Respondant respondant, String name, String value) {
+		RespondantNVP nvp = new RespondantNVP();
+		nvp.setName(name);
+		nvp.setValue(value);
+		nvp.setRespondantId(respondant.getId());
+		setNVPNameId(nvp);
+		return respondantNVPRepository.save(nvp);
 	}
 
 	@Override
-	public Respondant getRespondantByPersonAndPosition(Person person, Position position) {		
-		return respondantRepository.findByPersonIdAndPositionId(person.getId(), position.getId());
+	public Set<RespondantNVP> getNVPsForRespondant(Long respondantId) {
+		return respondantNVPRepository.findAllByRespondantId(respondantId);
 	}
 }

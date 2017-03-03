@@ -42,6 +42,16 @@ public class Prediction implements Serializable {
 	@Column(name = "position_prediction_config_id")
 	private Long positionPredictionConfigId;
 
+	@Column(name = "prediction_foreign_id")
+	private String foreignId;
+
+	@Column(name = "prediction_value")
+	private Boolean value;
+	
+	@Column(name = "prediction_target_id")
+	private Long targetId;
+
+	
 	@Column(name = "prediction_score")
 	private Double predictionScore;
 
