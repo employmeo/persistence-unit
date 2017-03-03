@@ -1,17 +1,15 @@
 package com.employmeo.data.repository;
 
-import java.util.Set;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import com.employmeo.data.model.RespondantNVP;
+import com.employmeo.data.model.NVPName;
 
 @Repository
-public interface RespondantNVPRepository extends PagingAndSortingRepository<RespondantNVP, Long> {
+public interface NVPNameRepository extends PagingAndSortingRepository<NVPName, Long> {
 
 	@Query
-	Set<RespondantNVP> findAllByRespondantId(Long respondantId);
+	NVPName findByName(String nvpName);
 	
 }

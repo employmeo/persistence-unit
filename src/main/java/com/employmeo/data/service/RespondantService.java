@@ -22,35 +22,25 @@ public interface RespondantService {
 
 	Respondant getRespondantByAccountIdAndAtsId(@NonNull Long accountId, @NonNull String atsId);
 
-	Respondant save(@NonNull Respondant respondant);
-
 	Respondant getRespondantById(@NonNull Long respondantId);
 
 	Respondant getRespondantByPersonAndPosition(Person person, Position position);
 
-	Page<Respondant> getByAccountId(@NonNull Long accountId, @NonNull Integer pageNumber, @NonNull Integer pageSize);
-
-	Page<Respondant> getByAccountId(@NonNull Long accountId);
-
+	Respondant save(@NonNull Respondant respondant);
+	
 	Set<Respondant> getByBenchmarkId(@NonNull Long benchmarkId);
 	
 	Set<Respondant> getCompletedForBenchmarkId(@NonNull Long benchmarkId);
 	
-	Set<RespondantScore> getAllRespondantScores();
-
-	RespondantScore save(@NonNull RespondantScore respondantScore);
-
-	RespondantScore getRespondantScoreById(@NonNull RespondantScorePK respondantScorePK);
-
-	Response saveResponse(Response response);
-
-	Response saveResponse(Long respondantId, Long questionId, Integer responseValue, String responseText);
-
-	Set<Response> getResponses(@NonNull UUID respondantUuid);
-
 	List<Respondant> getAnalysisPendingRespondants();
+
+	List<Respondant> getGraderBasedScoringPendingRespondants();
 	
-	Set<Response> getGradeableResponses(@NonNull Long respondantId);
+	List<Respondant> getAllRespondantsByStatus(@NonNull Integer status);
+	
+	Page<Respondant> getByAccountId(@NonNull Long accountId, @NonNull Integer pageNumber, @NonNull Integer pageSize);
+
+	Page<Respondant> getByAccountId(@NonNull Long accountId);
 
 	Page<Respondant> getBySearchParams(
 			@NonNull Long accountId,
@@ -62,7 +52,7 @@ public interface RespondantService {
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate);
 
-	public Page<Respondant> getBySearchParams(
+	Page<Respondant> getBySearchParams(
 			@NonNull Long accountId,
 			@NonNull Integer statusLow,
 			@NonNull Integer statusHigh,
@@ -74,13 +64,33 @@ public interface RespondantService {
 			@NonNull @Min(value = 1) Integer pageNumber,
 			@NonNull @Min(value = 1) @Max(value = 100) Integer pageSize
 			);
+	
+	RespondantScore getRespondantScoreById(@NonNull RespondantScorePK respondantScorePK);
+	
+	RespondantScore save(@NonNull RespondantScore respondantScore);
 
-	public List<Respondant> getGraderBasedScoringPendingRespondants();
+	Set<RespondantScore> getAllRespondantScores();
+
+	Response saveResponse(Response response);
+
+	Response saveResponse(Long respondantId, Long questionId, Integer responseValue, String responseText);
+
+	Set<Response> getResponses(@NonNull UUID respondantUuid);
 	
-	public Outcome save(@NonNull Outcome outcome);
+	Set<Response> getGradeableResponses(@NonNull Long respondantId);
+
+	Outcome save(@NonNull Outcome outcome);
 	
-	public Outcome addOutcomeToRespondant(@NonNull Respondant respondant, @NonNull Long targetId, Boolean value);
+	Outcome addOutcomeToRespondant(@NonNull Respondant respondant, @NonNull Long targetId, Boolean value);
 	
-	public Set<Outcome> getOutcomesForRespondant(@NonNull Long respondantId);
+	Set<Outcome> getOutcomesForRespondant(@NonNull Long respondantId);
+
+	RespondantNVP save(@NonNull RespondantNVP nvp);
+	
+	Iterable<RespondantNVP> save(@NonNull Iterable<RespondantNVP> nvps);
+	
+	RespondantNVP addNVPToRespondant(@NonNull Respondant respondant, @NonNull String name, String value);
+	
+	Set<RespondantNVP> getNVPsForRespondant(@NonNull Long respondantId);
 	
 }

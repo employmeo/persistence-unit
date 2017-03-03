@@ -7,6 +7,7 @@ import com.employmeo.data.model.Account;
 import com.employmeo.data.model.Benchmark;
 import com.employmeo.data.model.Location;
 import com.employmeo.data.model.Position;
+import com.employmeo.data.model.User;
 
 import lombok.NonNull;
 
@@ -22,17 +23,25 @@ public interface AccountService {
 
 	Account save(@NonNull Account account);
 
-	Position getPositionById(@NonNull Long positionId);
-	
-	Position getPositionByAtsId(@NonNull Long accountId, @NonNull String atsId);
-	
-	Position save(@NonNull Position position);
 
 	Location getLocationById(@NonNull Long locationId);
 	
 	Location getLocationByAtsId(@NonNull Long accountId, @NonNull String atsId);
 
 	Location save(@NonNull Location location);
+	
+
+	Position getPositionById(@NonNull Long positionId);
+	
+	Position getPositionByAtsId(@NonNull Long accountId, @NonNull String atsId);
+	
+	Position save(@NonNull Position position);
+	
+	Set<Position> getAllPositions();
+	
+	
+	Set<User> getUsersForAccount(@NonNull Long accountId);
+		
 	
 	Benchmark getBenchmarkById(@NonNull Long benchmarkId);
 	
@@ -41,9 +50,9 @@ public interface AccountService {
 	List<Benchmark> getBenchmarksByAccountId(@NonNull Long accountId);
 	
 	List<Benchmark> getIncompleteBenchmarksByAccountId(@NonNull Long accountId);
+	
+	List<Benchmark> getAllBenchmarks();
 
 	Benchmark save(@NonNull Benchmark benchmark);
-	
-	Set<Position> getAllPositions();
 
 }
