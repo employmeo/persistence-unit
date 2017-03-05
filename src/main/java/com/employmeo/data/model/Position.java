@@ -55,9 +55,25 @@ public class Position implements Serializable {
 	@Column(name = "position_account")
 	private Long accountId;
 	
+	@Column(name = "position_scoring_scale_id")
+	private Long scoringScaleId;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "position_scoring_scale_id", insertable=false, updatable=false)
+	private ScoringScale scoringScale;
+	
 	@JsonIgnore
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "position", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<PositionPredictionConfiguration> positionPredictionConfigurations = new HashSet<>();
-
+	
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "position", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	private Set<CriticalFactor> criticalFactors;
+		
+	public ScoringScale getScoringScale() {
+		if (this.scoringScale != null) return this.scoringScale;
+		return ProfileDefaults.DEFAULT_SCALE;
+	}
 }

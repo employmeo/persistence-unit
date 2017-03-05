@@ -79,7 +79,23 @@ public class Account implements Serializable {
 
 	@Column(name = "account_default_asid")
 	private Long defaultAsId;
+	
+	@Column(name = "account_scoring_scale_id")
+	private Long scoringScaleId;
 
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "account_scoring_scale_id", insertable=false, updatable=false)
+	private ScoringScale scoringScale;
+	
+	@Column(name = "account_custom_profile_id")
+	private Long customProfileId;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "account_custom_profile_id", insertable=false, updatable=false)
+	private CustomProfile customProfile;
+	
 	// bi-directional many-to-one association to Survey
 	@JsonIgnore
 	@Fetch(FetchMode.SUBSELECT)
@@ -116,4 +132,13 @@ public class Account implements Serializable {
 	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<BillingItem> billingItems = new HashSet<>();
 
+	public CustomProfile getCustomProfile() {
+		if (this.customProfile != null) return this.customProfile;
+		return ProfileDefaults.DEFAULT_PROFILES;
+	}
+	
+	public ScoringScale getScoringScale() {
+		if (this.scoringScale != null) return this.scoringScale;
+		return ProfileDefaults.DEFAULT_SCALE;
+	}
 }

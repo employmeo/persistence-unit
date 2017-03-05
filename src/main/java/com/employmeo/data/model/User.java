@@ -19,6 +19,9 @@ public class User implements Serializable {
 
 	@Transient
 	private static final long serialVersionUID = 8267893893548964337L;
+	
+	public static final int TYPE_BASIC = 1;
+	public static final int TYPE_SUPER = 999;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +58,7 @@ public class User implements Serializable {
 	private Integer userStatus;
 
 	@Column(name = "USER_TYPE")
-	private Integer userType;
+	private Integer userType = User.TYPE_BASIC;
 
 	@Column(name = "USER_ATS_ID")
 	private String atsId;
