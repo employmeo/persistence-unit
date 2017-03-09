@@ -31,7 +31,7 @@ public class CriticalFactor implements Serializable {
 	private Position position;
 
 	@Column(name = "critical_factor_position_id")
-	private Long positiontId;
+	private Long positionId;
 
 	@JsonManagedReference
 	@ManyToOne
