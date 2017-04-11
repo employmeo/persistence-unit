@@ -37,7 +37,7 @@ public class ProfileDefaults {
 	public static final String dHighlight = "#d43f3a";
 	
 	public static final String uName = "Not Scored";
-	public static final String uIcon = "fa-quesiton";
+	public static final String uIcon = "fa-question";
 	public static final String uClass = "btn-default";
 	public static final String uColor = "rgba(120,60,100,1)";
 	public static final String uOverlay = "rgba(120,60,100,0.3)";
