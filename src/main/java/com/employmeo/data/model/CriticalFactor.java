@@ -33,7 +33,7 @@ public class CriticalFactor implements Serializable {
 	@Column(name = "critical_factor_position_id")
 	private Long positionId;
 
-	@JsonManagedReference
+	@JsonBackReference("cf-corefactor")
 	@ManyToOne
 	@JoinColumn(name = "critical_factor_corefactor_id", insertable=false, updatable=false)
 	private Corefactor corefactor;

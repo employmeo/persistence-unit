@@ -34,7 +34,7 @@ public class CorefactorDescription implements Serializable {
 	@Column(name="cf_high_end")
 	private Double highEnd;
 
-	@JsonBackReference
+	@JsonBackReference(value="cf-desc")
 	@ManyToOne
 	@JoinColumn(name = "cf_id",insertable=false,updatable=false)
 	private Corefactor corefactor;
