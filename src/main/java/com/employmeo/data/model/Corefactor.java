@@ -66,7 +66,7 @@ public class Corefactor implements Serializable {
 	@Column(name = "cf_parent_id")
 	private Long parentId;	
 
-	@JsonManagedReference
+	@JsonManagedReference(value="cf-desc")
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "corefactor", fetch = FetchType.EAGER)
 	private Set<CorefactorDescription> corefactorDescriptions = new HashSet<>();
