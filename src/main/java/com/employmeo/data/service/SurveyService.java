@@ -1,5 +1,6 @@
 package com.employmeo.data.service;
 
+import java.util.List;
 import java.util.Set;
 
 import com.employmeo.data.model.*;
@@ -17,6 +18,8 @@ public interface SurveyService {
 	Survey getSurveyById(@NonNull Long surveyId);
 
 	Set<SurveySection> getAllSurveySections();
+	
+	List<SurveySection> getAllSurveySectionsSorted();
 
 	SurveySection save(@NonNull SurveySection surveySection);
 
