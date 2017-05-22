@@ -29,14 +29,20 @@ public interface AccountService {
 	Location getLocationByAtsId(@NonNull Long accountId, @NonNull String atsId);
 
 	Location save(@NonNull Location location);
-	
 
+	void delete(@NonNull Location location);
+	
+	Set<Location> getAllLocations();
+
+	
 	Position getPositionById(@NonNull Long positionId);
 	
 	Position getPositionByAtsId(@NonNull Long accountId, @NonNull String atsId);
 	
 	Position save(@NonNull Position position);
 	
+	void delete(@NonNull Position position);
+
 	Set<Position> getAllPositions();
 	
 	
