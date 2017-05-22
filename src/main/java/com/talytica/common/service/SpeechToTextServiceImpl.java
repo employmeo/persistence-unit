@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -33,10 +34,10 @@ public class SpeechToTextServiceImpl implements SpeechToTextService {
 	private String TRANSLATE = "/v1/recognize?continuous=true";
 	private String NARROWBAND_US = "&model=en-US_NarrowbandModel";
 	
-	@Value("${com.talytica.apis.watson.speech.user}")
+	@Value("${com.talytica.apis.watson.speech.user:null}")
 	private String WATSON_USER;
 	
-	@Value("${com.talytica.apis.watson.speech.pass}")
+	@Value("${com.talytica.apis.watson.speech.pass:null}")
 	private String WATSON_PASS;
 	
 	@Autowired
@@ -107,6 +108,11 @@ public class SpeechToTextServiceImpl implements SpeechToTextService {
 
 		return nvps;
 		
-	}	
-
+	}
+	
+	@PostConstruct
+	private void logConfiguration() {
+		if ("null".equals(WATSON_USER)) log.warn("--- SPEECH ANALYTICS SERVICE UNAVAILABLE - NO USER CONFIGURED ---");
+	}
+	
 }

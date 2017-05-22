@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -20,11 +21,11 @@ public class AddressServiceImpl implements AddressService {
 	@Value("https://maps.googleapis.com/maps/api/geocode/json")
 	private String MAPS_SERVICE;
 
-	@Value("${com.talytica.apis.googlemaps}")
-	private String googleApiKey = System.getenv("GOOGLE_MAPS_KEY");
+	@Value("${com.talytica.apis.googlemaps:null}")
+	private String GOOGLE_API_KEY;
 
 	private String getMapsKey() {
-		return googleApiKey;
+		return GOOGLE_API_KEY;
 	}
 
 	@Override
@@ -92,4 +93,10 @@ public class AddressServiceImpl implements AddressService {
 		}
 		return address;
 	}
+	
+	@PostConstruct
+	private void logConfiguration() {
+		if ("null".equals(GOOGLE_API_KEY)) log.warn("--- GOOGLE MAPS API SERVICE UNAVAILABLE - NO USER CONFIGURED ---");
+	}
+	
 }

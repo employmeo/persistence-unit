@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -17,15 +18,15 @@ import org.json.JSONObject;
 
 @Slf4j
 @Service
-public class TextAnaltyticsServiceImpl implements TextAnalyticsService {
+public class TextAnalyticsServiceImpl implements TextAnalyticsService {
 	
 	private String WATSON_API = "https://gateway.watsonplatform.net/natural-language-understanding/api";
 	private String ANALYZE = "/v1/analyze?version=2017-02-27";
 	
-	@Value("${com.talytica.apis.watson.sentiment.user}")
+	@Value("${com.talytica.apis.watson.sentiment.user:null}")
 	private String WATSON_USER;
 	
-	@Value("${com.talytica.apis.watson.sentiment.pass}")
+	@Value("${com.talytica.apis.watson.sentiment.pass:null}")
 	private String WATSON_PASS;
 	
 	
@@ -100,4 +101,10 @@ public class TextAnaltyticsServiceImpl implements TextAnalyticsService {
 		params.put("features", features);
 		return analyzeText(params);
 	}
+		
+	@PostConstruct
+	private void logConfiguration() {
+		if ("null".equals(WATSON_USER)) log.warn("--- TEXT ANALYTICS SERVICE UNAVAILABLE - NO USER CONFIGURED ---");
+	}
+	
 }

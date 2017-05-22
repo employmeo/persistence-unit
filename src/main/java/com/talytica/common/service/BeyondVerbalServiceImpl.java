@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -32,8 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 	
-	@Value("${com.talytica.apis.beyondverbal.key}")
-	private String beyondVerbalKey;
+	@Value("${com.talytica.apis.beyondverbal.key:null}")
+	private String BEYONDVERBAL_KEY;
 	private String beyondVerbalToken = null;
 	private final String BV_API = "https://apiv3.beyondverbal.com/v3/recording";
 	private final String START = "/start";
@@ -244,7 +245,7 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 		log.debug("no token found");
 		Form form = new Form();
 		form.param("grant_type", "client_credentials");
-		form.param("apikey", beyondVerbalKey);
+		form.param("apikey", BEYONDVERBAL_KEY);
 		Client client = ClientBuilder.newClient();
 		javax.ws.rs.core.Response result = client.target("https://token.beyondverbal.com/token")
 				.request(MediaType.APPLICATION_JSON)
@@ -255,6 +256,11 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 		beyondVerbalToken = json.optString("access_token");
 		return this.beyondVerbalToken;		
 		
-	}	
+	}
+	
+	@PostConstruct
+	private void logConfiguration() {
+		if ("null".equals(BEYONDVERBAL_KEY)) log.warn("--- AUDIO ANALYTICS SERVICE UNAVAILABLE - NO USER CONFIGURED ---");
+	}
 	
 }
