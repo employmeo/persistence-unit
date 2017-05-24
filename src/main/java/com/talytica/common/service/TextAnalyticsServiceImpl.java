@@ -69,8 +69,16 @@ public class TextAnalyticsServiceImpl implements TextAnalyticsService {
 		features.put("sentiment",sentiment);
 		params.put("features", features);
 		JSONObject result = analyzeText(params);
-		return result.getJSONObject("document").getDouble("score");
+		
+		Double score = result.getJSONObject("document").optDouble("score");
+		return normalizeSentimentScore(score);
 	}
+	
+	@Override
+	public Double normalizeSentimentScore(Double watsonScore) {
+		return 1d - Math.sqrt(1d - watsonScore)/Math.sqrt(2d);
+	}
+
 	
 	@Override
 	public JSONObject analyzeSentimentForTarget(String text, String target) {

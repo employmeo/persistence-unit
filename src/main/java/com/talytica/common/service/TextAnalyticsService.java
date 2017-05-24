@@ -8,5 +8,6 @@ public interface TextAnalyticsService {
 	public Double analyzeSentiment(String text);
 	public JSONObject analyzeSentimentForTarget(String text, String target);
 	public JSONObject analyzeSentimentForTarget(String text, String[] targets);
+	public Double normalizeSentimentScore(Double watsonScore);
 	
 }

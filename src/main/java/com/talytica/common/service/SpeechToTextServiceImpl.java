@@ -101,7 +101,7 @@ public class SpeechToTextServiceImpl implements SpeechToTextService {
 				RespondantNVP nvp = new RespondantNVP();
 				nvp.setName(response.getQuestion().getQuestionText());
 				nvp.setValue(text);
-				nvp.setRespondantId(response.getId());
+				nvp.setRespondantId(response.getRespondantId());
 				nvps.add(respondantService.save(nvp));
 			}
 		}

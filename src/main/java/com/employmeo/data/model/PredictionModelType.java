@@ -16,7 +16,7 @@ public enum PredictionModelType {
 
 	public static PredictionModelType getByValue(@NonNull String value) {
         for (PredictionModelType modelType : PredictionModelType.values()) {
-            if (value.equals(modelType.getValue())) {
+            if (value.equalsIgnoreCase(modelType.getValue())) {
                 return modelType;
             }
         }

@@ -78,6 +78,10 @@ public interface RespondantService {
 	Set<Response> getResponses(@NonNull UUID respondantUuid);
 	
 	Set<Response> getGradeableResponses(@NonNull Long respondantId);
+	
+	Set<Response> getAudioResponses(Long respondantId);
+	
+	Set<Response> getVideoResponses(Long respondantId);
 
 	Outcome save(@NonNull Outcome outcome);
 	

@@ -43,7 +43,10 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
 	private static final Integer DEFAULT_PAGE_SIZE = 100;
-	private static final String AUDIO_SCORING = "audio";
+	private static final String[] GRADEABLES = {"audio","audio+","video","video+"};
+	private static final Integer AUDIOTYPE = 16;
+	private static final Integer VIDEOTYPE = 28;
+	
 	//private static final int REFERENCE_COREFACTOR = 43;
 
 	@Override
@@ -305,7 +308,7 @@ public class RespondantServiceImpl implements RespondantService  {
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> gradeables = new HashSet<Response>();
 		for (SurveyQuestion sq : questionset) {
-			if (AUDIO_SCORING.equalsIgnoreCase(sq.getQuestion().getScoringModel())) {
+			if (Arrays.asList(GRADEABLES).contains(sq.getQuestion().getScoringModel().toLowerCase())) {
 			    Optional<Response> response = allresponses.stream().filter(resp -> sq.getQuestionId().equals(resp.getQuestionId())).findFirst();
 			    if (response.isPresent()) {
 			    	gradeables.add(response.get());
@@ -316,6 +319,41 @@ public class RespondantServiceImpl implements RespondantService  {
 		return gradeables;
 	}
 
+	@Override
+	public Set<Response> getAudioResponses(Long respondantId) {
+		Respondant respondant = respondantRepository.findOne(respondantId);
+		Set<Response> allresponses = respondant.getResponses();
+		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
+		Set<Response> audioresponses = new HashSet<Response>();
+		for (SurveyQuestion sq : questionset) {
+			if (sq.getQuestion().getQuestionType() == AUDIOTYPE) {
+			    Optional<Response> response = allresponses.stream().filter(resp -> sq.getQuestionId().equals(resp.getQuestionId())).findFirst();
+			    if (response.isPresent()) {
+			    	audioresponses.add(response.get());
+			    }
+			}
+		}
+		log.debug("Returning {} videoresponses for respondant {}", audioresponses.size(), respondantId);
+		return audioresponses;
+	}
+	
+	@Override
+	public Set<Response> getVideoResponses(Long respondantId) {
+		Respondant respondant = respondantRepository.findOne(respondantId);
+		Set<Response> allresponses = respondant.getResponses();
+		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
+		Set<Response> videoresponses = new HashSet<Response>();
+		for (SurveyQuestion sq : questionset) {
+			if (sq.getQuestion().getQuestionType() == VIDEOTYPE) {
+			    Optional<Response> response = allresponses.stream().filter(resp -> sq.getQuestionId().equals(resp.getQuestionId())).findFirst();
+			    if (response.isPresent()) {
+			    	videoresponses.add(response.get());
+			    }
+			}
+		}
+		log.debug("Returning {} videoresponses for respondant {}", videoresponses.size(), respondantId);
+		return videoresponses;
+	}	
 	@Override
 	public Outcome save(Outcome outcome) {
 		return outcomeRepository.save(outcome);

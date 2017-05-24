@@ -9,6 +9,14 @@ import lombok.NonNull;
 public interface PredictionModelService {
 
 	public List<LinearRegressionConfig> getLinearRegressionConfiguration(@NonNull Long modelId);
+	
+	public List<LinearRegressionConfig> getAllLinearRegressionConfigurations();
+	
+	public LinearRegressionConfig getLinearRegressionConfigurationById(@NonNull Long configId);
+	
+	public LinearRegressionConfig save(LinearRegressionConfig config);
+	
+	public void delete(LinearRegressionConfig config);
 
 	public PredictionModel getModelByName(@NonNull String modelName);
 	

@@ -2,6 +2,7 @@ package com.talytica.common.service;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.employmeo.data.model.*;
+import com.employmeo.data.repository.ApiTransactionRepository;
 import com.employmeo.data.repository.ResponseRepository;
 import com.employmeo.data.service.CorefactorService;
 
@@ -36,6 +38,7 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 	@Value("${com.talytica.apis.beyondverbal.key:null}")
 	private String BEYONDVERBAL_KEY;
 	private String beyondVerbalToken = null;
+	private Long tokenExpiration;
 	private final String BV_API = "https://apiv3.beyondverbal.com/v3/recording";
 	private final String START = "/start";
 	private final String ANALYSIS = "/analysis";
@@ -47,6 +50,9 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 	private CorefactorService corefactorService;
 
 	@Autowired
+	private ApiTransactionRepository apiTransactionRepository;
+	
+	@Autowired
 	private ResponseRepository responseRepository;
 	
 	@Override
@@ -54,12 +60,15 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 
 		Response response = responseRepository.findOne(responseId);
 		log.debug("New Analysis requested for: {}" , response);
-		String recordingId = startAnalysis(response.getId());
+		String recordingId = startAnalysis(response.getId());	
 		JSONObject json = analyzeMedia(response.getResponseMedia(), recordingId);
 
 		if (recordingId != null) {
-			response.setResponseText(recordingId);
-			responseRepository.save(response);
+			ApiTransaction txn = new ApiTransaction();
+			txn.setApiName(this.getClass().toString());
+			txn.setObjectId(responseId);
+			txn.setReferenceId(recordingId);
+			apiTransactionRepository.save(txn);
 		}
 		
 		return json;
@@ -103,7 +112,7 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 	
 	@Override
 	public JSONObject analyzeMedia(String responseMedia, String recordingId) {
-		
+		JSONObject json = new JSONObject();
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(BV_API+"/"+recordingId);
 		try {
@@ -118,14 +127,13 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 			} else {
 				String resp = result.readEntity(String.class);
 				log.debug("Post Media request {} resulted in: \n {}",target.toString(), resp);
-				JSONObject json = new JSONObject(resp);
-				
+				json = new JSONObject(resp);
 				return json;
 			}
 		} catch (Exception e) {
 			log.error("Failed to analyze {}, with {} ", recordingId, e.getMessage());
 		}
-		return null;		
+		return json;		
 	}
 	
 	
@@ -157,21 +165,25 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 	public List<RespondantScore> analyzeResponses(List<Response> responses) {
 		List<RespondantScore> scores = new ArrayList<RespondantScore>();
 		Set<JSONObject> segments = new HashSet<JSONObject>();
+		Long respondantId = null;
 		
 		for (Response response : responses) {
+			respondantId = response.getRespondantId();
 			JSONObject json = null;
-			if (response.getResponseText() != null) {
-				json = getAnalysis(response.getResponseText());
-			}
+			JSONArray analysisSegments = null;
+			log.info("looking for {}, {}",this.getClass().toString(), response.getId());
+			ApiTransaction txn = apiTransactionRepository.findFirstByApiNameAndObjectIdOrderByCreatedDateDesc(this.getClass().toString(), response.getId());
+			log.info("found {}",txn);
+			if (txn != null) json = getAnalysis(txn.getReferenceId());
 			if (json == null) {
 				log.debug("no recording id for {}", response);
 				json = analyzeResponse(response.getId());
-			}
-			JSONObject result = json.getJSONObject("result");
-			JSONArray analysisSegments = result.optJSONArray("analysisSegments");
+			}	
+			JSONObject result = json.optJSONObject("result");
+			if (null != result) analysisSegments = result.optJSONArray("analysisSegments");
 			if (analysisSegments != null ) for (int i=0;i<analysisSegments.length();i++) {segments.add(analysisSegments.getJSONObject(i));}
 		}
-		log.debug("full output is: {}",segments);
+		log.debug("{} Responses analayzed as : {}", responses.size(), segments);
 
 		Double totalduration = 0d;
 		Double tempertotal = 0d;
@@ -207,24 +219,12 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 			
 		}
 		
-		RespondantScore temperScore = new RespondantScore();
-		temperScore.setId(new RespondantScorePK(TEMPER_COREFACTOR,responses.get(0).getRespondantId()));
-		temperScore.setValue(tempertotal/(10*totalduration));
-		temperScore.setQuestionCount(responses.size());
-		scores.add(temperScore);
-		
-		RespondantScore valenceScore = new RespondantScore();
-		valenceScore.setId(new RespondantScorePK(VALENCE_COREFACTOR,responses.get(0).getRespondantId()));
-		valenceScore.setValue(valencetotal/(10*totalduration));
-		valenceScore.setQuestionCount(responses.size());
-		scores.add(valenceScore);
-
-		RespondantScore arousalScore = new RespondantScore();
-		arousalScore.setId(new RespondantScorePK(AROUSAL_COREFACTOR,responses.get(0).getRespondantId()));
-		arousalScore.setValue(arousaltotal/(10*totalduration));
-		arousalScore.setQuestionCount(responses.size());
-		scores.add(arousalScore);
-		
+		if (totalduration > 0) {
+			scores.add(scaleScore(TEMPER_COREFACTOR,respondantId,tempertotal/totalduration,responses.size()));
+			scores.add(scaleScore(VALENCE_COREFACTOR,respondantId,valencetotal/totalduration,responses.size()));
+			scores.add(scaleScore(AROUSAL_COREFACTOR,respondantId,arousaltotal/totalduration,responses.size()));
+		}
+			
 		for (Map.Entry<Corefactor, Double> pair : hashtable.entrySet()) {
 			RespondantScore moodScore = new RespondantScore();
 			Corefactor moodFactor = pair.getKey();	
@@ -237,12 +237,22 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 
 		return scores;
 	}
-
+	
+	private RespondantScore scaleScore(Long respondantId, Long corefactorId, Double normalScore, int count) {
+		RespondantScore rs = new RespondantScore();
+		Corefactor cf =corefactorService.findCorefactorById(corefactorId);
+		rs.setId(new RespondantScorePK(corefactorId,respondantId));
+		Double scaledValue = (cf.getHighValue()-cf.getLowValue()) * (normalScore) + cf.getLowValue();
+		rs.setQuestionCount(count);
+		rs.setValue(Math.max(cf.getLowValue(), Math.min(cf.getHighValue(), scaledValue)));
+		return rs;
+	}
+	
 	
 	private String getBeyondVerbalToken() {
 		
-		if (this.beyondVerbalToken != null) return this.beyondVerbalToken;	
-		log.debug("no token found");
+		if (this.tokenExpiration > System.currentTimeMillis()) return this.beyondVerbalToken;	
+		log.debug("Token expired / not found");
 		Form form = new Form();
 		form.param("grant_type", "client_credentials");
 		form.param("apikey", BEYONDVERBAL_KEY);
@@ -252,7 +262,9 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 				.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
 		
 		JSONObject json = new JSONObject(result.readEntity(String.class));
-		log.debug("token request returned: {}", json);		
+
+		this.tokenExpiration = System.currentTimeMillis() + (1000 * json.optLong("expires_in",0l));
+		log.debug("token returned with expy: {}", new Date(this.tokenExpiration));		
 		beyondVerbalToken = json.optString("access_token");
 		return this.beyondVerbalToken;		
 		
@@ -260,6 +272,7 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 	
 	@PostConstruct
 	private void logConfiguration() {
+		this.tokenExpiration = System.currentTimeMillis(); // set token to expire now
 		if ("null".equals(BEYONDVERBAL_KEY)) log.warn("--- AUDIO ANALYTICS SERVICE UNAVAILABLE - NO USER CONFIGURED ---");
 	}
 	
