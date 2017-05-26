@@ -178,4 +178,19 @@ public class AccountServiceImpl implements AccountService {
 		return benchmark;
 	}
 
+	@Override
+	public void delete(Location location) {
+		locationRepository.delete(location);		
+	}
+
+	@Override
+	public Set<Location> getAllLocations() {
+		return Sets.newHashSet(locationRepository.findAll());
+	}
+
+	@Override
+	public void delete(Position position) {
+		positionRepository.delete(position);		
+	}
+
 }

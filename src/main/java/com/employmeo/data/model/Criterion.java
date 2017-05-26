@@ -43,13 +43,14 @@ public class Criterion implements Serializable {
 	@Column(name = "CRITERION_QUESTION_ID")
 	private Long surveyQuestionId;
 
+	@Column(name = "CRITERION_LINKED_QUESTION_ID")
+	private Long graderQuestionId;
+	
 	// bi-directional many-to-one association to Question
 	@JsonManagedReference
 	@ManyToOne
-	@JoinColumn(name = "CRITERION_LINKED_QUESTION_ID")
+	@JoinColumn(name = "CRITERION_LINKED_QUESTION_ID", insertable=false, updatable=false)
 	private Question graderQuestion;
 
-	@Column(name = "CRITERION_LINKED_QUESTION_ID", insertable=false, updatable=false)
-	private Long graderQuestionId;
 	
 }

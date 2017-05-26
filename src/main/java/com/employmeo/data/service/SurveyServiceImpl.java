@@ -1,14 +1,17 @@
 package com.employmeo.data.service;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employmeo.data.model.*;
 import com.employmeo.data.repository.*;
 
+import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +61,17 @@ public class SurveyServiceImpl implements SurveyService  {
 
 		return surveySections;
 	}
+
+	@Override
+	public List<SurveySection> getAllSurveySectionsSorted() {
+		List<SurveySection> surveySections = Lists.newArrayList(surveySectionRepository.findAll(sortBySurveyId()));
+		log.debug("Retrieved all {} surveySections", surveySections.size());
+		return surveySections;
+	}
+	
+    private Sort sortBySurveyId() {
+        return new Sort(Sort.Direction.ASC, "surveyId");
+    }
 
 	@Override
 	public SurveySection save(@NonNull SurveySection surveySection) {

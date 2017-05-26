@@ -78,13 +78,13 @@ public class PositionPredictionConfiguration implements Serializable {
 	
 	@Column(name = "prediction_trigger_point")
 	private Integer triggerPoint;
-	
 
-	@Column(name = "created_date", insertable = true, updatable = false)
+	@Column(name = "created_date", insertable = false, updatable = false)
 	private Date createdDate;
 
 	@JsonIgnore
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "positionPredictionConfig", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<Prediction> predictions = new HashSet<>();
+	
 }

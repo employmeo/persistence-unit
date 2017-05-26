@@ -7,11 +7,13 @@ import javax.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The persistent class for the predictive_model database table.
  *
  */
+@Slf4j
 @Entity
 @Table(name = "linear_regression_config")
 @Data
@@ -56,7 +58,13 @@ public class LinearRegressionConfig implements Serializable {
     public LinearRegressionConfigType getConfigType() {
         return LinearRegressionConfigType.getConfigType(this.configTypeId);
     }
-
+    
+	@PrePersist
+	private void setCreatedDate() {
+		log.debug("Generating create date as {}", createdDate);
+		createdDate = new Date();
+	}
+	
     public void setConfigType(LinearRegressionConfigType configType) {
         if (configType == null) {
             this.configTypeId = null;

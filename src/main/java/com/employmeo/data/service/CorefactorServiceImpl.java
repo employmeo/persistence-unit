@@ -37,7 +37,7 @@ public class CorefactorServiceImpl implements CorefactorService {
 	@Cacheable(value="corefactors")
 	public Corefactor findCorefactorById(@NonNull Long corefactorId) {
 		Corefactor corefactor = corefactorRepository.findOne(corefactorId);
-		log.debug("Retrieved for id {} entity {}", corefactorId, corefactor.getName());
+		log.debug("Retrieved for id {} entity {}", corefactorId, corefactor);
 
 		return corefactor;
 	}

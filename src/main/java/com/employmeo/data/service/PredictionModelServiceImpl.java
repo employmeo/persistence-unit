@@ -12,6 +12,7 @@ import com.employmeo.data.repository.LinearRegressionConfigRepository;
 import com.employmeo.data.repository.PredictionModelRepository;
 import com.employmeo.data.repository.PredictionTargetRepository;
 
+import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,26 @@ public class PredictionModelServiceImpl implements PredictionModelService{
 			throw new IllegalStateException("Model " + predictionModel.getName() + " is not a linear regression type model. Please review setup.");
 		}
 		return configEntries;
+	}
+
+	@Override
+	public List<LinearRegressionConfig> getAllLinearRegressionConfigurations() {
+		return Lists.newArrayList(linearRegressionConfigRepository.findAll());
+	}
+	
+	@Override
+	public LinearRegressionConfig getLinearRegressionConfigurationById(Long configId) {
+		return linearRegressionConfigRepository.findOne(configId);
+	}	
+	
+	@Override
+	public LinearRegressionConfig save(LinearRegressionConfig config) {
+		return linearRegressionConfigRepository.save(config);
+	}
+
+	@Override
+	public void delete(LinearRegressionConfig config) {
+		linearRegressionConfigRepository.delete(config);
 	}
 
 	@Override
@@ -98,5 +119,4 @@ public class PredictionModelServiceImpl implements PredictionModelService{
 	public Set<PredictionTarget> getAllPredictionTargets() {
 		return Sets.newHashSet(predictionTargetRepository.findAll());
 	}
-
 }

@@ -67,7 +67,7 @@ public class EmailServiceImpl implements EmailService {
 	private String QUICKREF_REMINDER_TEMPLATE_ID;
 	
 	
-	@Value("${com.talytica.apis.sendgrid}")
+	@Value("${com.talytica.apis.sendgrid:null}")
 	private String SG_API;
 	
 	@Value("${email.delivery.override.enabled:false}")
