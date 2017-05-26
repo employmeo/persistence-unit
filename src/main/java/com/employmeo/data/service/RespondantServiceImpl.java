@@ -43,7 +43,7 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
 	private static final Integer DEFAULT_PAGE_SIZE = 100;
-	private static final String[] GRADEABLES = {"audio","audio+","video","video+"};
+	private static final String[] GRADEABLES = {"audio","audio+","video","video+"}; // audio- and video- not graded
 	private static final Integer AUDIOTYPE = 16;
 	private static final Integer VIDEOTYPE = 28;
 	
