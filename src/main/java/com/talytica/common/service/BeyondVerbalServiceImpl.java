@@ -18,6 +18,7 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.math3.distribution.NormalDistribution;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,15 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 	private final String BV_API = "https://apiv3.beyondverbal.com/v3/recording";
 	private final String START = "/start";
 	private final String ANALYSIS = "/analysis";
-	private final Long TEMPER_COREFACTOR = 1012l; 
-	private final Long VALENCE_COREFACTOR = 1013l;
-	private final Long AROUSAL_COREFACTOR = 1014l;
+	private Long TEMPER_COREFACTOR = 1012l;
+	private NormalDistribution temperDist;
+	private Double temperMean = 29d;
+	private Double temperDev = 12d;
+	private Long VALENCE_COREFACTOR = 1013l;
+	private NormalDistribution valenceDist;
+	private Double valenceMean = 27.5d;
+	private Double valenceDev = 13.77d; 
+	private Long AROUSAL_COREFACTOR = 1014l;
 	
 	@Autowired
 	private CorefactorService corefactorService;
@@ -216,13 +223,27 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 			if (hashtable.containsKey(secondaryCorefactor)) factorDuration = hashtable.get(secondaryCorefactor);
 			factorDuration += 1.25d * duration;// half value if duration isn't where we want it.
 			hashtable.put(secondaryCorefactor, factorDuration);
-			
 		}
 		
 		if (totalduration > 0) {
-			scores.add(scaleScore(TEMPER_COREFACTOR,respondantId,tempertotal/totalduration,responses.size()));
-			scores.add(scaleScore(VALENCE_COREFACTOR,respondantId,valencetotal/totalduration,responses.size()));
-			scores.add(scaleScore(AROUSAL_COREFACTOR,respondantId,arousaltotal/totalduration,responses.size()));
+			log.debug("Weighted Average Temper {} normalized to {}",tempertotal/totalduration,
+					1d - 2d * Math.abs(0.5d- temperDist.cumulativeProbability(tempertotal/totalduration)));
+			scores.add(scaleScore(
+					respondantId,
+					TEMPER_COREFACTOR,
+					1d - 2d * Math.abs(0.5d- temperDist.cumulativeProbability(tempertotal/totalduration)),
+					responses.size()));
+			log.debug("Weighted Average Valence {} normalized to {}",valencetotal/totalduration,
+					valenceDist.cumulativeProbability(valencetotal/totalduration));
+			scores.add(scaleScore(respondantId,
+					VALENCE_COREFACTOR,
+					valenceDist.cumulativeProbability(valencetotal/totalduration),
+					responses.size()));
+			scores.add(scaleScore(
+					respondantId,
+					AROUSAL_COREFACTOR,
+					arousaltotal/(100d*totalduration),
+					responses.size()));
 		}
 			
 		for (Map.Entry<Corefactor, Double> pair : hashtable.entrySet()) {
@@ -245,6 +266,7 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 		Double scaledValue = (cf.getHighValue()-cf.getLowValue()) * (normalScore) + cf.getLowValue();
 		rs.setQuestionCount(count);
 		rs.setValue(Math.max(cf.getLowValue(), Math.min(cf.getHighValue(), scaledValue)));
+		log.debug("Score for {} converted from {} to {}",cf.getName(),normalScore,rs.getValue());
 		return rs;
 	}
 	
@@ -273,6 +295,8 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 	@PostConstruct
 	private void logConfiguration() {
 		this.tokenExpiration = System.currentTimeMillis(); // set token to expire now
+		temperDist = new NormalDistribution(temperMean,temperDev);
+		valenceDist = new NormalDistribution(valenceMean,valenceDev);
 		if ("null".equals(BEYONDVERBAL_KEY)) log.warn("--- AUDIO ANALYTICS SERVICE UNAVAILABLE - NO USER CONFIGURED ---");
 	}
 	
