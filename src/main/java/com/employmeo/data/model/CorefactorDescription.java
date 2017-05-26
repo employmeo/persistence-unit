@@ -44,5 +44,8 @@ public class CorefactorDescription implements Serializable {
 
 	@Column(name="cf_low_end")
 	private Double lowEnd;
+	
+	@Column(name="cfdesc_quartile")
+	private Integer quartile;
 
 }

@@ -1,6 +1,7 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,11 +65,37 @@ public class Corefactor implements Serializable {
 	private String displayGroup;
 	
 	@Column(name = "cf_parent_id")
-	private Long parentId;	
+	private Long parentId;
+	
+	@Column(name = "corefactor_color")
+	private String color;
+	
+	@Column(name = "corefactor_border")
+	private String borderColor;
+	
+	@Column(name = "corefactor_default_coefficient")
+	private Double defaultCoefficient;
+	
+	@Column(name = "corefactor_created_date", updatable=false)
+	private Date createdDate;
+	
+	@Column(name = "corefactor_modified_date")
+	private Date modifiedDate;
+	
 
 	@JsonManagedReference(value="cf-desc")
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "corefactor", fetch = FetchType.EAGER)
 	private Set<CorefactorDescription> corefactorDescriptions = new HashSet<>();
+	
+	@PrePersist
+	private void setCreatedDate() {
+		this.createdDate = new Date();
+	}
+	
+	@PreUpdate
+	private void setModifiedDate() {
+		this.modifiedDate = new Date();
+	}
 
 }
