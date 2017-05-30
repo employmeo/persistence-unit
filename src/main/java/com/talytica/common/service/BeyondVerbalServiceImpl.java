@@ -179,7 +179,7 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 			JSONObject json = null;
 			JSONArray analysisSegments = null;
 			log.info("looking for {}, {}",this.getClass().toString(), response.getId());
-			ApiTransaction txn = apiTransactionRepository.findFirstByApiNameAndObjectIdOrderByCreatedDateDesc(this.getClass().toString(), response.getId());
+			ApiTransaction txn = apiTransactionRepository.findFirstByApiNameAndObjectIdOrderByIdDesc(this.getClass().toString(), response.getId());
 			log.info("found {}",txn);
 			if (txn != null) json = getAnalysis(txn.getReferenceId());
 			if (json == null) {
