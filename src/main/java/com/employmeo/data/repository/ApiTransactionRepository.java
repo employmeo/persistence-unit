@@ -10,6 +10,6 @@ import com.employmeo.data.model.ApiTransaction;
 public interface ApiTransactionRepository extends PagingAndSortingRepository<ApiTransaction, Long> {
   
 	@Query
-	public ApiTransaction findFirstByApiNameAndObjectIdOrderByCreatedDateDesc(String apiName, Long objectId);
+	public ApiTransaction findFirstByApiNameAndObjectIdOrderByIdDesc(String apiName, Long objectId);
 	
 }

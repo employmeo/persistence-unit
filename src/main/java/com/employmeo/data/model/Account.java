@@ -30,14 +30,15 @@ public class Account implements Serializable {
 	public static final int STATUS_HOLD = 500;
 	public static final int STATUS_CLOSED = 1000;
 	
-	public static final int TYPE_DEMO = 1;
-	public static final int TYPE_TRIAL_SMB = 100;
+	public static final int TYPE_TRIAL_SMB = 50;
+	public static final int TYPE_PAID_SMB = 100;
 	public static final int TYPE_CIRCLE = 200;
 	public static final int TYPE_TRIANGLE = 300;
 	public static final int TYPE_SQUARE = 400;
 	public static final int TYPE_ENTERPRISE = 500;
 	public static final int TYPE_INTEGRATED = 600;
 	public static final int TYPE_MASTER = 0;
+	public static final int TYPE_DEMO = 999;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
