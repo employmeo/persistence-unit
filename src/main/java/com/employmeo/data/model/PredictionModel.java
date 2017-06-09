@@ -52,6 +52,15 @@ public class PredictionModel implements Serializable {
 	@Column(name = "prediction_target_id")
 	private Long predictionTargetId;
 
+	@Column(name = "default_mean")
+	private Double mean;
+	
+	@Column(name = "default_stdev")
+	private Double stDev;
+
+	@Column(name = "default_popsize")
+	private Long popSize;
+	
 	@JsonIgnore
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "predictionModel", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
