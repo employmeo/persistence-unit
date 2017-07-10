@@ -1,6 +1,7 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -61,6 +62,9 @@ public class Survey implements Serializable {
 	@Column(name = "survey_list_price")
 	private Double listPrice;
 
+	@Column(name = "survey_default_models")
+	private String defaultModels;
+
 	@Column(name = "survey_completion_time")
 	private Long completionTime;
 
@@ -81,5 +85,13 @@ public class Survey implements Serializable {
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "survey", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<SurveySection> surveySections = new HashSet<>();
+
+	@Column(name = "survey_modified_date")
+	private Date modifiedDate;
+
+	@PreUpdate
+	void setModifiedDate() {
+		this.modifiedDate = new Date();
+	}
 
 }
