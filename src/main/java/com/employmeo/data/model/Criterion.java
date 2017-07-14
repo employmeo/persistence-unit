@@ -46,6 +46,13 @@ public class Criterion implements Serializable {
 	@Column(name = "CRITERION_LINKED_QUESTION_ID")
 	private Long graderQuestionId;
 	
+	@Column(name = "is_summary")
+	private Boolean isSummary = Boolean.FALSE;
+
+	@Column(name = "is_relationship")
+	private Boolean isRelationship = Boolean.FALSE;
+
+	
 	// bi-directional many-to-one association to Question
 	@JsonManagedReference
 	@ManyToOne

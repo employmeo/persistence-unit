@@ -65,4 +65,10 @@ public class Grade implements Serializable {
 			if (this.question == null) return null;
 			return this.question.getQuestionText();
 		}
+		
+		@Transient
+		private Boolean isRelationship;
+
+		@Transient
+		private Boolean isSummary;
 }

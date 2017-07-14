@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -108,7 +110,26 @@ public class Grader implements Serializable {
 	
 	@Column(name = "grader_respondant_id")
 	private Long respondantId;
+
+	@Column(name = "grader_account_id")
+	private Long accountId;
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	@JoinColumn(name = "grader_account_id", updatable = false, insertable = false)
+	private Account account;
+
+	@Column(name = "grader_useragent")
+	private String userAgent;
 	
+	@Column(name = "grader_ipaddress")
+	private String ipAddress;
+
+	@Column(name = "grader_relationship")
+	private String relationship;
+	
+	@Column(name = "grader_summary_score")
+	private String summaryScore;
+
 	@Column(name = "grader_notes")
 	private String notes;
 	
