@@ -97,7 +97,7 @@ public class GraderServiceImpl implements GraderService {
 	@Override
 	public Grade saveGrade(Grade grade) {
 		Grade savedGrade = gradeRepository.save(grade);
-		log.debug("Saved Grader {}", savedGrade);
+		log.debug("Saved Grade {}", savedGrade);
 		return savedGrade;
 	}
 
