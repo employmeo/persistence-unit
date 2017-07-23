@@ -76,6 +76,9 @@ public class EmailServiceImpl implements EmailService {
 	@Value("${email.delivery.override.address:email-delivery-overrides@talytica.com}")
 	private String deliveryOverrideAddress;
 
+	@Value("${email.delivery.whitelist:@talytica.com,@employmeo.com}")
+	private String[] deliveryWhitelist;
+	
 	@Value("info@talytica.com")
 	private String EMAIL_ADDRESS;
 	
@@ -91,7 +94,7 @@ public class EmailServiceImpl implements EmailService {
 	@PostConstruct
 	private void reportDeliveryConfiguration() {
 		if(emailDeliveryOverrideEnabled) {
-			log.warn("Email delivery OVERRIDE ENABLED !! - Emails will be diverted to: {}", deliveryOverrideAddress);
+			log.warn("EMAIL OVERRIDE ENABLED - Emails not addressed to {} be diverted to: {}", deliveryWhitelist, deliveryOverrideAddress);
 		} else {
 			log.warn("Emails will be DELIVERED to target recipients - no overrides enabled !");
 		}
@@ -115,16 +118,14 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	private Email getEmailDeliveryAddress(String to) {
-		String deliveryAddress = null;
 		
-		if(! emailDeliveryOverrideEnabled) {
-			deliveryAddress = to;
-		} else {
-			log.warn("Email delivery diverted to: {} instead of actual: {}", deliveryOverrideAddress, to);
-			deliveryAddress = deliveryOverrideAddress;
+		if(! emailDeliveryOverrideEnabled) return new Email(to);
+		for (String match : deliveryWhitelist) {
+			if (to.toLowerCase().indexOf(match.toLowerCase()) > -1) return new Email(to);
 		}
 		
-		return new Email(deliveryAddress);
+		log.warn("DIVERTED EMAIL TO: {} INSTEAD OF: {}", deliveryOverrideAddress, to);		
+		return new Email(deliveryOverrideAddress);
 	}
 
 	@Override
