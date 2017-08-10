@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 	private GraderConfigRepository graderConfigRepository;
 
 	@Override
+	@Cacheable(value="asurveybyid")
 	public AccountSurvey getAccountSurveyById(@NonNull Long accountSurveyId) {
 		AccountSurvey accountSurvey = accountSurveyRepository.findOne(accountSurveyId);
 		log.debug("Retrieved account survey for id {} as: {}", accountSurveyId, accountSurvey);
@@ -34,6 +36,7 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 	}
 
 	@Override
+	@Cacheable(value="asurveybyuuid")
 	public AccountSurvey getAccountSurveyByUuid(UUID asUuid) {
 		AccountSurvey accountSurvey = accountSurveyRepository.findByUuId(asUuid);
 		log.debug("Account Survey by uuid {} : {}", asUuid, accountSurvey);

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.employmeo</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.0.38</version>
+	<version>0.0.39-SNAPSHOT</version>
 	<name>Talytica Persistence Unit</name>
 	<description>Talytica persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
@@ -82,6 +82,11 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
+		 <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
 		<!-- jsr303 validation -->
 		<dependency>
 			<groupId>javax.validation</groupId>
