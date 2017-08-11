@@ -28,6 +28,7 @@ public class QuestionServiceImpl implements QuestionService  {
 
 
 	@Override
+	@Cacheable(value="allquestions")
 	public Set<Question> getAllQuestions() {
 		Set<Question> questions = Sets.newHashSet(questionRepository.findAll());
 		log.debug("Retrieved all {} questions", questions.size());
@@ -51,6 +52,7 @@ public class QuestionServiceImpl implements QuestionService  {
 	}
 
 	@Override
+	@Cacheable(value="allanswers")
 	public Set<Answer> getAllAnswers() {
 		Set<Answer> answers = Sets.newHashSet(answerRepository.findAll());
 		log.debug("Retrieved all {} answers", answers.size());
@@ -67,6 +69,7 @@ public class QuestionServiceImpl implements QuestionService  {
 	}
 
 	@Override
+	@Cacheable(value="answerbyid")
 	public Answer getAnswerById(@NonNull Long answerId) {
 		Answer answer = answerRepository.findOne(answerId);
 		log.debug("Retrieved for id {} entity {}", answerId, answer);
