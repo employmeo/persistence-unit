@@ -39,49 +39,28 @@ public class CustomWorkflow implements Serializable {
 	@JoinColumn(name = "cw_position_id", insertable=false, updatable=false)
 	private Position position;
 
-	@Column(name = "cs_position_id")
+	@Column(name = "cw_position_id")
 	private Long positionId;
+	
+	@Column(name = "cw_profile")
+	private String profile;
 
-	@JsonManagedReference
-	@ManyToOne
-	@JoinColumn(name = "cw_trigger_point", insertable=false, updatable=false)
+	@Column(name = "cw_trigger_point")
 	private Integer triggerPoint;
 
 	@Column(name = "cw_type")
 	private String type;
-
-	@JsonBackReference(value="cfg-model")
-	@ManyToOne
-	@JoinColumn(name = "model_id", insertable=false, updatable=false)
-	private PredictionModel predictionModel;
-
-	@Column(name = "model_id")
-	private Long predictionModelId;
-
-	@Column(name = "target_threshold")
-	private BigDecimal targetThreshold;
 	
-	@Column(name = "prediction_mean")
-	private Double mean;
+	@Column(name = "cw_text")
+	private String text;
 	
-	@Column(name = "prediction_stdev")
-	private Double stDev;
-
-	@Column(name = "prediction_pop_size")
-	private Long popSize;
+	@Column(name = "cw_notes")
+	private String notes;
 	
-	@Column(name = "active")
+	@Column(name = "cw_active")
 	private Boolean active;
 
-	@Column(name = "display_priority")
-	private Integer displayPriority;
-
-	@Column(name = "created_date", insertable = false, updatable = false)
-	private Date createdDate;
-
-	@JsonIgnore
-	@Fetch(FetchMode.SUBSELECT)
-	@OneToMany(mappedBy = "positionPredictionConfig", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private Set<Prediction> predictions = new HashSet<>();
+	@Column(name = "cw_exec_order")
+	private Integer execOrder;
 	
 }
