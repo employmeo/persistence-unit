@@ -2,17 +2,12 @@ package com.employmeo.data.config;
 
 import java.beans.PropertyVetoException;
 import java.util.Properties;
-
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.jdbc.datasource.embedded.ConnectionProperties;
 import org.springframework.orm.jpa.*;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
