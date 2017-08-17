@@ -11,4 +11,5 @@ public interface CorefactorService {
 	Corefactor getByForeignId(String foreignId);
 	Corefactor save(Corefactor corefactor);
 	void delete(Long corefactorId);
+	void clearCache();
 }
