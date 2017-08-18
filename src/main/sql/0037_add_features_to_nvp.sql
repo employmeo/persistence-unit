@@ -7,7 +7,7 @@ ALTER TABLE employmeo.questions ADD question_created_date timestamp with time zo
 CREATE TABLE employmeo.custom_workflows
 (
   cw_id bigserial,
-  cs_position_id bigint,
+  cw_position_id bigint,
   cw_profile text,
   cw_trigger_point integer,
   cw_type text,
@@ -17,7 +17,7 @@ CREATE TABLE employmeo.custom_workflows
   cw_active boolean,
   cw_exec_order integer,
   CONSTRAINT custom_workflow_pkey PRIMARY KEY (cw_id),
-  CONSTRAINT custom_workflow_cs_position_id_fkey FOREIGN KEY (cs_position_id)
+  CONSTRAINT custom_workflow_cw_position_id_fkey FOREIGN KEY (cw_position_id)
       REFERENCES employmeo.positions (position_id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
