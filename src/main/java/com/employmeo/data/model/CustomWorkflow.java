@@ -1,17 +1,9 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.*;
-
 import javax.persistence.*;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 import lombok.*;
 
@@ -53,6 +45,9 @@ public class CustomWorkflow implements Serializable {
 	
 	@Column(name = "cw_text")
 	private String text;
+	
+	@Column(name = "cw_ats_id")
+	private String atsId;
 	
 	@Column(name = "cw_notes")
 	private String notes;

@@ -4,7 +4,32 @@ UPDATE employmeo.respondant_nvps set nvp_use_in_model = true, nvp_show_in_portal
 ALTER TABLE employmeo.questions ADD question_modified_date timestamp with time zone;
 ALTER TABLE employmeo.questions ADD question_created_date timestamp with time zone;
 
+CREATE TABLE employmeo.custom_workflows
+(
+  cw_id bigserial,
+  cs_position_id bigint,
+  cw_profile text,
+  cw_trigger_point integer,
+  cw_type text,
+  cw_text text,
+  cw_ats_id text,
+  cw_notes text,
+  cw_active boolean,
+  cw_exec_order integer,
+  CONSTRAINT custom_workflow_pkey PRIMARY KEY (cw_id),
+  CONSTRAINT custom_workflow_cs_position_id_fkey FOREIGN KEY (cs_position_id)
+      REFERENCES employmeo.positions (position_id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE employmeo.custom_workflows
+  OWNER TO postgres;
+
 --//@UNDO
+
+DROP TABLE employmeo.custom_workflows;
 
 ALTER TABLE employmeo.respondant_nvps DROP nvp_show_in_portal;
 ALTER TABLE employmeo.respondant_nvps DROP nvp_use_in_model;
