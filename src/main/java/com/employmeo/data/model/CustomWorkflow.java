@@ -1,6 +1,8 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
+import java.util.Comparator;
+
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -13,13 +15,19 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(exclude={"position"})
 @ToString(exclude={"position"})
-public class CustomWorkflow implements Serializable {
+public class CustomWorkflow implements Serializable, Comparable<CustomWorkflow> {
 
 	@Transient
 	private static final long serialVersionUID = 93934417467941938L;
 
 	public static final int TRIGGER_POINT_CREATION = 0;
 	public static final int TRIGGER_POINT_ASSESSMENT = 10;
+	
+	public static final String TYPE_EMAIL = "email";
+	public static final String TYPE_ATSUPDATE = "atsupdate";
+	public static final String TYPE_STATUSPOLLING = "statuspolling";
+	public static final String TYPE_PREDICT = "predict";
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,5 +65,14 @@ public class CustomWorkflow implements Serializable {
 
 	@Column(name = "cw_exec_order")
 	private Integer execOrder;
+
+	public int compareTo(CustomWorkflow obj) {
+	    if (this.getExecOrder() > obj.getExecOrder()) {
+	           return 1;
+	    } else if (this.getExecOrder() < obj.getExecOrder()){
+	           return -1;
+	    } 
+	    return 0;
+	}
 	
 }

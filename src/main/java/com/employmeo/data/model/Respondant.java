@@ -30,21 +30,34 @@ public class Respondant implements Serializable {
 	@Transient
 	private static final long serialVersionUID = 808486275173441348L;
 
-	public static final int STATUS_PRESCREEN = -20;
+	public static final int STATUS_PRESCREEN = -20; // start stage 0
 	public static final int STATUS_CREATED = 0;
-	public static final int STATUS_INVITED = 1;
+	public static final int STATUS_INVITED = 1; // start stage 1
 	public static final int STATUS_STARTED = 5;
 	public static final int STATUS_REMINDED = 6;
 	public static final int STATUS_COMPLETED = 10;
 	public static final int STATUS_UNGRADED = 11;
 	public static final int STATUS_SCORED = 13;
-	public static final int STATUS_PREDICTED = 15;
-	public static final int STATUS_REJECTED = 16;
-	public static final int STATUS_OFFERED = 17;
-	public static final int STATUS_DECLINED = 18;
+	public static final int STATUS_PREDICTED = 15;  // end stage 1
+
+	public static final int STATUS_NOT_ADVANCED = 19;  // end stage 1
+	public static final int STATUS_ADVANCED = 20;  // start stage 2
+	public static final int STATUS_ADVINITIATED = 21;  // start stage 2
+	public static final int STATUS_ADVSTARTED = 25;  
+	public static final int STATUS_ADVREMINDED = 26;  
+	public static final int STATUS_ADVCOMPLETED = 30; 
+	public static final int STATUS_ADVUNGRADED = 31; // for outstanding interview grades and or reference checks
+	public static final int STATUS_ADVSCORESADDED = 33;  // end stage 1
+	public static final int STATUS_ADVREPREDICTED = 35;  // end stage 1
+	
 	public static final int STATUS_HIRED = 20;
-	public static final int STATUS_QUIT = 30;
-	public static final int STATUS_TERMINATED = 40;
+
+	public static final int STATUS_REJECTED = 89;
+	public static final int STATUS_OFFERED = 90;
+	public static final int STATUS_DECLINED = 99;
+	//public static final int STATUS_HIRED = 100;
+	public static final int STATUS_QUIT = 800;
+	public static final int STATUS_TERMINATED = 900;
 	
 	public static final int TYPE_APPLICANT = 1;
 	public static final int TYPE_BENCHMARK = 100;
