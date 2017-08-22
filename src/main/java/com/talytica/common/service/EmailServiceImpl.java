@@ -103,6 +103,7 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public void sendMessage(String from, String to, String subject, String text, String html) {
 		
+		// for now - do nothing with BCC
 		Email fromEmail = new Email(from);
 		Email toEmail = getEmailDeliveryAddress(to);
 		Content textContent = new Content("text/plain", text);
@@ -110,7 +111,7 @@ public class EmailServiceImpl implements EmailService {
 		if (html != null) {
 			Content textHtml = new Content("text/html", html);
 			email.addContent(textHtml);
-		}	
+		}
 		
 		asynchSend(email);
 	
@@ -130,15 +131,27 @@ public class EmailServiceImpl implements EmailService {
 
 	@Override
 	public void sendEmailInvitation(Respondant respondant) {
-		sendEmailInvitation(respondant, false);
+		sendEmailInvitation(respondant, false, null);
 	}
 	
 	@Override
+	public void sendEmailInvitation(Respondant respondant, String bcc) {
+		sendEmailInvitation(respondant, false, bcc);
+		
+	}
+
+	@Override
 	public void sendEmailReminder(Respondant respondant) {
-		sendEmailInvitation(respondant, true);	
+		sendEmailInvitation(respondant, true, null);	
+	}
+
+	@Override
+	public void sendEmailReminder(Respondant respondant, String bcc) {
+		sendEmailInvitation(respondant, true, bcc);	
+		
 	}
 	
-	public void sendEmailInvitation(Respondant respondant, boolean reminder){	
+	public void sendEmailInvitation(Respondant respondant, boolean reminder, String bcc){	
 		Mail email = new Mail();
 		if (respondant.getAccount().getDefaultEmail() != null) {
 			email.setFrom(new Email(EMAIL_ADDRESS, respondant.getAccount().getAccountName()));
@@ -195,7 +208,7 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[ACCOUNT_NAME]",as.getAccount().getAccountName());
 		if (respondant.getPosition() != null) pers.addSubstitution("[JOB_TITLE]", respondant.getPosition().getPositionName());		
 		pers.addTo(getEmailDeliveryAddress(respondant.getPerson().getEmail()));
-
+		if (bcc != null && !emailDeliveryOverrideEnabled) pers.addBcc(getEmailDeliveryAddress(bcc));
 		email.addPersonalization(pers);
 
 		asynchSend(email);
@@ -385,7 +398,6 @@ public class EmailServiceImpl implements EmailService {
 
 		asynchSend(email);
 	}	
-	
 	
 	private void asynchSend(Mail email) {
 	    SendGrid sg = new SendGrid(SG_API);
