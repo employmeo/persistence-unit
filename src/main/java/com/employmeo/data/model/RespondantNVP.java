@@ -31,5 +31,12 @@ public class RespondantNVP implements Serializable{
 
 		@Column(name = "nvp_value")
 		private String value;
+		
+		@Column(name = "nvp_use_in_model")
+		private Boolean useInModel = Boolean.TRUE;
+
+		@Column(name = "nvp_show_in_portal")
+		private Boolean showInPortal = Boolean.FALSE;
+
 
 }

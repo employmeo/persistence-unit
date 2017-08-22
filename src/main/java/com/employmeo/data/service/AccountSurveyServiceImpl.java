@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +53,11 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 	public AccountSurvey save(AccountSurvey accountSurvey) {
 		log.debug("saving Account Survey {}", accountSurvey);
 		return accountSurveyRepository.save(accountSurvey);
+	}
+
+	@Override
+	@CacheEvict(allEntries=true,cacheNames={"asurveybyid","asurveybyuuid"})
+	public void clearCache() {	
 	}
 
 }
