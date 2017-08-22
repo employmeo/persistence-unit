@@ -24,5 +24,7 @@ public interface QuestionService {
 	void deleteQuestion(Long questionId);
 	
 	void deleteAnswer(Long answerId);
+	
+	void clearCache();
 
 }

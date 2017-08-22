@@ -3,6 +3,7 @@ package com.employmeo.data.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.*;
 
@@ -71,6 +73,11 @@ public class Position implements Serializable {
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "position", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Set<CriticalFactor> criticalFactors;
+	
+	@JsonManagedReference(value="workflow-position")
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "position", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	private List<CustomWorkflow> customWorkflows;
 		
 	public ScoringScale getScoringScale() {
 		if (this.scoringScale != null) return this.scoringScale;

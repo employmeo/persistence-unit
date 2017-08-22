@@ -3,6 +3,7 @@ package com.employmeo.data.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -63,6 +64,12 @@ public class CorefactorServiceImpl implements CorefactorService {
 	public void delete(Long corefactorId) {
 		corefactorRepository.delete(corefactorId);
 		log.debug("Deleted corefactor {}", corefactorId);
+	}
+
+	@Override
+	@CacheEvict(allEntries=true,cacheNames={"corefactors","allcorefactors"})
+	public void clearCache() {
+		// does this empy all caches?	
 	}
 
 }

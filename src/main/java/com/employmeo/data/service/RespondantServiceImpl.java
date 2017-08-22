@@ -237,8 +237,6 @@ public class RespondantServiceImpl implements RespondantService  {
 			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		}
 
-
-
 	    return respondants;
 	};
 
@@ -403,14 +401,21 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	@Override
 	public RespondantNVP addNVPToRespondant(Respondant respondant, String name, String value) {
+		return addNVPToRespondant(respondant, name, value, false, true);
+	}
+
+	@Override
+	public RespondantNVP addNVPToRespondant(Respondant respondant, String name, String value, Boolean display, Boolean inModel) {
 		RespondantNVP nvp = new RespondantNVP();
 		nvp.setName(name);
 		nvp.setValue(value);
 		nvp.setRespondantId(respondant.getId());
 		setNVPNameId(nvp);
+		nvp.setUseInModel(inModel);
+		nvp.setShowInPortal(display);
 		return respondantNVPRepository.save(nvp);
 	}
-
+	
 	@Override
 	public Set<RespondantNVP> getNVPsForRespondant(Long respondantId) {
 		return respondantNVPRepository.findAllByRespondantId(respondantId);

@@ -95,6 +95,8 @@ public interface RespondantService {
 	
 	RespondantNVP addNVPToRespondant(@NonNull Respondant respondant, @NonNull String name, String value);
 	
+	RespondantNVP addNVPToRespondant(Respondant respondant, String name, String value, Boolean display, Boolean inModel);
+	
 	Set<RespondantNVP> getNVPsForRespondant(@NonNull Long respondantId);
 	
 }

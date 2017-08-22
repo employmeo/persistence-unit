@@ -1,6 +1,7 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,8 +31,12 @@ public class Question implements Serializable {
 	private Long questionId;
 
 	// Integer ?????
-	@Column(name = "MODIFIED_DATE")
-	private Integer modifiedDate = 0;
+	@Column(name = "QUESTION_MODIFIED_DATE")
+	private Date modifiedDate;
+
+	// Integer ?????
+	@Column(name = "QUESTION_CREATED_DATE")
+	private Date createdDate = new Date();
 
 	@Column(name = "QUESTION_DESCRIPTION")
 	private String description;
@@ -97,4 +102,13 @@ public class Question implements Serializable {
 		return null;
 	}
 
+	@PrePersist
+	private void setCreatedDate() {
+		this.createdDate = new Date();
+	}
+	
+	@PreUpdate
+	private void setUpdateDate() {
+		this.modifiedDate = new Date();
+	}
 }
