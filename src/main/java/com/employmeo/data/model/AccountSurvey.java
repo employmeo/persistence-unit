@@ -27,6 +27,7 @@ public class AccountSurvey implements Serializable {
 
 	public static final int TYPE_APPLICANT = 100;
 	public static final int TYPE_BENCHMARK = 200;
+	public static final int TYPE_STAGE2 = 300;
 	public static final int STATUS_ACTIVE = 1;
 	public static final int STATUS_DISABLED = 99;
 

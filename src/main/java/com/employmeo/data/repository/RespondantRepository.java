@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -67,4 +68,7 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	@Query
 	public List<Respondant> findAllByRespondantStatusInOrderByFinishTimeDesc(List<Integer> scoringEligibleRespondantStatuses);
 
+	@Modifying
+	@Query("update Respondant respondant set respondant.errorStatus = ?1 where respondant.id = ?2")
+	public void setErrorStatusById(Boolean status, Long id);
 }

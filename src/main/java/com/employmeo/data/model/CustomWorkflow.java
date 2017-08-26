@@ -1,7 +1,6 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
-import java.util.Comparator;
 
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;

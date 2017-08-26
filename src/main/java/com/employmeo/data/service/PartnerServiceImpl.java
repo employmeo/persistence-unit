@@ -29,7 +29,13 @@ public class PartnerServiceImpl implements PartnerService {
 		return partners;
 	}
 
+	@Override
+	public Set<Partner> getPartnerSetByName(String partnerName) {
+		Set<Partner> partners = Sets.newHashSet(partnerRepository.findAllByPartnerName(partnerName));
+		log.debug("Retrieved all {} partners", partners);
 
+		return partners;
+	}
 	@Override
 	public Partner getPartnerById(@NonNull Long partnerId) {
 		Partner partner = partnerRepository.findOne(partnerId);

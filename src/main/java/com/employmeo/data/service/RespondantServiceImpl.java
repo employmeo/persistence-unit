@@ -298,6 +298,14 @@ public class RespondantServiceImpl implements RespondantService  {
 		log.debug("Found {} respondants who are ungraded, with all graders fulfilled", scoringEligibleRespondants.size());
 		return scoringEligibleRespondants;
 	}
+	
+	@Override
+	public List<Respondant> getPredictionPendingRespondants() {
+		List<Integer> predictionNeededStatuses = Arrays.asList(Respondant.STATUS_SCORED);
+		List<Respondant> predictionNeededRespondants = respondantRepository.findAllByRespondantStatusInOrderByFinishTimeDesc(predictionNeededStatuses);
+		log.debug("Found {} respondants in needs prediction status", predictionNeededRespondants.size());
+		return predictionNeededRespondants;
+	}
 
 	@Override
 	public Set<Response> getGradeableResponses(Long respondantId) {
@@ -419,5 +427,20 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public Set<RespondantNVP> getNVPsForRespondant(Long respondantId) {
 		return respondantNVPRepository.findAllByRespondantId(respondantId);
+	}
+
+	@Override
+	public Set<RespondantNVP> getModelNVPsForRespondant(Long respondantId) {
+		return respondantNVPRepository.findAllByRespondantIdAndUseInModel(respondantId, true);
+	}
+
+	@Override
+	public Set<RespondantNVP> getDisplayNVPsForRespondant(Long respondantId) {
+		return respondantNVPRepository.findAllByRespondantIdAndShowInPortal(respondantId, true);
+	}
+	
+	@Override
+	public void markError(Respondant respondant) {
+		respondantRepository.setErrorStatusById(true, respondant.getId());
 	}
 }

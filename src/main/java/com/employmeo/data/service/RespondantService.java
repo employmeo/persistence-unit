@@ -99,4 +99,12 @@ public interface RespondantService {
 	
 	Set<RespondantNVP> getNVPsForRespondant(@NonNull Long respondantId);
 	
+	Set<RespondantNVP> getModelNVPsForRespondant(@NonNull Long respondantId);
+	
+	Set<RespondantNVP> getDisplayNVPsForRespondant(@NonNull Long respondantId);
+
+	List<Respondant> getPredictionPendingRespondants();
+
+	void markError(Respondant respondant);
+	
 }

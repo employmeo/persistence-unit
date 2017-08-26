@@ -31,5 +31,14 @@ public class Partner implements Serializable {
 
 	@Column(name = "partner_prefix")
 	private String prefix;
+	
+	@Column(name = "partner_api_login")
+	private String apiLogin;
+
+	@Column(name = "partner_api_pass")
+	private String apiPass;
+
+	@Column(name = "partner_api_key")
+	private String apiKey;
 
 }

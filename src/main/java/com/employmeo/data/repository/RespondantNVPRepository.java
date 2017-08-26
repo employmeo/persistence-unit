@@ -13,5 +13,10 @@ public interface RespondantNVPRepository extends PagingAndSortingRepository<Resp
 
 	@Query
 	Set<RespondantNVP> findAllByRespondantId(Long respondantId);
+
+	@Query
+	Set<RespondantNVP> findAllByRespondantIdAndUseInModel(Long respondantId, Boolean useInModel);
 	
+	@Query
+	Set<RespondantNVP> findAllByRespondantIdAndShowInPortal(Long respondantId, Boolean showInPortal);	
 }

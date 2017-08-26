@@ -14,4 +14,6 @@ public interface PartnerService {
 
 	Partner save(@NonNull Partner partner);
 
+	Set<Partner> getPartnerSetByName(String partnerName);
+
 }
