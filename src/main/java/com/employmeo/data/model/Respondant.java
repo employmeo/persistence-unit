@@ -50,12 +50,12 @@ public class Respondant implements Serializable {
 	public static final int STATUS_ADVSCORESADDED = 33;  // end stage 1
 	public static final int STATUS_ADVREPREDICTED = 35;  // end stage 1
 	
-	public static final int STATUS_HIRED = 20;
+	//public static final int STATUS_HIRED = 20;
 
 	public static final int STATUS_REJECTED = 89;
 	public static final int STATUS_OFFERED = 90;
 	public static final int STATUS_DECLINED = 99;
-	//public static final int STATUS_HIRED = 100;
+	public static final int STATUS_HIRED = 100;
 	public static final int STATUS_QUIT = 800;
 	public static final int STATUS_TERMINATED = 900;
 	

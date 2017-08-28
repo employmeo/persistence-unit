@@ -21,6 +21,7 @@ public class CustomWorkflow implements Serializable, Comparable<CustomWorkflow> 
 
 	public static final int TRIGGER_POINT_CREATION = 0;
 	public static final int TRIGGER_POINT_ASSESSMENT = 10;
+	public static final int TRIGGER_POINT_ADVANCE = 20;
 	
 	public static final String TYPE_EMAIL = "email";
 	public static final String TYPE_ATSUPDATE = "atsupdate";

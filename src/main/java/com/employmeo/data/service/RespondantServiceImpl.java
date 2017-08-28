@@ -242,7 +242,7 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	@Override
 	public List<Respondant> getAnalysisPendingRespondants() {
-		List<Integer> scoringEligibleRespondantStatuses = Arrays.asList(Respondant.STATUS_COMPLETED, Respondant.STATUS_SCORED);
+		List<Integer> scoringEligibleRespondantStatuses = Arrays.asList(Respondant.STATUS_COMPLETED, Respondant.STATUS_ADVCOMPLETED);
 		List<Respondant> scoringEligibleRespondants = respondantRepository.findAllByRespondantStatusInOrderByFinishTimeDesc(scoringEligibleRespondantStatuses);
 
 		log.debug("Returning {} scoring eligible respondants", scoringEligibleRespondants.size());
@@ -274,7 +274,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	
 	@Override
 	public List<Respondant> getGraderBasedScoringPendingRespondants() {
-		List<Integer> ungradedRespondantStatuses = Arrays.asList(Respondant.STATUS_UNGRADED);
+		List<Integer> ungradedRespondantStatuses = Arrays.asList(Respondant.STATUS_UNGRADED, Respondant.STATUS_ADVUNGRADED);
 		List<Respondant> ungradedRespondants = respondantRepository.findAllByRespondantStatusInOrderByFinishTimeDesc(ungradedRespondantStatuses);
 		log.debug("Found {} respondants in ungraded status", ungradedRespondants.size());
 
@@ -301,6 +301,8 @@ public class RespondantServiceImpl implements RespondantService  {
 	
 	@Override
 	public List<Respondant> getPredictionPendingRespondants() {
+		// TODO Enable predictions for stage two.
+		//List<Integer> predictionNeededStatuses = Arrays.asList(Respondant.STATUS_SCORED, Respondant.STATUS_ADVSCORESADDED);
 		List<Integer> predictionNeededStatuses = Arrays.asList(Respondant.STATUS_SCORED);
 		List<Respondant> predictionNeededRespondants = respondantRepository.findAllByRespondantStatusInOrderByFinishTimeDesc(predictionNeededStatuses);
 		log.debug("Found {} respondants in needs prediction status", predictionNeededRespondants.size());
