@@ -14,7 +14,7 @@ import com.employmeo.data.model.Grader;
 import com.employmeo.data.model.Respondant;
 import com.employmeo.data.model.Survey;
 import com.employmeo.data.model.User;
-import com.employmeo.data.repository.AccountSurveyRepository;
+import com.employmeo.data.service.AccountSurveyService;
 import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
@@ -66,7 +66,6 @@ public class EmailServiceImpl implements EmailService {
 	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Use Above
 	private String QUICKREF_REMINDER_TEMPLATE_ID;
 	
-	
 	@Value("${com.talytica.apis.sendgrid:null}")
 	private String SG_API;
 	
@@ -84,9 +83,9 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Autowired
 	ExternalLinksService externalLinksService;
-	
+
 	@Autowired
-	AccountSurveyRepository accountSurveyRepository;
+	AccountSurveyService accountSurveyService;
 	
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
 	private Email FROM_ADDRESS = new Email ("info@talytica.com");
@@ -163,7 +162,8 @@ public class EmailServiceImpl implements EmailService {
 		String link = externalLinksService.getAssessmentLink(respondant);
 		String body = null;
 
-		AccountSurvey as = respondant.getAccountSurvey();	
+		AccountSurvey as = respondant.getAccountSurvey();
+		if (respondant.getRespondantStatus() >= Respondant.STATUS_ADVANCED) as = accountSurveyService.getAccountSurveyById(respondant.getSecondStageSurveyId());
 		if (Survey.TYPE_PHONE == as.getSurvey().getSurveyType()) {
 		
 			String idnum = respondant.getPayrollId();
