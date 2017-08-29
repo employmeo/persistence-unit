@@ -302,8 +302,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public List<Respondant> getPredictionPendingRespondants() {
 		// TODO Enable predictions for stage two.
-		//List<Integer> predictionNeededStatuses = Arrays.asList(Respondant.STATUS_SCORED, Respondant.STATUS_ADVSCORESADDED);
-		List<Integer> predictionNeededStatuses = Arrays.asList(Respondant.STATUS_SCORED);
+		List<Integer> predictionNeededStatuses = Arrays.asList(Respondant.STATUS_SCORED, Respondant.STATUS_ADVSCORESADDED);
 		List<Respondant> predictionNeededRespondants = respondantRepository.findAllByRespondantStatusInOrderByFinishTimeDesc(predictionNeededStatuses);
 		log.debug("Found {} respondants in needs prediction status", predictionNeededRespondants.size());
 		return predictionNeededRespondants;
