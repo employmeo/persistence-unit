@@ -1,5 +1,7 @@
 package com.employmeo.data.repository;
 
+import java.util.Set;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -11,6 +13,9 @@ public interface PartnerRepository extends PagingAndSortingRepository<Partner, L
 	
 	@Query
 	Partner findByPartnerName(String partnerName);
+	
+	@Query
+	Set<Partner> findAllByPartnerName(String partnerName);
 
 	@Query
 	Partner findByLogin(String login);

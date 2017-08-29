@@ -81,6 +81,9 @@ public class Account implements Serializable {
 	@Column(name = "account_default_asid")
 	private Long defaultAsId;
 	
+	@Column(name = "account_second_asid")
+	private Long secondAsid;
+	
 	@Column(name = "account_scoring_scale_id")
 	private Long scoringScaleId;
 

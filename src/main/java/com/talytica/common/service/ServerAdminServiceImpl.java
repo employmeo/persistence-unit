@@ -3,25 +3,21 @@ package com.talytica.common.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import javax.annotation.PostConstruct;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 @Slf4j

@@ -10,11 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.employmeo.data.model.Account;
 import com.employmeo.data.model.Benchmark;
 import com.employmeo.data.model.Location;
+import com.employmeo.data.model.Partner;
 import com.employmeo.data.model.Position;
 import com.employmeo.data.model.User;
 import com.employmeo.data.repository.AccountRepository;
 import com.employmeo.data.repository.BenchmarkRepository;
 import com.employmeo.data.repository.LocationRepository;
+import com.employmeo.data.repository.PartnerRepository;
 import com.employmeo.data.repository.PositionRepository;
 import com.employmeo.data.repository.UserRepository;
 
@@ -38,6 +40,8 @@ public class AccountServiceImpl implements AccountService {
 	private LocationRepository locationRepository;
 	@Autowired
 	private BenchmarkRepository benchmarkRepository;
+	@Autowired
+	private PartnerRepository partnerRepository;
 
 
 	@Override
@@ -193,4 +197,11 @@ public class AccountServiceImpl implements AccountService {
 		positionRepository.delete(position);		
 	}
 
+	@Override
+	public Set<Account> getAccountsForPartner(String partnerName) {
+		Set<Partner> partners = partnerRepository.findAllByPartnerName(partnerName);
+		List<Long> ids = Lists.newArrayList();
+		for (Partner partner : partners) ids.add(partner.getId());
+		return accountRepository.findAllByAtsPartnerIdIn(ids);
+	}
 }

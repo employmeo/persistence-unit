@@ -50,12 +50,12 @@ public class Respondant implements Serializable {
 	public static final int STATUS_ADVSCORESADDED = 33;  // end stage 1
 	public static final int STATUS_ADVREPREDICTED = 35;  // end stage 1
 	
-	public static final int STATUS_HIRED = 20;
+	//public static final int STATUS_HIRED = 20;
 
 	public static final int STATUS_REJECTED = 89;
 	public static final int STATUS_OFFERED = 90;
 	public static final int STATUS_DECLINED = 99;
-	//public static final int STATUS_HIRED = 100;
+	public static final int STATUS_HIRED = 100;
 	public static final int STATUS_QUIT = 800;
 	public static final int STATUS_TERMINATED = 900;
 	
@@ -103,6 +103,9 @@ public class Respondant implements Serializable {
 	@Column(name = "respondant_asid", insertable = true, updatable = false)
 	private Long accountSurveyId;
 
+	@Column(name = "respondant_second_asid", insertable = true, updatable = true)
+	private Long secondStageSurveyId;
+	
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "respondant_partner_id", insertable = false, updatable = false)
@@ -135,6 +138,9 @@ public class Respondant implements Serializable {
 
 	@Column(name = "respondant_person_id")
 	private Long personId;
+	
+	@Column(name = "respondant_error_status")
+	private Boolean errorStatus = false;
 
 	// bi-directional many-to-one association to Responses
 	@JsonIgnore
@@ -160,18 +166,6 @@ public class Respondant implements Serializable {
 
 	@Column(name = "respondant_composite_score")
 	private Double compositeScore;
-
-	@Column(name = "respondant_profile_a")
-	private Double profileA;
-
-	@Column(name = "respondant_profile_b")
-	private Double profileB;
-
-	@Column(name = "respondant_profile_c")
-	private Double profileC;
-
-	@Column(name = "respondant_profile_d")
-	private Double profileD;
 
 	@Column(name = "respondant_ats_id")
 	private String atsId;
@@ -221,4 +215,21 @@ public class Respondant implements Serializable {
 			log.debug("Random numeric identifier create date as {}", payrollId);
 		}
 	}
+	
+	/***
+	 * Depricated profile scores (became predictions)
+	 */
+	
+//	@Column(name = "respondant_profile_a")
+//	private Double profileA;
+
+//	@Column(name = "respondant_profile_b")
+//	private Double profileB;
+
+//	@Column(name = "respondant_profile_c")
+//	private Double profileC;
+
+//	@Column(name = "respondant_profile_d")
+//	private Double profileD;
+
 }
