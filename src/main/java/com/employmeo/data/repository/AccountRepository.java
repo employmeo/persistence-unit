@@ -20,5 +20,8 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
 	
 	@Query
 	public Set<Account> findAllByAtsPartnerIdIn(List<Long> partnerIds);
+	
+	@Query
+	public Account findOneByAtsPartnerId(Long partnerId);
 
 }

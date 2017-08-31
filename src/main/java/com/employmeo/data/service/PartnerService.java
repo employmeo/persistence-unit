@@ -11,9 +11,10 @@ public interface PartnerService {
 	Set<Partner> getAllPartners();
 
 	Partner getPartnerById(Long partnerId);
-
-	Partner save(@NonNull Partner partner);
-
+	
+	Partner getPartnerByLogin(String login);
+	
 	Set<Partner> getPartnerSetByName(String partnerName);
 
+	Partner save(@NonNull Partner partner);
 }

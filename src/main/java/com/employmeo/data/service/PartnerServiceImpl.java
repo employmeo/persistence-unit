@@ -51,4 +51,9 @@ public class PartnerServiceImpl implements PartnerService {
 
 		return savedPartner;
 	}
+
+	@Override
+	public Partner getPartnerByLogin(String login) {
+		return partnerRepository.findByLogin(login);
+	}
 }

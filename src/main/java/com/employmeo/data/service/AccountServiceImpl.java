@@ -204,4 +204,9 @@ public class AccountServiceImpl implements AccountService {
 		for (Partner partner : partners) ids.add(partner.getId());
 		return accountRepository.findAllByAtsPartnerIdIn(ids);
 	}
+
+	@Override
+	public Account getByPartnerId(Long partnerId) {
+		return accountRepository.findOneByAtsPartnerId(partnerId);
+	}
 }
