@@ -326,7 +326,7 @@ public class EmailServiceImpl implements EmailService {
 		email.addContent(new Content("text/plain", body));
 		email.addContent(new Content("text/html", body));
 		if (reminder) {
-			email.setSubject("Reminder: " + fullname + " asked for your referall");
+			email.setSubject("Reminder: " + fullname + " asked for your referral");
 			email.setTemplateId(REFERENCE_REMINDER_TEMPLATE_ID);
 		} else {
 			email.setSubject("Reference Request from: " + fullname);
