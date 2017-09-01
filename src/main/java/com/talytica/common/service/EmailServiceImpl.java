@@ -78,8 +78,11 @@ public class EmailServiceImpl implements EmailService {
 	@Value("${email.delivery.whitelist:@talytica.com,@employmeo.com}")
 	private String[] deliveryWhitelist;
 	
-	@Value("info@talytica.com")
-	private String EMAIL_ADDRESS;
+	@Value("${email.delivery.from:no-reply@talytica.com}")
+	private String FROM_EMAIL_ADDRESS;
+	
+	@Value("${email.delivery.replyto:info@talytica.com}")
+	private String REPLYTO_EMAIL_ADDRESS;
 	
 	@Autowired
 	ExternalLinksService externalLinksService;
@@ -88,7 +91,8 @@ public class EmailServiceImpl implements EmailService {
 	AccountSurveyService accountSurveyService;
 	
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
-	private Email FROM_ADDRESS = new Email ("info@talytica.com");
+	private Email FROM_ADDRESS;
+	private Email REPLYTO_ADDRESS;
 	
 	@PostConstruct
 	private void reportDeliveryConfiguration() {
@@ -97,6 +101,8 @@ public class EmailServiceImpl implements EmailService {
 		} else {
 			log.warn("Emails will be DELIVERED to target recipients - no overrides enabled !");
 		}
+		FROM_ADDRESS = new Email (FROM_EMAIL_ADDRESS);
+		REPLYTO_ADDRESS = new Email(REPLYTO_EMAIL_ADDRESS);
 	}
 
 	@Override
@@ -153,7 +159,7 @@ public class EmailServiceImpl implements EmailService {
 	public void sendEmailInvitation(Respondant respondant, boolean reminder, String bcc){	
 		Mail email = new Mail();
 		if (respondant.getAccount().getDefaultEmail() != null) {
-			email.setFrom(new Email(EMAIL_ADDRESS, respondant.getAccount().getAccountName()));
+			email.setFrom(new Email(FROM_EMAIL_ADDRESS, respondant.getAccount().getAccountName()));
 			email.setReplyTo(new Email(respondant.getAccount().getDefaultEmail()));
 		} else {
 			email.setFrom(FROM_ADDRESS);			
@@ -301,7 +307,7 @@ public class EmailServiceImpl implements EmailService {
 		Mail email = new Mail();
 
 		if (grader.getRespondant().getAccount().getDefaultEmail() != null) {
-			email.setFrom(new Email(EMAIL_ADDRESS, grader.getRespondant().getAccount().getAccountName()));
+			email.setFrom(new Email(FROM_EMAIL_ADDRESS, grader.getRespondant().getAccount().getAccountName()));
 			email.setReplyTo(new Email(grader.getRespondant().getAccount().getDefaultEmail()));
 		} else {
 			email.setFrom(FROM_ADDRESS);		
@@ -400,6 +406,7 @@ public class EmailServiceImpl implements EmailService {
 	}	
 	
 	private void asynchSend(Mail email) {
+		if (email.getReplyto() == null) email.setReplyTo(REPLYTO_ADDRESS);
 	    SendGrid sg = new SendGrid(SG_API);
 	    Request request = new Request();
         request.method = Method.POST;
