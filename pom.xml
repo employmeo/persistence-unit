@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.employmeo</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.1.2</version>
+	<version>0.1.3</version>
 	<name>Talytica Persistence Unit</name>
 	<description>Talytica persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->

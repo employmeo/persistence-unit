@@ -62,5 +62,7 @@ public interface AccountService {
 	Benchmark save(@NonNull Benchmark benchmark);
 
 	Set<Account> getAccountsForPartner(String partnerName);
+	
+	Account getByPartnerId(Long partnerId);
 
 }
