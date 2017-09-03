@@ -30,11 +30,12 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public void validate(JSONObject address) {
-		String formattedAddress = address.optString("street") +
-				" " + address.optString("city") + 
-				", " + address.optString("state") + 
-				" " + address.optString("zip");
-		address.put("formatted_address", formattedAddress);
+		StringBuffer formattedAddress = new StringBuffer();
+		if (address.has("street")) formattedAddress.append(address.optString("street") + " ");
+		if (address.has("city")) formattedAddress.append(address.optString("city") + ", ");
+		if (address.has("state")) formattedAddress.append(address.optString("state") + ", ");
+		if (address.has("zip")) formattedAddress.append(address.optString("zip"));
+		address.put("formatted_address", formattedAddress.toString());
 		
 		if (address.has("lat") && address.has("lng")) return;
 
