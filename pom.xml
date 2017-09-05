@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.employmeo</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.1.3</version>
+	<version>0.1.4-SNAPSHOT</version>
 	<name>Talytica Persistence Unit</name>
 	<description>Talytica persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
@@ -29,6 +29,7 @@
 		<metrics.version>3.1.3</metrics.version>
 		<org-json.version>20160810</org-json.version>
 		<sendgrid.version>3.1.0</sendgrid.version>
+		<stripe.version>5.8.0</stripe.version>
 		<commons-math-version>3.6.1</commons-math-version>
 		<commons-file.version>1.3.1</commons-file.version>
 		<spring-cloud-version>1.2.0.RELEASE</spring-cloud-version>
@@ -133,6 +134,11 @@
 			<artifactId>spring-cloud-aws-context</artifactId>
 			<version>${spring-cloud-version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.stripe</groupId>
+		    <artifactId>stripe-java</artifactId>
+		    <version>${stripe.version}</version>
+		</dependency>	
 		<!-- sendgrid email service -->
 		<dependency>
 		    <groupId>com.sendgrid</groupId>
