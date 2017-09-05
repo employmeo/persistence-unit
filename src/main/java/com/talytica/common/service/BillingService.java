@@ -31,4 +31,6 @@ public interface BillingService {
 
 	String getStripePK();
 
+	void clearCache();
+
 }

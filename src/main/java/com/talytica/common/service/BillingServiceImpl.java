@@ -67,6 +67,7 @@ public class BillingServiceImpl implements BillingService {
 	}
 	
 	@Scheduled(fixedRate = 300000)
+	@Override
 	@CacheEvict("allplans")
 	public void clearCache() {};
 	
