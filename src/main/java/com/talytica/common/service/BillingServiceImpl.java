@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.validation.constraints.NotNull;
 
 @Slf4j
 @Service
@@ -95,19 +96,22 @@ public class BillingServiceImpl implements BillingService {
 		}
 		return plans;
 	}
-
+	
 	@Override
-	public Customer createCustomerFor(Account account) throws StripeException {
+	public Customer createCustomerFor(@NotNull Account account, @NotNull User user) throws StripeException {
 		Map<String, Object> params = new HashMap<String, Object>();
-		for (User user : account.getUsers()) {
-			if (user.getUserStatus() == User.TYPE_BASIC) {
-				params.put("email", user.getEmail());
-				break;
-			}
-		}
+		params.put("email", user.getEmail());
 		params.put("description", account.getAccountName());
 		Customer customer = Customer.create(params);
 		return addLinkTo(customer);
+	}
+	
+	@Override
+	public Customer createCustomerFor(@NotNull Account account) throws StripeException {
+		User user = null;
+		for (User anyUser : account.getUsers()) {user = anyUser; break; }
+		if (user == null) return null;
+		return createCustomerFor(account, user);
 	}
 
 	@Override

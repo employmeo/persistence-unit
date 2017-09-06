@@ -3,6 +3,7 @@ package com.talytica.common.service;
 import java.util.List;
 
 import com.employmeo.data.model.Account;
+import com.employmeo.data.model.User;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
@@ -16,6 +17,8 @@ public interface BillingService {
 	List<Plan> getAllPlans() throws StripeException;
 
 	Customer createCustomerFor(Account account) throws StripeException;
+
+	Customer createCustomerFor(Account account, User user) throws StripeException;
 	
 	Subscription subscribeCustomerToPlan(Customer customer, String planId) throws StripeException;	
 	
