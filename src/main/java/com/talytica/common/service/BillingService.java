@@ -7,6 +7,7 @@ import com.employmeo.data.model.User;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
+import com.stripe.model.Invoice;
 import com.stripe.model.Plan;
 import com.stripe.model.Subscription;
 
@@ -14,15 +15,21 @@ public interface BillingService {
 	
 	List<String> getActiveSubscriptionStatuses();
 
+	String getStripePK();
+
 	List<Plan> getAllPlans() throws StripeException;
+	
+	void clearCache();
+
 
 	Customer createCustomerFor(Account account) throws StripeException;
 
 	Customer createCustomerFor(Account account, User user) throws StripeException;
 	
 	Subscription subscribeCustomerToPlan(Customer customer, String planId) throws StripeException;	
-	
-	List<Customer> getAllCustomers() throws StripeException;
+
+	Card addCardToCustomer(String stripeToken, Account account) throws StripeException;
+
 
 	Customer getCustomer(String email) throws StripeException;
 	
@@ -30,10 +37,10 @@ public interface BillingService {
 
 	List<Plan> getCustomerPlans(String id) throws StripeException;
 
-	Card addCardToCustomer(String stripeToken, Account account) throws StripeException;
+	List<Invoice> getCustomerInvoices(String id) throws StripeException;
 
-	String getStripePK();
+	Invoice getCustomerNextInvoice(String id) throws StripeException;
 
-	void clearCache();
+	String getDashboardPrefix(Customer customer) throws StripeException;
 
 }

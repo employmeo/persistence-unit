@@ -72,13 +72,6 @@ public class BillingServiceImpl implements BillingService {
 	@CacheEvict("allplans")
 	public void clearCache() {};
 	
-	@Override
-	public List<Customer> getAllCustomers() throws StripeException {
-		Map<String, Object> listParams = new HashMap<String, Object>();
-		//listParams.put("count", 1);
-		CustomerCollection customers = Customer.list(listParams);
-		return customers.getData();
-	}
 	
 	@Override
 	public Customer getCustomer(String id) throws StripeException {
@@ -137,7 +130,34 @@ public class BillingServiceImpl implements BillingService {
 		return getCustomer(account.getStripeId());
 	}
 	
+	@Override
+	public List<Invoice> getCustomerInvoices(String id) throws StripeException {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("customer", id);
+		return Invoice.list(params).getData();
+	}
 	
+	@Override
+	public Invoice getCustomerNextInvoice(String id) throws StripeException {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("customer", id);
+		return Invoice.upcoming(params);
+	}
+	
+
+
+	@Override
+	public String getDashboardPrefix(Customer customer) throws StripeException {
+		String link;
+		if (customer.getLivemode()) {
+			link = DASHBOARD;
+		} else {
+			link = DASHBOARD + "test/";
+		}
+		return link;
+	}
+
+	// Helper functions to add stripe links
 
 	private Customer addLinkTo(Customer customer) {
 		String link = null;
@@ -164,5 +184,4 @@ public class BillingServiceImpl implements BillingService {
 		plan.setMetadata(meta);
 		return plan;
 	}
-	
 }
