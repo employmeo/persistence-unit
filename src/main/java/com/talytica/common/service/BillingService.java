@@ -28,8 +28,10 @@ public interface BillingService {
 	
 	Subscription subscribeCustomerToPlan(Customer customer, String planId) throws StripeException;	
 
-	Card addCardToCustomer(String stripeToken, Account account) throws StripeException;
+	Subscription subscribeCustomerToPlan(String customerId, String planId, Integer quantity, Integer trialPeriod)
+			throws StripeException;
 
+	Card addCardToCustomer(String stripeToken, Account account) throws StripeException;
 
 	Customer getCustomer(String email) throws StripeException;
 	

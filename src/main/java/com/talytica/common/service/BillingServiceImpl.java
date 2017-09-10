@@ -109,10 +109,26 @@ public class BillingServiceImpl implements BillingService {
 
 	@Override
 	public Subscription subscribeCustomerToPlan(Customer customer, String planId) throws StripeException {
+
+		return subscribeCustomerToPlan(customer.getId(), planId, 1, 10);
+	}
+	
+	@Override
+	public Subscription subscribeCustomerToPlan(String stripeId, String planId, Integer quantity, Integer trialPeriod) throws StripeException {
+
+		Map<String, Object> item = new HashMap<String, Object>();
+		item.put("plan", planId);
+		item.put("quantity", quantity);
+
+		Map<String, Object> items = new HashMap<String, Object>();
+		items.put("0", item);
+
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("plan", planId);
-		params.put("trial_period_days", 10);
-		Subscription subscription = customer.getSubscriptions().create(params);
+		params.put("customer", stripeId);
+		params.put("items", items);
+		params.put("trial_period_days", trialPeriod);
+		Subscription subscription = Subscription.create(params);
+				
 		return subscription;
 	}
 
