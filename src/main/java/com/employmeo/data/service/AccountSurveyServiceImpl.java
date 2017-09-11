@@ -1,5 +1,6 @@
 package com.employmeo.data.service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ import com.employmeo.data.model.GraderConfig;
 import com.employmeo.data.repository.AccountSurveyRepository;
 import com.employmeo.data.repository.GraderConfigRepository;
 
+import jersey.repackaged.com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,6 +60,22 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 	@Override
 	@CacheEvict(allEntries=true,cacheNames={"asurveybyid","asurveybyuuid"})
 	public void clearCache() {	
+	}
+
+	@Override
+	public AccountSurvey getAccountSurveyBySurveyIdForAccount(Long surveyId, Long accountId) {
+		int status = AccountSurvey.STATUS_ACTIVE;
+		List<Integer> types = Lists.newArrayList();
+		types.add(AccountSurvey.TYPE_APPLICANT);
+		List<AccountSurvey> surveys = accountSurveyRepository.findAllBySurveyIdAndAccountIdAndAccountSurveyStatusAndTypeIn(surveyId, accountId, status, types);
+		
+		if (surveys.size() == 0) {
+			return null;
+		} else if (surveys.size() > 1) {
+			log.warn("{} Account Surveys found for account {} and survey {}",surveys.size(),accountId,surveyId);
+		}
+		return surveys.get(0);
+
 	}
 
 }

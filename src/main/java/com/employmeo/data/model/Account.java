@@ -17,8 +17,8 @@ import lombok.*;
 @Table(name = "accounts")
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(exclude={"accountSurveys","positions","locations","users","respondants","billingItems"})
-@ToString(exclude={"accountSurveys","positions","locations","users","respondants","billingItems"})
+@EqualsAndHashCode(exclude={"accountSurveys","positions","locations","users"})
+@ToString(exclude={"accountSurveys","positions","locations","users"})
 public class Account implements Serializable {
 
 	@Transient
@@ -72,6 +72,9 @@ public class Account implements Serializable {
 	@Column(name = "account_ats_id")
 	private String atsId;
 
+	@Column(name = "account_stripe_id")
+	private String stripeId;
+
 	@Column(name = "account_default_location_id")
 	private Long defaultLocationId;
 
@@ -123,19 +126,7 @@ public class Account implements Serializable {
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<User> users = new HashSet<>();
-
-	// bi-directional many-to-one association to Respondants
-	@JsonIgnore
-	@Fetch(FetchMode.SUBSELECT)
-	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private Set<Respondant> respondants = new HashSet<>();
-
-	// bi-directional many-to-one association to BillingItem
-	@JsonIgnore
-	@Fetch(FetchMode.SUBSELECT)
-	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private Set<BillingItem> billingItems = new HashSet<>();
-
+	
 	public CustomProfile getCustomProfile() {
 		if (this.customProfile != null) return this.customProfile;
 		return ProfileDefaults.DEFAULT_PROFILES;

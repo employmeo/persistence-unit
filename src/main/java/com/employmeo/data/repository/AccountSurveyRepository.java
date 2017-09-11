@@ -1,5 +1,6 @@
 package com.employmeo.data.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.Query;
@@ -13,5 +14,9 @@ public interface AccountSurveyRepository extends PagingAndSortingRepository<Acco
 
 	@Query
 	public AccountSurvey findByUuId(UUID UuId);
+	
+	@Query
+	public List<AccountSurvey> findAllBySurveyIdAndAccountIdAndAccountSurveyStatusAndTypeIn(Long surveyId, Long accountId, int status,
+			List<Integer> types);
 	
 }

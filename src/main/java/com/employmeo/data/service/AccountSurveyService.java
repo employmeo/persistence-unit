@@ -12,6 +12,8 @@ public interface AccountSurveyService {
 	
 	AccountSurvey getAccountSurveyByUuid(UUID asUuid);
 	
+	AccountSurvey getAccountSurveyBySurveyIdForAccount(Long surveyId, Long accountId);
+
 	AccountSurvey save(AccountSurvey accountSurvey);
 	
 	Set<GraderConfig> getGraderConfigsForSurvey(Long asId);

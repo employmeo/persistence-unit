@@ -1,5 +1,6 @@
 package com.talytica.common.service;
 
+import java.text.SimpleDateFormat;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.employmeo.data.model.Account;
 import com.employmeo.data.model.AccountSurvey;
 import com.employmeo.data.model.Grader;
 import com.employmeo.data.model.Respondant;
@@ -23,6 +25,7 @@ import com.sendgrid.Personalization;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
+import com.stripe.model.Invoice;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,6 +62,12 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Use Above
 	private String REFERENCE_REMINDER_TEMPLATE_ID;
+	
+	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Not Created Yet
+	private String INVOICE_TEMPLATE_ID;
+	
+	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") //  Not Created Yet
+	private String INVOICE_REMINDER_TEMPLATE_ID;
 
 	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Not Created Yet
 	private String QUICKREF_TEMPLATE_ID;
@@ -93,6 +102,7 @@ public class EmailServiceImpl implements EmailService {
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
 	private Email FROM_ADDRESS;
 	private Email REPLYTO_ADDRESS;
+	private SimpleDateFormat dateFormatter;
 	
 	@PostConstruct
 	private void reportDeliveryConfiguration() {
@@ -103,6 +113,7 @@ public class EmailServiceImpl implements EmailService {
 		}
 		FROM_ADDRESS = new Email (FROM_EMAIL_ADDRESS);
 		REPLYTO_ADDRESS = new Email(REPLYTO_EMAIL_ADDRESS);
+		dateFormatter = new SimpleDateFormat("MMM dd, YYY");
 	}
 
 	@Override
@@ -405,6 +416,42 @@ public class EmailServiceImpl implements EmailService {
 		asynchSend(email);
 	}	
 	
+	@Override
+	public void sendInvoice(Account account, Invoice invoice, String email) {
+		sendInvoice(account, invoice, email, false);
+	}
+	@Override
+	public void sendInvoiceReminder(Account account, Invoice invoice, String email) {
+		 sendInvoice(account, invoice, email, true);	
+	}
+
+	public void sendInvoice(Account account, Invoice invoice, String to, Boolean reminder) {
+		Mail email = new Mail();
+		email.setFrom(FROM_ADDRESS);
+		String link = "null"; // need a link! externalLinksService.getGraderEmailLink(grader);
+		
+		String body = "Your card will be billed for " + invoice.getAmountDue() + " on " + invoice.getDueDate();
+		email.addContent(new Content("text/plain", body));
+		email.addContent(new Content("text/html", body));
+		if (reminder) {
+			email.setSubject("Reminder: Invoice Due For Talytica");
+			email.setTemplateId(INVOICE_REMINDER_TEMPLATE_ID);
+		} else {
+			email.setSubject("Invoice Due For Talytica");
+			email.setTemplateId(INVOICE_TEMPLATE_ID);
+		}
+		
+		Personalization pers = new Personalization();
+		pers.addSubstitution("[LINK]", link );
+		pers.addSubstitution("[AMOUNT]", String.format("$#,###.00",invoice.getAmountDue()));
+		log.debug("Invoice data: {}",invoice);
+		//pers.addSubstitution("[DUE_DATE]", dateFormatter.format(1000*invoice.getDueDate()));
+		pers.addTo(getEmailDeliveryAddress(to));		
+		
+		email.addPersonalization(pers);
+		asynchSend(email);	
+	}
+	
 	private void asynchSend(Mail email) {
 		if (email.getReplyto() == null) email.setReplyTo(REPLYTO_ADDRESS);
 	    SendGrid sg = new SendGrid(SG_API);
@@ -427,5 +474,9 @@ public class EmailServiceImpl implements EmailService {
 			}
 		});
 	}
+
+	
+
+
 
 }

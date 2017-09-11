@@ -20,6 +20,7 @@ public class CustomWorkflow implements Serializable, Comparable<CustomWorkflow> 
 	private static final long serialVersionUID = 93934417467941938L;
 
 	public static final int TRIGGER_POINT_CREATION = 0;
+	public static final int TRIGGER_POINT_INVITATIONSENT = 1;
 	public static final int TRIGGER_POINT_ASSESSMENT = 10;
 	public static final int TRIGGER_POINT_ADVANCE = 20;
 	
