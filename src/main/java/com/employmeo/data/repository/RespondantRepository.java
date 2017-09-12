@@ -63,8 +63,14 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	public Page<Respondant> findAllByAccountIdAndLocationIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long locationId, Integer type, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 
 	@Query
+	public Page<Respondant> findAllByAccountIdAndLocationIdInAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, List<Long> locationIds, Integer type, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+
+	@Query
 	public Page<Respondant> findAllByAccountIdAndLocationIdAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, Long locationId, Long positionId, Integer type, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 
+	@Query
+	public Page<Respondant> findAllByAccountIdAndLocationIdInAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, List<Long> locationIds, Long positionId, Integer type, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
+	
 	@Query
 	public List<Respondant> findAllByRespondantStatusInOrderByFinishTimeDesc(List<Integer> scoringEligibleRespondantStatuses);
 

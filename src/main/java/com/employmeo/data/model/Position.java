@@ -25,6 +25,10 @@ import lombok.*;
 @ToString(exclude={"account"})
 public class Position implements Serializable {
 
+	public static final int STATUS_UNVERIFIED = 0;
+	public static final int STATUS_ACTIVE = 1;
+	public static final int STATUS_NOT_ACTIVE = 99;
+	
 	@Transient
 	private static final long serialVersionUID = 4126199869944171627L;
 
@@ -56,6 +60,9 @@ public class Position implements Serializable {
 
 	@Column(name = "position_account")
 	private Long accountId;
+	
+	@Column(name = "position_status")
+	private Integer status = Location.STATUS_ACTIVE;
 	
 	@Column(name = "position_scoring_scale_id")
 	private Long scoringScaleId;

@@ -28,6 +28,10 @@ public interface AccountService {
 	
 	Location getLocationByAtsId(@NonNull Long accountId, @NonNull String atsId);
 
+	List<Location> getVisibleLocations(Long accountId);
+	
+	List<Location> getAllActiveLocations(Long accountId);
+
 	Location save(@NonNull Location location);
 
 	void delete(@NonNull Location location);
@@ -39,6 +43,8 @@ public interface AccountService {
 	
 	Position getPositionByAtsId(@NonNull Long accountId, @NonNull String atsId);
 	
+	List<Position> getActivePositions(Long accountId);
+
 	Position save(@NonNull Position position);
 	
 	void delete(@NonNull Position position);
