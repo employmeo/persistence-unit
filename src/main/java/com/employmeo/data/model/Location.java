@@ -16,6 +16,14 @@ import lombok.*;
 @ToString(exclude={"account"})
 public class Location implements Serializable {
 
+	public static final int TYPE_NORMAL = 1; // Normal visible in portal location
+	public static final int TYPE_VISIBLE_PARENT = 100; // Parent location (has children) but also visible in portal
+	public static final int TYPE_HIDDEN_PARENT = 200; // Parent location (has children) not visible in portal
+	
+	public static final int STATUS_UNVERIFIED = 0;
+	public static final int STATUS_ACTIVE = 1;
+	public static final int STATUS_NOT_ACTIVE = 99;
+	
 	@Transient
 	private static final long serialVersionUID = -6765625000801160708L;
 
@@ -35,6 +43,12 @@ public class Location implements Serializable {
 
 	@Column(name = "location_account_id", insertable = true, updatable = false)
 	private Long accountId;
+
+	@Column(name = "location_status")
+	private Integer status = Location.STATUS_ACTIVE;
+	
+	@Column(name = "location_type")
+	private Integer type = Location.TYPE_NORMAL;
 
 	@Column(name = "location_city")
 	private String city;
@@ -65,6 +79,8 @@ public class Location implements Serializable {
 
 	@Column(name = "location_payroll_id")
 	private String payrollId;
-
+	
+	@Column(name = "location_parent_id")
+	private Long parentId;
 
 }

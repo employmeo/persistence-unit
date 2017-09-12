@@ -1,5 +1,7 @@
 package com.employmeo.data.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -12,4 +14,10 @@ public interface LocationRepository extends PagingAndSortingRepository<Location,
 	@Query
 	public Location findByAccountIdAndAtsId(Long accountId, String atsId);
 	
+	@Query
+	public List<Location> findAllByAccountIdAndStatusInAndTypeIn(Long accountId, List<Integer> statuses, List<Integer> types);
+	
+	@Query
+	public List<Location> findAllByParentId(Long locationId);
+
 }

@@ -1,5 +1,7 @@
 package com.employmeo.data.service;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -91,6 +93,14 @@ public class AccountServiceImpl implements AccountService {
 		return positions;
 	}
 
+	@Override
+	public List<Position> getActivePositions(Long accountId) {
+		List<Integer> statuses = Arrays.asList(Position.STATUS_ACTIVE);
+		List<Position> positions = positionRepository.findAllByAccountIdAndStatusIn(accountId, statuses);
+		log.debug("Retrieved {} active positions", positions.size());
+		return positions;
+	}
+	
 	@Override
 	public Position save(@NonNull Position position) {
 		Position savedPosition = positionRepository.save(position);
@@ -208,5 +218,23 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Account getByPartnerId(Long partnerId) {
 		return accountRepository.findOneByAtsPartnerId(partnerId);
+	}
+
+	@Override
+	public List<Location> getVisibleLocations(Long accountId) {
+		List<Integer> statuses = Arrays.asList(Location.STATUS_ACTIVE,Location.STATUS_UNVERIFIED);
+		List<Integer> types = Arrays.asList(Location.TYPE_NORMAL,Location.TYPE_VISIBLE_PARENT);
+		List<Location> locations = locationRepository.findAllByAccountIdAndStatusInAndTypeIn(accountId, statuses, types);
+		log.debug("Retrieved {} active positions", locations.size());
+		return locations;
+	}
+
+	@Override
+	public List<Location> getAllActiveLocations(Long accountId) {
+		List<Integer> statuses = Arrays.asList(Location.STATUS_ACTIVE,Location.STATUS_UNVERIFIED);
+		List<Integer> types = Arrays.asList(Location.TYPE_NORMAL,Location.TYPE_VISIBLE_PARENT,Location.TYPE_HIDDEN_PARENT);
+		List<Location> locations = locationRepository.findAllByAccountIdAndStatusInAndTypeIn(accountId, statuses, types);
+		log.debug("Retrieved {} active positions", locations.size());
+		return locations;
 	}
 }

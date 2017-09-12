@@ -20,7 +20,8 @@ public class User implements Serializable {
 	@Transient
 	private static final long serialVersionUID = 8267893893548964337L;
 	
-	public static final int TYPE_BASIC = 1;
+	public static final int TYPE_BASIC = 1; // Owner of an account
+	public static final int TYPE_LIMITED = 100; // User that might have restricted access
 	public static final int TYPE_SUPER = 999;
 
 	@Id
@@ -71,6 +72,10 @@ public class User implements Serializable {
 	// direct access to account id
 	@Column(name = "USER_ACCOUNT_ID", updatable = false, insertable = true)
 	private Long userAccountId;
+	
+	// direct access to account id
+	@Column(name = "USER_LOCATION_RESTRICTION")
+	private Long locationRestrictionId;
 	
     @PrePersist
     protected void onPersist() {

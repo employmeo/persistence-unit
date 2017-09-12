@@ -1,5 +1,6 @@
 package com.employmeo.data.service;
 
+import java.util.List;
 import java.util.Set;
 
 import com.employmeo.data.model.GraderConfig;
@@ -20,5 +21,7 @@ public interface UserService {
 	User getUserByEmail(@NonNull String email);
 	
 	Set<GraderConfig> getGraderConfigs(@NonNull Long userId);
+
+	List<Long> getLocationLimits(User user);
 
 }

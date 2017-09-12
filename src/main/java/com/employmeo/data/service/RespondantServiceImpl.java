@@ -193,7 +193,7 @@ public class RespondantServiceImpl implements RespondantService  {
 			@NonNull Long accountId,
 			@NonNull Integer statusLow,
 			@NonNull Integer statusHigh,
-			Long locationId,
+			List<Long> locationIds,
 			Long positionId,
 			@NonNull Integer type,
 			@NonNull Timestamp fromDate,
@@ -201,20 +201,20 @@ public class RespondantServiceImpl implements RespondantService  {
 
 		return getBySearchParams(accountId,
 				   statusLow, statusHigh,
-				   locationId,
+				   locationIds,
 				   positionId,
 				   type,
 				   fromDate, toDate,
 				   DEFAULT_PAGE_NUMBER,
 				   DEFAULT_PAGE_SIZE);
 	}
-
+	
 	@Override
 	public Page<Respondant> getBySearchParams(
 			@NonNull Long accountId,
 			@NonNull Integer statusLow,
 			@NonNull Integer statusHigh,
-			Long locationId,
+			List<Long> locationIds,
 			Long positionId,
 			@NonNull Integer type,
 			@NonNull Timestamp fromDate,
@@ -227,19 +227,22 @@ public class RespondantServiceImpl implements RespondantService  {
 
 		Page<Respondant> respondants = null;
 
-		if ((locationId != null) && (positionId != null)) {
-			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, positionId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
-		} else if ((locationId == null) && (positionId == null)) {
+		if ((!locationIds.isEmpty()) && (positionId != null)) {
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdInAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationIds, positionId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
+		} else if ((locationIds.isEmpty()) && (positionId == null)) {
 			respondants = respondantRepository.findAllByAccountIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
-		} else if (locationId == null) {
+		} else if (locationIds.isEmpty()) {
 			respondants = respondantRepository.findAllByAccountIdAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, positionId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		} else {
-			respondants = respondantRepository.findAllByAccountIdAndLocationIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationId, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
+			respondants = respondantRepository.findAllByAccountIdAndLocationIdInAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(accountId, locationIds, type, statusLow, statusHigh, fromDate, toDate, pageRequest);
 		}
 
 	    return respondants;
 	};
-
+	
+	
+	
+	
 	@Override
 	public List<Respondant> getAnalysisPendingRespondants() {
 		List<Integer> scoringEligibleRespondantStatuses = Arrays.asList(Respondant.STATUS_COMPLETED, Respondant.STATUS_ADVCOMPLETED);

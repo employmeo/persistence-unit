@@ -46,24 +46,14 @@ public interface RespondantService {
 			@NonNull Long accountId,
 			@NonNull Integer statusLow,
 			@NonNull Integer statusHigh,
-			Long locationId,
+			List<Long> locationIds,
 			Long positionId,
 			@NonNull Integer type,
 			@NonNull Timestamp fromDate,
 			@NonNull Timestamp toDate);
-
-	Page<Respondant> getBySearchParams(
-			@NonNull Long accountId,
-			@NonNull Integer statusLow,
-			@NonNull Integer statusHigh,
-			Long locationId,
-			Long positionId,
-			@NonNull Integer type,
-			@NonNull Timestamp fromDate,
-			@NonNull Timestamp toDate,
-			@NonNull @Min(value = 1) Integer pageNumber,
-			@NonNull @Min(value = 1) @Max(value = 100) Integer pageSize
-			);
+	
+	Page<Respondant> getBySearchParams(Long accountId, Integer statusLow, Integer statusHigh, List<Long> locationIds,
+			Long positionId, Integer type, Timestamp fromDate, Timestamp toDate, Integer pageNumber, Integer pageSize);
 	
 	RespondantScore getRespondantScoreById(@NonNull RespondantScorePK respondantScorePK);
 	
@@ -106,5 +96,4 @@ public interface RespondantService {
 	List<Respondant> getPredictionPendingRespondants();
 
 	void markError(Respondant respondant);
-	
 }
