@@ -96,4 +96,6 @@ public interface RespondantService {
 	List<Respondant> getPredictionPendingRespondants();
 
 	void markError(Respondant respondant);
+
+	boolean isGraderMinMet(Respondant respondant);
 }

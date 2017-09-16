@@ -41,6 +41,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Autowired
 	private OutcomeRepository outcomeRepository;
 
+
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
 	private static final Integer DEFAULT_PAGE_SIZE = 100;
 	private static final String[] GRADEABLES = {"audio","audio+","video","video+"}; // audio- and video- not graded
@@ -446,5 +447,19 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public void markError(Respondant respondant) {
 		respondantRepository.setErrorStatusById(true, respondant.getId());
+	}
+
+	@Override
+	public boolean isGraderMinMet(Respondant respondant) {
+		Integer minGraders = respondant.getAccountSurvey().getMinGraders();
+		if ((minGraders == null) || (minGraders <= 0)) return true;
+		log.debug("Respondant {} needs {} graders",respondant.getId(),minGraders);
+		if (respondant.getWaveGraderMin()) return true;
+		log.debug("Respondant {} minimum grader requirement not waved",respondant.getId(),minGraders);
+		List<Grader> graders = graderRepository.findAllByRespondantId(respondant.getId());
+		Integer completed = 0;
+		for (Grader grader : graders) if (grader.getStatus() == Grader.STATUS_COMPLETED) completed++;
+		
+		return (completed >= minGraders);
 	}
 }

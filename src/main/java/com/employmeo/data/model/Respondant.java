@@ -37,6 +37,7 @@ public class Respondant implements Serializable {
 	public static final int STATUS_REMINDED = 6;
 	public static final int STATUS_COMPLETED = 10;
 	public static final int STATUS_UNGRADED = 11;
+	public static final int STATUS_INSUFFICIENT_GRADERS = 12;
 	public static final int STATUS_SCORED = 13;
 	public static final int STATUS_PREDICTED = 15;  // end stage 1
 
@@ -47,6 +48,7 @@ public class Respondant implements Serializable {
 	public static final int STATUS_ADVREMINDED = 26;  
 	public static final int STATUS_ADVCOMPLETED = 30; 
 	public static final int STATUS_ADVUNGRADED = 31; // for outstanding interview grades and or reference checks
+	public static final int STATUS_INSUFFICIENT_ADVGRADERS = 32;
 	public static final int STATUS_ADVSCORESADDED = 33;  // end stage 1
 	public static final int STATUS_ADVREPREDICTED = 35;  // end stage 1
 	
@@ -141,7 +143,10 @@ public class Respondant implements Serializable {
 	
 	@Column(name = "respondant_error_status")
 	private Boolean errorStatus = false;
-
+	
+	@Column(name = "respondant_wave_grader_min")
+	private Boolean waveGraderMin = false;
+	
 	// bi-directional many-to-one association to Responses
 	@JsonIgnore
 	@Fetch(FetchMode.SUBSELECT)
@@ -185,6 +190,10 @@ public class Respondant implements Serializable {
 	// Scoring info
 	@Column(name = "respondant_user_agent")
 	private String respondantUserAgent;
+	
+	// Scoring info
+	@Column(name = "respondant_ip_address")
+	private String ipAddress;
 
 	@Column(name = "respondant_start_time")
 	private Timestamp startTime;
