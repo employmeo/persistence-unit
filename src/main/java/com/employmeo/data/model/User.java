@@ -33,8 +33,8 @@ public class User implements Serializable {
 	@Column(name = "MODIFIED_DATE")
 	private Date modifiedDate;
 
-	@Column(name = "USER_AVATAR_URL")
-	private String avatarUrl;
+//	@Column(name = "USER_AVATAR_URL")
+//	private String avatarUrl;
 
 	@Column(name = "USER_EMAIL")
 	private String email;
@@ -45,11 +45,11 @@ public class User implements Serializable {
 	@Column(name = "USER_LNAME")
 	private String lastName;
 
-	@Column(name = "USER_LOCALE")
-	private String userLocale;
+//	@Column(name = "USER_LOCALE")
+//	private String userLocale;
 
-	@Column(name = "USER_NAME")
-	private String userName;
+//	@Column(name = "USER_NAME")
+//	private String userName;
 
 	@JsonIgnore
 	@Column(name = "USER_PASSWORD")
