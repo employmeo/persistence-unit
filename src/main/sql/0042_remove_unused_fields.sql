@@ -4,6 +4,11 @@ ALTER TABLE employmeo.respondants DROP respondant_profile_a;
 ALTER TABLE employmeo.respondants DROP respondant_profile_b;
 ALTER TABLE employmeo.respondants DROP respondant_profile_c;
 ALTER TABLE employmeo.respondants DROP respondant_profile_d;
+ALTER TABLE employmeo.positions DROP position_target_tenure;
+ALTER TABLE employmeo.positions DROP position_target_hireratio;
+ALTER TABLE employmeo.users DROP user_avatar_url;
+ALTER TABLE employmeo.users DROP user_locale;
+ALTER TABLE employmeo.users DROP user_name;
 
 DROP TABLE employmeo.dbdeploy_demo;
 DROP TABLE employmeo.billing_item;
@@ -14,11 +19,21 @@ DROP TABLE employmeo.payroll_summary;
 --//@UNDO
 
 ALTER TABLE employmeo.accounts ADD account_feature_scoring boolean;
-
 ALTER TABLE employmeo.respondants ADD respondant_profile_a double precision;
 ALTER TABLE employmeo.respondants ADD respondant_profile_b double precision;
 ALTER TABLE employmeo.respondants ADD respondant_profile_c double precision;
 ALTER TABLE employmeo.respondants ADD respondant_profile_d double precision;
+ALTER TABLE employmeo.positions ADD COLUMN position_target_tenure numeric(10,0);
+ALTER TABLE employmeo.positions ALTER COLUMN position_target_tenure SET DEFAULT NULL::numeric;
+ALTER TABLE employmeo.positions ADD COLUMN position_target_hireratio numeric(10,0);
+ALTER TABLE employmeo.positions ALTER COLUMN position_target_hireratio SET DEFAULT NULL::numeric;
+ALTER TABLE employmeo.users ADD COLUMN user_avatar_url character varying(255);
+ALTER TABLE employmeo.users ALTER COLUMN user_avatar_url SET DEFAULT NULL::character varying;
+ALTER TABLE employmeo.users ADD COLUMN user_locale character varying(5);
+ALTER TABLE employmeo.users ALTER COLUMN user_locale SET DEFAULT 'en_US'::character varying;
+ALTER TABLE employmeo.users ADD COLUMN user_name character varying(255);
+ALTER TABLE employmeo.users ALTER COLUMN user_name SET DEFAULT NULL::character varying;
+
 
 CREATE TABLE employmeo.billing_item
 (
