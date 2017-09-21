@@ -4,7 +4,9 @@ import org.json.JSONObject;
 
 public interface ServerAdminService {
 	
-	public boolean clearRemoteCache(String server);
+	public void clearRemoteCache(String server);
+
+	public void triggerPipeline(String action);
 	
 	public JSONObject serverHealthCheck(String server);
 	
