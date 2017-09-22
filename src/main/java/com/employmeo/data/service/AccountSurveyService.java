@@ -17,6 +17,14 @@ public interface AccountSurveyService {
 	AccountSurvey save(AccountSurvey accountSurvey);
 	
 	Set<GraderConfig> getGraderConfigsForSurvey(Long asId);
+
+	Iterable<GraderConfig> getAllGraderConfigs();
+	
+	GraderConfig save(GraderConfig graderConfig);
+	
+	GraderConfig getGraderConfigById(Long configId);
+
+	void delete(GraderConfig graderConfig);
 	
 	void clearCache();
 

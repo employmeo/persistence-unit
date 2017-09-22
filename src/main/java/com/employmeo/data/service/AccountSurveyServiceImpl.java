@@ -52,6 +52,28 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 	}
 
 	@Override
+	public Iterable<GraderConfig> getAllGraderConfigs() {
+		return graderConfigRepository.findAll();
+	}
+
+	@Override
+	public GraderConfig getGraderConfigById(Long configId) {
+
+		return graderConfigRepository.findOne(configId);
+	}
+
+	@Override
+	public void delete(GraderConfig graderConfig) {
+		graderConfigRepository.delete(graderConfig);
+	}
+	
+	@Override
+	public GraderConfig save(GraderConfig graderConfig) {
+		return graderConfigRepository.save(graderConfig);
+	}
+	
+	
+	@Override
 	public AccountSurvey save(AccountSurvey accountSurvey) {
 		log.debug("saving Account Survey {}", accountSurvey);
 		return accountSurveyRepository.save(accountSurvey);
