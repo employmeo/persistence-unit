@@ -103,6 +103,9 @@ public class AccountSurvey implements Serializable {
 	@Column(name = "as_benchmark_id")
 	private Long benchmarkId;
 	
+	@Column(name = "as_min_graders")
+	private Integer minGraders = 0;
+	
 	@PrePersist
 	void generateUUID() {
 		if(null == uuId) {

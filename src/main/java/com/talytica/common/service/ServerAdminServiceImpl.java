@@ -38,35 +38,27 @@ public class ServerAdminServiceImpl implements ServerAdminService {
 	private String BASE_SERVICE_URL;
 	
 	@Override
-	public boolean clearRemoteCache(String server) {
+	public void triggerPipeline(String action) {
+		getIntegrationClient().target(BASE_SERVICE_URL + "/integration/1/admin/trigger/"+action).request().post(null);
+	}
 	
+	@Override
+	public void clearRemoteCache(String server) {
 		Client client = null;
 		WebTarget target;		
 		switch (server) {
 		case "integration":
 			client = getIntegrationClient();
-			target = client.target(BASE_SERVICE_URL + "/integration/clearcache");
+			target = client.target(BASE_SERVICE_URL + "/integration/1/admin/clearcache");
 			break;
 		case "survey":
 			client = ClientBuilder.newClient();
 			target = client.target(BASE_SURVEY_URL + "/survey/clearcache");
 			break;
 		default:
-			return false; 		
+			return;
 		}
-		try {
-			javax.ws.rs.core.Response result = target.request(MediaType.APPLICATION_JSON).post(null);
-			if (result.getStatus() >= 300) {
-				log.warn("Cache Clear of {} failed: {}", server, result.getStatusInfo().getReasonPhrase());
-				return false;
-			} else {
-				log.info("SUCCESS: Cleared {} Cache", server);
-			}
-		} catch (Exception e) {
-			log.warn("Cache Clear of {} Failed {}", server, e.getMessage());
-			return false;
-		}		
-		return true;
+		target.request().post(null);
 	}
 
 	@Override

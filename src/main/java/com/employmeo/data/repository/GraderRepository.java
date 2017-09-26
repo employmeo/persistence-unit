@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -23,13 +24,19 @@ public interface GraderRepository extends PagingAndSortingRepository<Grader, Lon
 
 	@Query
 	public List<Grader> findAllByRespondantId(Long respondantId);
+	
+	@Modifying
+	@Query("update Grader grader set grader.summaryScore = ?1 where grader.id = ?2")
+	public void modifySummaryById(String summary, Long id);
 
+	@Modifying
+	@Query("update Grader grader set grader.relationship = ?1 where grader.id = ?2")
+	public void modifyRelationshipById(String status, Long id);
+	
 	//TODO: Fix Me !!
 	@Query("SELECT g from Grader g WHERE g.userId = ?1 AND g.status IN ?2 AND g.createdDate BETWEEN ?3 and ?4")
 	public Page<Grader> findAllByUserIdAndStatusInAndCreatedDateBetween(@NonNull Long userId,
 																  List<Integer> status,
-																  //@Temporal(TemporalType.TIMESTAMP) Date from,
-																  //@Temporal(TemporalType.TIMESTAMP) Date to,
 																  Date from,
 																  Date to,
 			                                                      Pageable pageRequest);

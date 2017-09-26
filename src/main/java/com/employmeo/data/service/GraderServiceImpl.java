@@ -161,5 +161,15 @@ public class GraderServiceImpl implements GraderService {
 		return criteria;
 	}
 
+	@Override
+	public void setSummary(Long graderId, String summary) {
+		graderRepository.modifySummaryById(summary, graderId);
+	}
+
+	@Override
+	public void setRelationship(Long graderId, String relationship) {
+		graderRepository.modifyRelationshipById(relationship, graderId);		
+	}
+
 
 }

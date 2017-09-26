@@ -43,11 +43,11 @@ public class Position implements Serializable {
 	@Column(name = "position_description")
 	private String description;
 
-	@Column(name = "position_target_hireratio")
-	private BigDecimal positionTargetHireratio;
+	//@Column(name = "position_target_hireratio")
+	//private BigDecimal positionTargetHireratio;
 
-	@Column(name = "position_target_tenure")
-	private BigDecimal targetTenure;
+	//@Column(name = "position_target_tenure")
+	//private BigDecimal targetTenure;
 
 	@Column(name = "position_ats_id")
 	private String atsId;
