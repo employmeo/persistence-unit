@@ -17,5 +17,7 @@ public interface ResponseRepository extends PagingAndSortingRepository<Response,
   
   @Query
   List<Response> findAllByRespondantIdAndQuestionIdOrderByCreatedDesc(Long respondantId, Long questionId);
-  
+
+  @Query
+  Set<Response> findByRespondantIdAndQuestionIdIn(Long respondantId, List<Long> questionIds);
 }

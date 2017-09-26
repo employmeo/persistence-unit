@@ -344,9 +344,14 @@ public class RespondantServiceImpl implements RespondantService  {
 			    }
 			}
 		}
-		log.debug("Returning {} videoresponses for respondant {}", audioresponses.size(), respondantId);
+		log.debug("Returning {} audioresponses for respondant {}", audioresponses.size(), respondantId);
 		return audioresponses;
 	}
+	
+	public Set<Response> getResponsesToQuestions(Long respondantId, List<SurveyQuestion> questions) {
+		List<Long> questionIds = questions.stream().map(SurveyQuestion::getQuestionId).collect(Collectors.toList()); 
+		return responseRepository.findByRespondantIdAndQuestionIdIn(respondantId, questionIds);
+	}	
 	
 	@Override
 	public Set<Response> getVideoResponses(Long respondantId) {
