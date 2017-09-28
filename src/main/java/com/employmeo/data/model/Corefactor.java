@@ -89,12 +89,12 @@ public class Corefactor implements Serializable {
 	private Set<CorefactorDescription> corefactorDescriptions = new HashSet<>();
 	
 	@PrePersist
-	private void setCreatedDate() {
+	void setCreatedDate() {
 		this.createdDate = new Date();
 	}
 	
 	@PreUpdate
-	private void setModifiedDate() {
+	void setModifiedDate() {
 		this.modifiedDate = new Date();
 	}
 

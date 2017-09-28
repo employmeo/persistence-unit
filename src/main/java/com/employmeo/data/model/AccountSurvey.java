@@ -36,7 +36,7 @@ public class AccountSurvey implements Serializable {
 	@Column(name = "as_id")
 	private Long id;
 
-	@Column(name = "as_uuid")
+	@Column(name = "as_uuid", insertable = true, updatable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Convert(disableConversion = true)  // hibernate specific mapping
 	@Type(type="pg-uuid") // hibernate specific mapping

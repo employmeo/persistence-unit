@@ -78,7 +78,8 @@ public class User implements Serializable {
 	private Long locationRestrictionId;
 	
     @PrePersist
-    protected void onPersist() {
+    @PreUpdate
+    public void onPersist() {
     	modifiedDate = new Date();
     }
 

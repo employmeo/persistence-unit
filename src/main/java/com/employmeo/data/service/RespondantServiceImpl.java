@@ -405,6 +405,7 @@ public class RespondantServiceImpl implements RespondantService  {
 				newNameId.setName(nvp.getName());
 				nameId = nvpNameRepository.save(newNameId);
 				log.info("New NVP ID#{} added for: {}",nameId.getId(),nameId.getName());
+				nvpNameRepository.resetCache(nvp.getName());
 			}
 			log.debug("Using ID#{} for: {}",nameId.getId(),nameId.getName());
 			nvp.setNameId(nameId.getId());
