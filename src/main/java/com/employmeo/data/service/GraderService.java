@@ -15,6 +15,8 @@ public interface GraderService {
 
 	Grader getGraderById(@NonNull Long graderId);
 
+	ReferenceCheckConfig getReferenceCheckConfigById(Long rcConfigId);
+
 	List<Grade> getGradesByGraderId(@NonNull Long graderId);
 	
 	List<Grade> getAllGradesByRespondantId(Long respondantId);
