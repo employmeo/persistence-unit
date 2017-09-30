@@ -317,7 +317,6 @@ public class EmailServiceImpl implements EmailService {
 
 	public void sendReferenceRequest(Grader grader, boolean reminder){	
 		Mail email = new Mail();
-
 		if ((grader.getRespondant().getAccount().getDefaultEmail() != null) && (!grader.getRespondant().getAccount().getDefaultEmail().isEmpty())) {
 			email.setFrom(new Email(FROM_EMAIL_ADDRESS, grader.getRespondant().getAccount().getAccountName()));
 			email.setReplyTo(new Email(grader.getRespondant().getAccount().getDefaultEmail()));
@@ -343,6 +342,11 @@ public class EmailServiceImpl implements EmailService {
 		} else {
 			email.setSubject("Reference Request from: " + fullname);
 			email.setTemplateId(REFERENCE_TEMPLATE_ID);
+		}
+		if (grader.getRcConfig() != null) {
+			if ((grader.getRcConfig().getInviteTemplate() != null) &&  (!grader.getRcConfig().getInviteTemplate().isEmpty())) {
+				email.setTemplateId(grader.getRcConfig().getInviteTemplate());
+			}
 		}
 		
 		Personalization pers = new Personalization();

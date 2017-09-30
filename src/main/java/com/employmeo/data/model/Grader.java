@@ -21,6 +21,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -140,7 +142,14 @@ public class Grader implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "grader_modified_date")
 	private Date modifiedDate;
-	  
+
+	@Column(name = "grader_config_id")
+	private Long rcConfigId;
+	
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	@JoinColumn(name = "grader_config_id",insertable=false,updatable=false)
+	private ReferenceCheckConfig rcConfig;
+	
 	@PrePersist
 	void generateUUIDandDate()  {
 		if(null == uuId) {

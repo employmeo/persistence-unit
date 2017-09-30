@@ -458,7 +458,9 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	@Override
 	public boolean isGraderMinMet(Respondant respondant) {
-		Integer minGraders = respondant.getAccountSurvey().getMinGraders();
+		ReferenceCheckConfig rcConfig = respondant.getAccountSurvey().getRcConfig();
+		if (rcConfig == null) return true;
+		Integer minGraders = rcConfig.getMinReferences();
 		if ((minGraders == null) || (minGraders <= 0)) return true;
 		log.debug("Respondant {} needs {} graders",respondant.getId(),minGraders);
 		if (respondant.getWaveGraderMin()) return true;
