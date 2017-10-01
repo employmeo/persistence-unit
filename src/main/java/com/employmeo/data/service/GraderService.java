@@ -15,6 +15,8 @@ public interface GraderService {
 
 	Grader getGraderById(@NonNull Long graderId);
 
+	ReferenceCheckConfig getReferenceCheckConfigById(Long rcConfigId);
+
 	List<Grade> getGradesByGraderId(@NonNull Long graderId);
 	
 	List<Grade> getAllGradesByRespondantId(Long respondantId);
@@ -35,6 +37,10 @@ public interface GraderService {
 	
 	Grader save(Grader grader);
 
+	void setSummary(Long graderId, String summary);
+
+	void setRelationship(Long graderId, String relationship);
+	
 	Grade saveGrade(Grade grade);
 	
 	List<Question> getCriteriaByQuestionId(@NonNull Long questionId);

@@ -14,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(exclude={"question","survey"})
 @ToString(exclude={"question","survey"})
-public class SurveyQuestion implements Serializable {
+public class SurveyQuestion implements Serializable, Comparable<SurveyQuestion> {
 
 	@Transient
 	private static final long serialVersionUID = -7227663971810034513L;
@@ -55,4 +55,10 @@ public class SurveyQuestion implements Serializable {
 	@Column(name = "SURVEY_ID")
 	private Long surveyId;
 
+	public int compareTo(SurveyQuestion obj) {
+    	int result = this.getPage() - obj.getPage();
+    	if (result == 0) result = this.getSequence() - obj.getSequence();
+    	return result;
+	}
+	
 }

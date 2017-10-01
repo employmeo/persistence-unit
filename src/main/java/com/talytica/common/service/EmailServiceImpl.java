@@ -113,6 +113,7 @@ public class EmailServiceImpl implements EmailService {
 		}
 		FROM_ADDRESS = new Email (FROM_EMAIL_ADDRESS);
 		REPLYTO_ADDRESS = new Email(REPLYTO_EMAIL_ADDRESS);
+		log.info("Emails will be from: {} with reply to: {} by default", FROM_ADDRESS.getEmail(),REPLYTO_ADDRESS.getEmail());
 		dateFormatter = new SimpleDateFormat("MMM dd, YYY");
 	}
 
@@ -169,7 +170,7 @@ public class EmailServiceImpl implements EmailService {
 	
 	public void sendEmailInvitation(Respondant respondant, boolean reminder, String bcc){	
 		Mail email = new Mail();
-		if (respondant.getAccount().getDefaultEmail() != null) {
+		if ((respondant.getAccount().getDefaultEmail() != null) && (!respondant.getAccount().getDefaultEmail().isEmpty()) ){
 			email.setFrom(new Email(FROM_EMAIL_ADDRESS, respondant.getAccount().getAccountName()));
 			email.setReplyTo(new Email(respondant.getAccount().getDefaultEmail()));
 		} else {
@@ -316,8 +317,7 @@ public class EmailServiceImpl implements EmailService {
 
 	public void sendReferenceRequest(Grader grader, boolean reminder){	
 		Mail email = new Mail();
-
-		if (grader.getRespondant().getAccount().getDefaultEmail() != null) {
+		if ((grader.getRespondant().getAccount().getDefaultEmail() != null) && (!grader.getRespondant().getAccount().getDefaultEmail().isEmpty())) {
 			email.setFrom(new Email(FROM_EMAIL_ADDRESS, grader.getRespondant().getAccount().getAccountName()));
 			email.setReplyTo(new Email(grader.getRespondant().getAccount().getDefaultEmail()));
 		} else {
@@ -342,6 +342,11 @@ public class EmailServiceImpl implements EmailService {
 		} else {
 			email.setSubject("Reference Request from: " + fullname);
 			email.setTemplateId(REFERENCE_TEMPLATE_ID);
+		}
+		if (grader.getRcConfig() != null) {
+			if ((grader.getRcConfig().getInviteTemplate() != null) &&  (!grader.getRcConfig().getInviteTemplate().isEmpty())) {
+				email.setTemplateId(grader.getRcConfig().getInviteTemplate());
+			}
 		}
 		
 		Personalization pers = new Personalization();
@@ -474,9 +479,5 @@ public class EmailServiceImpl implements EmailService {
 			}
 		});
 	}
-
-	
-
-
 
 }

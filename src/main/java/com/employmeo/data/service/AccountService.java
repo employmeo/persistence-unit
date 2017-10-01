@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.employmeo.data.model.Account;
 import com.employmeo.data.model.Benchmark;
+import com.employmeo.data.model.CustomWorkflow;
 import com.employmeo.data.model.Location;
 import com.employmeo.data.model.Position;
 import com.employmeo.data.model.User;
@@ -70,5 +71,17 @@ public interface AccountService {
 	Set<Account> getAccountsForPartner(String partnerName);
 	
 	Account getByPartnerId(Long partnerId);
+	
+	
+	
+	CustomWorkflow getCustomWorkflowById(Long workflowId);
+	
+	Iterable<CustomWorkflow> getAllWorkflows();
+	
+	List<CustomWorkflow> getWorkflowsForPosition(Long positionId);
+
+	CustomWorkflow save(CustomWorkflow workflow);
+	
+	void delete(CustomWorkflow workflow);
 
 }

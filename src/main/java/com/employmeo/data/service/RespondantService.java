@@ -69,6 +69,8 @@ public interface RespondantService {
 	
 	Set<Response> getGradeableResponses(@NonNull Long respondantId);
 	
+	Set<Response> getResponsesToQuestions(Long id, List<SurveyQuestion> questions);
+
 	Set<Response> getAudioResponses(Long respondantId);
 	
 	Set<Response> getVideoResponses(Long respondantId);
@@ -96,4 +98,7 @@ public interface RespondantService {
 	List<Respondant> getPredictionPendingRespondants();
 
 	void markError(Respondant respondant);
+
+	boolean isGraderMinMet(Respondant respondant);
+
 }

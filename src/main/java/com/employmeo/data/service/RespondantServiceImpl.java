@@ -8,6 +8,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	private GraderRepository graderRepository;
 	@Autowired
 	private OutcomeRepository outcomeRepository;
+
 
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
 	private static final Integer DEFAULT_PAGE_SIZE = 100;
@@ -343,9 +346,14 @@ public class RespondantServiceImpl implements RespondantService  {
 			    }
 			}
 		}
-		log.debug("Returning {} videoresponses for respondant {}", audioresponses.size(), respondantId);
+		log.debug("Returning {} audioresponses for respondant {}", audioresponses.size(), respondantId);
 		return audioresponses;
 	}
+	
+	public Set<Response> getResponsesToQuestions(Long respondantId, List<SurveyQuestion> questions) {
+		List<Long> questionIds = questions.stream().map(SurveyQuestion::getQuestionId).collect(Collectors.toList()); 
+		return responseRepository.findByRespondantIdAndQuestionIdIn(respondantId, questionIds);
+	}	
 	
 	@Override
 	public Set<Response> getVideoResponses(Long respondantId) {
@@ -387,27 +395,27 @@ public class RespondantServiceImpl implements RespondantService  {
 	
 	@Override
 	public RespondantNVP save(RespondantNVP nvp) {		
-		setNVPNameId(nvp);
+		if (null == nvp.getNameId()) nvp.setNameId(getNVPNameId(nvp.getName()));
 		return respondantNVPRepository.save(nvp);
 	}
-
-	private void setNVPNameId(RespondantNVP nvp) {
-		if (null == nvp.getNameId()) {
-			NVPName nameId = nvpNameRepository.findByName(nvp.getName());
-			if (null == nameId) {
-				NVPName newNameId = new NVPName();
-				newNameId.setName(nvp.getName());
-				nameId = nvpNameRepository.save(newNameId);
-				log.info("New NVP ID#{} added for: {}",nameId.getId(),nameId.getName());
-			}
-			log.debug("Using ID#{} for: {}",nameId.getId(),nameId.getName());
-			nvp.setNameId(nameId.getId());
+	
+	@Cacheable(value = "nvpidbyname")
+	private Long getNVPNameId(String name) {
+		NVPName nameId = nvpNameRepository.findByName(name);
+		if (null == nameId) {	
+			NVPName newNameId = new NVPName();
+			newNameId.setName(name);
+			nameId = nvpNameRepository.save(newNameId);
+			log.info("New NVP ID#{} added for: {}",nameId.getId(),nameId.getName());
 		}
+		return nameId.getId(); 
 	}
 	
 	@Override
 	public Iterable<RespondantNVP> save(Iterable<RespondantNVP> nvps) {
-		nvps.forEach(nvp -> setNVPNameId(nvp));
+		nvps.forEach(nvp -> {
+			if (null == nvp.getNameId()) nvp.setNameId(getNVPNameId(nvp.getName()));
+			});
 		return respondantNVPRepository.save(nvps);
 	}
 
@@ -422,7 +430,7 @@ public class RespondantServiceImpl implements RespondantService  {
 		nvp.setName(name);
 		nvp.setValue(value);
 		nvp.setRespondantId(respondant.getId());
-		setNVPNameId(nvp);
+		nvp.setNameId(getNVPNameId(name));
 		nvp.setUseInModel(inModel);
 		nvp.setShowInPortal(display);
 		return respondantNVPRepository.save(nvp);
@@ -446,5 +454,21 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public void markError(Respondant respondant) {
 		respondantRepository.setErrorStatusById(true, respondant.getId());
+	}
+
+	@Override
+	public boolean isGraderMinMet(Respondant respondant) {
+		ReferenceCheckConfig rcConfig = respondant.getAccountSurvey().getRcConfig();
+		if (rcConfig == null) return true;
+		Integer minGraders = rcConfig.getMinReferences();
+		if ((minGraders == null) || (minGraders <= 0)) return true;
+		log.debug("Respondant {} needs {} graders",respondant.getId(),minGraders);
+		if (respondant.getWaveGraderMin()) return true;
+		log.debug("Respondant {} minimum grader requirement not waved",respondant.getId(),minGraders);
+		List<Grader> graders = graderRepository.findAllByRespondantId(respondant.getId());
+		Integer completed = 0;
+		for (Grader grader : graders) if (grader.getStatus() == Grader.STATUS_COMPLETED) completed++;
+		
+		return (completed >= minGraders);
 	}
 }

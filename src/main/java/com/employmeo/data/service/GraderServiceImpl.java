@@ -22,6 +22,9 @@ public class GraderServiceImpl implements GraderService {
 
 	@Autowired
 	GraderRepository graderRepository;
+	
+	@Autowired
+	ReferenceCheckConfigRepository rcconfigRepository;
 
 	@Autowired
 	GradeRepository gradeRepository;
@@ -161,5 +164,20 @@ public class GraderServiceImpl implements GraderService {
 		return criteria;
 	}
 
+	@Override
+	public void setSummary(Long graderId, String summary) {
+		graderRepository.modifySummaryById(summary, graderId);
+	}
+
+	@Override
+	public void setRelationship(Long graderId, String relationship) {
+		graderRepository.modifyRelationshipById(relationship, graderId);		
+	}
+
+	@Override
+	public ReferenceCheckConfig getReferenceCheckConfigById(Long rcConfigId) {
+		// TODO Auto-generated method stub
+		return rcconfigRepository.findOne(rcConfigId);
+	}
 
 }

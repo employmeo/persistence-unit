@@ -1,6 +1,5 @@
 package com.employmeo.data.service;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -11,12 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.employmeo.data.model.Account;
 import com.employmeo.data.model.Benchmark;
+import com.employmeo.data.model.CustomWorkflow;
 import com.employmeo.data.model.Location;
 import com.employmeo.data.model.Partner;
 import com.employmeo.data.model.Position;
 import com.employmeo.data.model.User;
 import com.employmeo.data.repository.AccountRepository;
 import com.employmeo.data.repository.BenchmarkRepository;
+import com.employmeo.data.repository.CustomWorkflowRepository;
 import com.employmeo.data.repository.LocationRepository;
 import com.employmeo.data.repository.PartnerRepository;
 import com.employmeo.data.repository.PositionRepository;
@@ -44,6 +45,8 @@ public class AccountServiceImpl implements AccountService {
 	private BenchmarkRepository benchmarkRepository;
 	@Autowired
 	private PartnerRepository partnerRepository;
+	@Autowired
+	private CustomWorkflowRepository customWorkflowRepository;
 
 
 	@Override
@@ -236,5 +239,30 @@ public class AccountServiceImpl implements AccountService {
 		List<Location> locations = locationRepository.findAllByAccountIdAndStatusInAndTypeIn(accountId, statuses, types);
 		log.debug("Retrieved {} active positions", locations.size());
 		return locations;
+	}
+
+	@Override
+	public CustomWorkflow getCustomWorkflowById(Long workflowId) {
+		return customWorkflowRepository.findOne(workflowId);
+	}
+
+	@Override
+	public Iterable<CustomWorkflow> getAllWorkflows() {
+		return customWorkflowRepository.findAll();
+	}
+
+	@Override
+	public List<CustomWorkflow> getWorkflowsForPosition(Long positionId) {
+		return customWorkflowRepository.findByPositionId(positionId);
+	}
+
+	@Override
+	public CustomWorkflow save(CustomWorkflow workflow) {
+		return customWorkflowRepository.save(workflow);
+	}
+
+	@Override
+	public void delete(CustomWorkflow workflow) {
+		customWorkflowRepository.delete(workflow);
 	}
 }
