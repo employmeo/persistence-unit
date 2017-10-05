@@ -1,6 +1,5 @@
 package com.talytica.common.service;
 
-import java.text.SimpleDateFormat;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -102,7 +101,6 @@ public class EmailServiceImpl implements EmailService {
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
 	private Email FROM_ADDRESS;
 	private Email REPLYTO_ADDRESS;
-	private SimpleDateFormat dateFormatter;
 	
 	@PostConstruct
 	private void reportDeliveryConfiguration() {
@@ -114,7 +112,6 @@ public class EmailServiceImpl implements EmailService {
 		FROM_ADDRESS = new Email (FROM_EMAIL_ADDRESS);
 		REPLYTO_ADDRESS = new Email(REPLYTO_EMAIL_ADDRESS);
 		log.info("Emails will be from: {} with reply to: {} by default", FROM_ADDRESS.getEmail(),REPLYTO_ADDRESS.getEmail());
-		dateFormatter = new SimpleDateFormat("MMM dd, YYY");
 	}
 
 	@Override
@@ -355,6 +352,7 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[APPLICANT]", fullname );
 		pers.addSubstitution("[POSITION_NAME]", positionName );
 		pers.addSubstitution("[GRADER_NAME]", grader.getPerson().getFirstName());
+		pers.addSubstitution("[GRADER_LASTNAME]", grader.getPerson().getLastName());
 		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
 		pers.addTo(getEmailDeliveryAddress(grader.getPerson().getEmail()));		
 
@@ -450,7 +448,6 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[LINK]", link );
 		pers.addSubstitution("[AMOUNT]", String.format("$#,###.00",invoice.getAmountDue()));
 		log.debug("Invoice data: {}",invoice);
-		//pers.addSubstitution("[DUE_DATE]", dateFormatter.format(1000*invoice.getDueDate()));
 		pers.addTo(getEmailDeliveryAddress(to));		
 		
 		email.addPersonalization(pers);
