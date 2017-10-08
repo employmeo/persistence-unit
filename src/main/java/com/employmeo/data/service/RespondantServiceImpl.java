@@ -8,7 +8,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -17,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.employmeo.data.model.*;
 import com.employmeo.data.repository.*;
 
+import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -471,4 +471,36 @@ public class RespondantServiceImpl implements RespondantService  {
 		
 		return (completed >= minGraders);
 	}
+
+	@Override
+	public List<String> getWarningMessages(Respondant respondant) {
+		List<Grader> graders = graderRepository.findAllByRespondantId(respondant.getId());
+		List<String> emails = Lists.newArrayList();
+		List<String> ipAddresses = Lists.newArrayList();
+		boolean dupGrader = false;
+		boolean dupResp = false;
+		for (Grader grader : graders) {
+			if (grader.getType() != Grader.TYPE_PERSON) continue;
+			String ipAddress = grader.getIpAddress();
+			if (ipAddress != null) {
+				if (ipAddress.equalsIgnoreCase(respondant.getIpAddress())) dupResp = true;
+				for (String check : ipAddresses) if (check.equalsIgnoreCase(ipAddress)) dupGrader = true;
+			}
+
+			String email = grader.getPerson().getEmail();
+			if (email.equalsIgnoreCase(respondant.getPerson().getEmail())) dupResp = true;
+			for (String check : emails) if (check.equalsIgnoreCase(email)) dupGrader = true;
+			
+			if (dupGrader || dupResp) break;
+			emails.add(email);
+			if (ipAddress != null) ipAddresses.add(ipAddress);
+		}
+				
+		List<String> messages = Lists.newArrayList();
+		if (dupGrader) messages.add("Some references share the same email or IP address.");
+		if (dupResp) messages.add("Candidate email or IP address matches a reference.");
+		return messages;
+	}
+	
+	
 }
