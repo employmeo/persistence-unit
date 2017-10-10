@@ -3,9 +3,6 @@ package com.employmeo.data.service;
 import java.sql.Timestamp;
 import java.util.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-
 import org.springframework.data.domain.Page;
 
 import com.employmeo.data.model.*;
@@ -100,5 +97,7 @@ public interface RespondantService {
 	void markError(Respondant respondant);
 
 	boolean isGraderMinMet(Respondant respondant);
+	
+	List<String> getWarningMessages(Respondant respondant);
 
 }
