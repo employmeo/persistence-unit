@@ -64,6 +64,8 @@ public interface RespondantService {
 
 	Set<Response> getResponses(@NonNull UUID respondantUuid);
 	
+	Set<Response> getResponsesById(@NonNull Long respondantId);
+	
 	Set<Response> getGradeableResponses(@NonNull Long respondantId);
 	
 	Set<Response> getResponsesToQuestions(Long id, List<SurveyQuestion> questions);
