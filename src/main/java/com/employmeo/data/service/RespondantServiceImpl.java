@@ -187,10 +187,14 @@ public class RespondantServiceImpl implements RespondantService  {
 	public Set<Response> getResponses(@NonNull UUID respondantUuid) {
 		Respondant respondant = respondantRepository.findByRespondantUuid(respondantUuid);
 		log.debug("Retrieved for id {} entity {}", respondantUuid, respondant);
-
-		return respondant.getResponses();
+		return getResponsesById(respondant.getId());
 	}
 
+	@Override
+	public Set<Response> getResponsesById(@NonNull Long respondantId) {
+		return responseRepository.findAllByRespondantId(respondantId);
+	}
+	
 	@Override
 	public Page<Respondant> getBySearchParams(
 			@NonNull Long accountId,
@@ -317,7 +321,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public Set<Response> getGradeableResponses(Long respondantId) {
 		Respondant respondant = respondantRepository.findOne(respondantId);
-		Set<Response> allresponses = respondant.getResponses();
+		Set<Response> allresponses = responseRepository.findAllByRespondantId(respondant.getId());
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> gradeables = new HashSet<Response>();
 		for (SurveyQuestion sq : questionset) {
@@ -335,7 +339,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public Set<Response> getAudioResponses(Long respondantId) {
 		Respondant respondant = respondantRepository.findOne(respondantId);
-		Set<Response> allresponses = respondant.getResponses();
+		Set<Response> allresponses = responseRepository.findAllByRespondantId(respondant.getId());
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> audioresponses = new HashSet<Response>();
 		for (SurveyQuestion sq : questionset) {
@@ -358,7 +362,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public Set<Response> getVideoResponses(Long respondantId) {
 		Respondant respondant = respondantRepository.findOne(respondantId);
-		Set<Response> allresponses = respondant.getResponses();
+		Set<Response> allresponses = responseRepository.findAllByRespondantId(respondant.getId());
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> videoresponses = new HashSet<Response>();
 		for (SurveyQuestion sq : questionset) {
