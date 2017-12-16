@@ -52,6 +52,8 @@ public interface RespondantService {
 	Page<Respondant> getBySearchParams(Long accountId, Integer statusLow, Integer statusHigh, List<Long> locationIds,
 			Long positionId, Integer type, Timestamp fromDate, Timestamp toDate, Integer pageNumber, Integer pageSize);
 	
+	Page<Respondant> getErrorStatusRespondants(Long accountId, List<Integer> statuses, Boolean errorStatus, Integer pageNumber);
+
 	RespondantScore getRespondantScoreById(@NonNull RespondantScorePK respondantScorePK);
 	
 	RespondantScore save(@NonNull RespondantScore respondantScore);
@@ -97,6 +99,10 @@ public interface RespondantService {
 	List<Respondant> getPredictionPendingRespondants();
 
 	void markError(Respondant respondant);
+	
+	void clearError(Long respondantId);
+	
+	void clearErrors(List<Long> respondantIds);
 
 	boolean isGraderMinMet(Respondant respondant);
 	

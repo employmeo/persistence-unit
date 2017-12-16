@@ -248,8 +248,6 @@ public class RespondantServiceImpl implements RespondantService  {
 	};
 	
 	
-	
-	
 	@Override
 	public List<Respondant> getAnalysisPendingRespondants() {
 		List<Integer> scoringEligibleRespondantStatuses = Arrays.asList(Respondant.STATUS_COMPLETED, Respondant.STATUS_ADVCOMPLETED);
@@ -258,6 +256,26 @@ public class RespondantServiceImpl implements RespondantService  {
 		log.debug("Returning {} scoring eligible respondants", scoringEligibleRespondants.size());
 		return scoringEligibleRespondants;
 	}
+	
+	@Override
+	public Page<Respondant> getErrorStatusRespondants(Long accountId, List<Integer> statuses, Boolean errorStatus, Integer pageNumber) {
+
+		Pageable  pageRequest = new PageRequest(pageNumber - 1, DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "id");
+		Page<Respondant> respondants = null;
+
+		if ((accountId != null) && (!statuses.isEmpty())) {
+			respondants = respondantRepository.findAllByAccountIdAndRespondantStatusInAndErrorStatus(accountId, statuses, errorStatus, pageRequest);
+		} else if (!statuses.isEmpty()) {
+			respondants = respondantRepository.findAllByRespondantStatusInAndErrorStatus(statuses, errorStatus, pageRequest);
+		} else if (accountId != null) {
+			respondants = respondantRepository.findAllByAccountIdAndErrorStatus(accountId, errorStatus, pageRequest);
+		} else {
+			respondants = respondantRepository.findAllByErrorStatus(errorStatus, pageRequest);
+		}
+
+	    return respondants;
+	};
+	
 
 	@Override
 	public Set<Respondant> getByBenchmarkId(Long benchmarkId) {
@@ -458,6 +476,16 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public void markError(Respondant respondant) {
 		respondantRepository.setErrorStatusById(true, respondant.getId());
+	}
+	
+	@Override
+	public void clearError(Long respondantId) {
+		respondantRepository.setErrorStatusById(false, respondantId);	
+	}
+
+	@Override
+	public void clearErrors(List<Long> respondantIds) {
+		respondantRepository.setErrorStatusByIds(false, respondantIds);	
 	}
 
 	@Override
