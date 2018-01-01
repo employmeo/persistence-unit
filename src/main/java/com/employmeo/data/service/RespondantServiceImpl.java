@@ -258,6 +258,11 @@ public class RespondantServiceImpl implements RespondantService  {
 	}
 	
 	@Override
+	public List<Respondant> getScoredApplicantsByPosition(Long positionId) {
+		return respondantRepository.findAllByPositionIdAndTypeAndRespondantStatusGreaterThan(positionId, Respondant.TYPE_APPLICANT, Respondant.STATUS_SCORED);
+	}
+	
+	@Override
 	public Page<Respondant> getErrorStatusRespondants(Long accountId, List<Integer> statuses, Boolean errorStatus, Integer pageNumber) {
 
 		Pageable  pageRequest = new PageRequest(pageNumber - 1, DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "id");
@@ -533,6 +538,6 @@ public class RespondantServiceImpl implements RespondantService  {
 		if (dupResp) messages.add("Candidate email or IP address matches a reference.");
 		return messages;
 	}
-	
+
 	
 }
