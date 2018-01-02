@@ -3,9 +3,6 @@ package com.employmeo.data.service;
 import java.sql.Timestamp;
 import java.util.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-
 import org.springframework.data.domain.Page;
 
 import com.employmeo.data.model.*;
@@ -38,6 +35,8 @@ public interface RespondantService {
 	
 	List<Respondant> getAllRespondantsByStatus(@NonNull Integer status);
 	
+	List<Respondant> getScoredApplicantsByPosition(Long positionId);
+	
 	Page<Respondant> getByAccountId(@NonNull Long accountId, @NonNull Integer pageNumber, @NonNull Integer pageSize);
 
 	Page<Respondant> getByAccountId(@NonNull Long accountId);
@@ -55,6 +54,8 @@ public interface RespondantService {
 	Page<Respondant> getBySearchParams(Long accountId, Integer statusLow, Integer statusHigh, List<Long> locationIds,
 			Long positionId, Integer type, Timestamp fromDate, Timestamp toDate, Integer pageNumber, Integer pageSize);
 	
+	Page<Respondant> getErrorStatusRespondants(Long accountId, List<Integer> statuses, Boolean errorStatus, Integer pageNumber);
+
 	RespondantScore getRespondantScoreById(@NonNull RespondantScorePK respondantScorePK);
 	
 	RespondantScore save(@NonNull RespondantScore respondantScore);
@@ -66,6 +67,8 @@ public interface RespondantService {
 	Response saveResponse(Long respondantId, Long questionId, Integer responseValue, String responseText);
 
 	Set<Response> getResponses(@NonNull UUID respondantUuid);
+	
+	Set<Response> getResponsesById(@NonNull Long respondantId);
 	
 	Set<Response> getGradeableResponses(@NonNull Long respondantId);
 	
@@ -98,7 +101,13 @@ public interface RespondantService {
 	List<Respondant> getPredictionPendingRespondants();
 
 	void markError(Respondant respondant);
+	
+	void clearError(Long respondantId);
+	
+	void clearErrors(List<Long> respondantIds);
 
 	boolean isGraderMinMet(Respondant respondant);
+	
+	List<String> getWarningMessages(Respondant respondant);
 
 }

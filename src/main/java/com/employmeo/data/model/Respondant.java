@@ -150,7 +150,7 @@ public class Respondant implements Serializable {
 	// bi-directional many-to-one association to Responses
 	@JsonIgnore
 	@Fetch(FetchMode.SUBSELECT)
-	@OneToMany(mappedBy = "respondant", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	@OneToMany(mappedBy = "respondant", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<Response> responses = new HashSet<>();
 
 	// bi-directional many-to-one association to Responses

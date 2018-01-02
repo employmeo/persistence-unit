@@ -8,7 +8,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -17,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.employmeo.data.model.*;
 import com.employmeo.data.repository.*;
 
+import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -187,10 +187,14 @@ public class RespondantServiceImpl implements RespondantService  {
 	public Set<Response> getResponses(@NonNull UUID respondantUuid) {
 		Respondant respondant = respondantRepository.findByRespondantUuid(respondantUuid);
 		log.debug("Retrieved for id {} entity {}", respondantUuid, respondant);
-
-		return respondant.getResponses();
+		return getResponsesById(respondant.getId());
 	}
 
+	@Override
+	public Set<Response> getResponsesById(@NonNull Long respondantId) {
+		return responseRepository.findAllByRespondantId(respondantId);
+	}
+	
 	@Override
 	public Page<Respondant> getBySearchParams(
 			@NonNull Long accountId,
@@ -244,8 +248,6 @@ public class RespondantServiceImpl implements RespondantService  {
 	};
 	
 	
-	
-	
 	@Override
 	public List<Respondant> getAnalysisPendingRespondants() {
 		List<Integer> scoringEligibleRespondantStatuses = Arrays.asList(Respondant.STATUS_COMPLETED, Respondant.STATUS_ADVCOMPLETED);
@@ -254,6 +256,31 @@ public class RespondantServiceImpl implements RespondantService  {
 		log.debug("Returning {} scoring eligible respondants", scoringEligibleRespondants.size());
 		return scoringEligibleRespondants;
 	}
+	
+	@Override
+	public List<Respondant> getScoredApplicantsByPosition(Long positionId) {
+		return respondantRepository.findAllByPositionIdAndTypeAndRespondantStatusGreaterThan(positionId, Respondant.TYPE_APPLICANT, Respondant.STATUS_SCORED);
+	}
+	
+	@Override
+	public Page<Respondant> getErrorStatusRespondants(Long accountId, List<Integer> statuses, Boolean errorStatus, Integer pageNumber) {
+
+		Pageable  pageRequest = new PageRequest(pageNumber - 1, DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "id");
+		Page<Respondant> respondants = null;
+
+		if ((accountId != null) && (!statuses.isEmpty())) {
+			respondants = respondantRepository.findAllByAccountIdAndRespondantStatusInAndErrorStatus(accountId, statuses, errorStatus, pageRequest);
+		} else if (!statuses.isEmpty()) {
+			respondants = respondantRepository.findAllByRespondantStatusInAndErrorStatus(statuses, errorStatus, pageRequest);
+		} else if (accountId != null) {
+			respondants = respondantRepository.findAllByAccountIdAndErrorStatus(accountId, errorStatus, pageRequest);
+		} else {
+			respondants = respondantRepository.findAllByErrorStatus(errorStatus, pageRequest);
+		}
+
+	    return respondants;
+	};
+	
 
 	@Override
 	public Set<Respondant> getByBenchmarkId(Long benchmarkId) {
@@ -317,7 +344,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public Set<Response> getGradeableResponses(Long respondantId) {
 		Respondant respondant = respondantRepository.findOne(respondantId);
-		Set<Response> allresponses = respondant.getResponses();
+		Set<Response> allresponses = responseRepository.findAllByRespondantId(respondant.getId());
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> gradeables = new HashSet<Response>();
 		for (SurveyQuestion sq : questionset) {
@@ -335,7 +362,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public Set<Response> getAudioResponses(Long respondantId) {
 		Respondant respondant = respondantRepository.findOne(respondantId);
-		Set<Response> allresponses = respondant.getResponses();
+		Set<Response> allresponses = responseRepository.findAllByRespondantId(respondant.getId());
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> audioresponses = new HashSet<Response>();
 		for (SurveyQuestion sq : questionset) {
@@ -358,7 +385,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public Set<Response> getVideoResponses(Long respondantId) {
 		Respondant respondant = respondantRepository.findOne(respondantId);
-		Set<Response> allresponses = respondant.getResponses();
+		Set<Response> allresponses = responseRepository.findAllByRespondantId(respondant.getId());
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> videoresponses = new HashSet<Response>();
 		for (SurveyQuestion sq : questionset) {
@@ -455,6 +482,16 @@ public class RespondantServiceImpl implements RespondantService  {
 	public void markError(Respondant respondant) {
 		respondantRepository.setErrorStatusById(true, respondant.getId());
 	}
+	
+	@Override
+	public void clearError(Long respondantId) {
+		respondantRepository.setErrorStatusById(false, respondantId);	
+	}
+
+	@Override
+	public void clearErrors(List<Long> respondantIds) {
+		respondantRepository.setErrorStatusByIds(false, respondantIds);	
+	}
 
 	@Override
 	public boolean isGraderMinMet(Respondant respondant) {
@@ -471,4 +508,36 @@ public class RespondantServiceImpl implements RespondantService  {
 		
 		return (completed >= minGraders);
 	}
+
+	@Override
+	public List<String> getWarningMessages(Respondant respondant) {
+		List<Grader> graders = graderRepository.findAllByRespondantId(respondant.getId());
+		List<String> emails = Lists.newArrayList();
+		List<String> ipAddresses = Lists.newArrayList();
+		boolean dupGrader = false;
+		boolean dupResp = false;
+		for (Grader grader : graders) {
+			if (grader.getType() != Grader.TYPE_PERSON) continue;
+			String ipAddress = grader.getIpAddress();
+			if (ipAddress != null) {
+				if (ipAddress.equalsIgnoreCase(respondant.getIpAddress())) dupResp = true;
+				for (String check : ipAddresses) if (check.equalsIgnoreCase(ipAddress)) dupGrader = true;
+			}
+
+			String email = grader.getPerson().getEmail();
+			if (email.equalsIgnoreCase(respondant.getPerson().getEmail())) dupResp = true;
+			for (String check : emails) if (check.equalsIgnoreCase(email)) dupGrader = true;
+			
+			if (dupGrader || dupResp) break;
+			emails.add(email);
+			if (ipAddress != null) ipAddresses.add(ipAddress);
+		}
+				
+		List<String> messages = Lists.newArrayList();
+		if (dupGrader) messages.add("Some references share the same email or IP address.");
+		if (dupResp) messages.add("Candidate email or IP address matches a reference.");
+		return messages;
+	}
+
+	
 }

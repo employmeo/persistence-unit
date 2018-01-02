@@ -34,6 +34,9 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	
 	@Query
 	public Respondant findByPersonIdAndPositionId(Long personId, Long positionId);
+	
+	@Query
+	public List<Respondant> findAllByPositionIdAndTypeAndRespondantStatusGreaterThan(Long positionId, int type, int status);
 
 	@Query
 	public Page<Respondant> findAllByAccountId(Long accountId, Pageable  pageRequest);
@@ -72,9 +75,25 @@ public interface RespondantRepository extends PagingAndSortingRepository<Respond
 	public Page<Respondant> findAllByAccountIdAndLocationIdInAndPositionIdAndTypeAndRespondantStatusBetweenAndCreatedDateBetween(Long accountId, List<Long> locationIds, Long positionId, Integer type, Integer statusLow, Integer statusHigh, Timestamp fromDate, Timestamp toDate, Pageable  pageRequest);
 	
 	@Query
+	public Page<Respondant> findAllByErrorStatus(Boolean errorStatus, Pageable pageRequest);
+	
+	@Query
+	public Page<Respondant> findAllByAccountIdAndErrorStatus(Long accountId, Boolean errorStatus, Pageable pageRequest);
+	
+	@Query
+	public Page<Respondant> findAllByRespondantStatusInAndErrorStatus(List<Integer> statuses, Boolean errorStatus, Pageable  pageRequest);
+	
+	@Query
+	public Page<Respondant> findAllByAccountIdAndRespondantStatusInAndErrorStatus(Long accountId, List<Integer> statuses, Boolean errorStatus, Pageable  pageRequest);
+	
+	@Query
 	public List<Respondant> findAllByRespondantStatusInOrderByFinishTimeDesc(List<Integer> scoringEligibleRespondantStatuses);
 
 	@Modifying
 	@Query("update Respondant respondant set respondant.errorStatus = ?1 where respondant.id = ?2")
 	public void setErrorStatusById(Boolean status, Long id);
+	
+	@Modifying
+	@Query("update Respondant respondant set respondant.errorStatus = ?1 where respondant.id in ?2")
+	public void setErrorStatusByIds(Boolean status, List<Long> ids);
 }
