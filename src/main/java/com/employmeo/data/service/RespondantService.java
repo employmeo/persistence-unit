@@ -35,6 +35,8 @@ public interface RespondantService {
 	
 	List<Respondant> getAllRespondantsByStatus(@NonNull Integer status);
 	
+	List<Respondant> getScoredApplicantsByPosition(Long positionId);
+	
 	Page<Respondant> getByAccountId(@NonNull Long accountId, @NonNull Integer pageNumber, @NonNull Integer pageSize);
 
 	Page<Respondant> getByAccountId(@NonNull Long accountId);

@@ -3,6 +3,7 @@ package com.talytica.common.service;
 import java.io.File;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,6 +38,9 @@ public class StorageServiceImpl implements StorageService{
 	
 	@Value("respondants/")
 	private String respondantMediaFolder;
+
+	@Value("analytics/")
+	private String analyticsFolder;
 	
 	@Value("accounts/")
 	private String accountMediaFolder;
@@ -45,6 +49,8 @@ public class StorageServiceImpl implements StorageService{
 	private String coreMediaFolder;
 	
 	private HashMap<String,List<S3ObjectSummary>> directoryLists;
+	
+	private final long THIRTY_MINUTES = (long) 30 *60 * 1000;
 	
 	@Override
 	public String uploadRespondantMediaFile(File media) {
@@ -68,10 +74,21 @@ public class StorageServiceImpl implements StorageService{
 	        s3Client.putObject(new PutObjectRequest(s3BucketName, key, media)
 	        			.withCannedAcl(CannedAccessControlList.PublicRead));
 		} catch (Exception e) {
-			log.error("Failed to save file: {} to url: {}", media.getName());
+			log.error("Failed to save file: {} to url: {}", media.getName(), url);
 			return null; 
 		}
 		return url;
+	}
+	
+	@Override
+	public void uploadAnalyticsFile(File csv, String filename) {
+		String key = environmentPath + "/" + analyticsFolder + filename;
+		try {	
+	        s3Client.putObject(new PutObjectRequest(s3BucketName, key, csv));
+		} catch (Exception e) {
+			log.error("Failed to save file: {} to {}", csv.getName(),filename);
+			throw e;
+		}
 	}
 	
 	@Override
@@ -102,9 +119,37 @@ public class StorageServiceImpl implements StorageService{
         return folders;
 	}
 	
+	@Override
+	public List<S3ObjectSummary> getDirectoryList(String prefix) {
+			
+		List<S3ObjectSummary> files = new ArrayList<S3ObjectSummary>();
+		ObjectListing objectListing = s3Client.listObjects(new ListObjectsRequest().withBucketName(s3BucketName).withPrefix(prefix));	
+		for (S3ObjectSummary summary : objectListing.getObjectSummaries()) {
+			if (summary.getSize() > 0) files.add(summary);
+		}
+        return files;
+	}
+	
+	@Override
+	public String getEnvPath() {
+		return this.environmentPath;
+	}
+	
 	@PostConstruct
 	private void initializeDirectories() {
 		this.directoryLists = new HashMap<String,List<S3ObjectSummary>>();
+	}
+
+	@Override
+	public String getS3Link(String key) {
+		Date expiration = new Date(new Date().getTime()+THIRTY_MINUTES);
+
+		return s3Client.generatePresignedUrl(s3BucketName, key, expiration).toExternalForm();
+	}
+	
+	@Override
+	public void deleteFile(String key) {
+		s3Client.deleteObject(s3BucketName, key);
 	}
 	
 }
