@@ -224,6 +224,7 @@ public class EmailServiceImpl implements EmailService {
 		if (respondant.getPosition() != null) pers.addSubstitution("[JOB_TITLE]", respondant.getPosition().getPositionName());		
 		pers.addTo(getEmailDeliveryAddress(respondant.getPerson().getEmail()));
 		if (bcc != null && !emailDeliveryOverrideEnabled) pers.addBcc(getEmailDeliveryAddress(bcc));
+		email.addCustomArg("person_id", respondant.getPersonId().toString());
 		email.addPersonalization(pers);
 
 		asynchSend(email);
@@ -294,8 +295,9 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[LINK]", link );
 		pers.addSubstitution("[FULL_NAME]", fullname);
 		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
-		pers.addTo(getEmailDeliveryAddress(respondant.getEmailRecipient()));		
+		pers.addTo(getEmailDeliveryAddress(respondant.getEmailRecipient()));
 		
+		email.addCustomArg("person_id", respondant.getPersonId().toString());
 		email.addPersonalization(pers);
 		asynchSend(email);
 	}
@@ -354,8 +356,9 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[GRADER_NAME]", grader.getPerson().getFirstName());
 		pers.addSubstitution("[GRADER_LASTNAME]", grader.getPerson().getLastName());
 		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
-		pers.addTo(getEmailDeliveryAddress(grader.getPerson().getEmail()));		
-
+		pers.addTo(getEmailDeliveryAddress(grader.getPerson().getEmail()));	
+		
+		email.addCustomArg("person_id", grader.getPersonId().toString());
 		email.addPersonalization(pers);
 
 		asynchSend(email);
