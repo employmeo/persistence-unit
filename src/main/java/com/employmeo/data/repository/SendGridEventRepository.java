@@ -12,6 +12,6 @@ import com.employmeo.data.model.SendGridEmailEvent;
 public interface SendGridEventRepository extends PagingAndSortingRepository<SendGridEmailEvent, Long> {
 	
 	@Query
-	public List<SendGridEmailEvent> findAllByPerson_idOrderByTime_stamp(Long personId);
+	public List<SendGridEmailEvent> findAllByPersonIdOrderByTimeStamp(Long personId);
 
 }

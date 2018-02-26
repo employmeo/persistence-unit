@@ -41,7 +41,8 @@ public class SendGridEmailEvent implements Serializable {
     public Long sg_user_id;
 	
 	@Column(name = "person_id")
-    public Long person_id;
+    @SerializedName("person_id")
+    public Long personId;
 	
 	@Column(name = "sg_message_id")
     public String sg_message_id;
@@ -56,7 +57,7 @@ public class SendGridEmailEvent implements Serializable {
     public String email;
 	
 	@Column(name = "time_stamp")
-    public Long timestamp;
+	public Long timeStamp;
 	
 	@Column(name = "asm_group_id")
     public String asm_group_id;
