@@ -12,9 +12,9 @@ import com.employmeo.data.model.SendGridEmailEvent;
 public interface SendGridEventRepository extends PagingAndSortingRepository<SendGridEmailEvent, Long> {
 	
 	@Query
-	public List<SendGridEmailEvent> findAllByPersonIdOrderByTimeStamp(String person_id);
+	public List<SendGridEmailEvent> findAllByPersonIdOrderByTimeStampDesc(String person_id);
 
 	@Query
-	public List<SendGridEmailEvent> findAllByEmailOrderByTimeStamp(String email);
+	public List<SendGridEmailEvent> findAllByEmailOrderByTimeStampDesc(String email);
 
 }
