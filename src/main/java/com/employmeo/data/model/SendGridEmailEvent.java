@@ -1,16 +1,20 @@
 package com.employmeo.data.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.talytica.common.json.UNIXTimeDeserializer;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,6 +30,8 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class SendGridEmailEvent implements Serializable {
 	
+	
+	public static final Date LONG_AGO = new Date(1337969592);
 	@Transient
 	private static final long serialVersionUID = 361536473629795725L;
 
@@ -40,8 +46,8 @@ public class SendGridEmailEvent implements Serializable {
 	@Column(name = "sg_user_id")
     public Long sg_user_id;
 	
+	@JsonProperty("person_id")
 	@Column(name = "person_id")
-    @SerializedName("person_id")
     public Long personId;
 	
 	@Column(name = "sg_message_id")
@@ -56,8 +62,10 @@ public class SendGridEmailEvent implements Serializable {
 	@Column(name = "email")
     public String email;
 	
+	@JsonProperty("timestamp")
+	@JsonDeserialize(using = UNIXTimeDeserializer.class)
 	@Column(name = "time_stamp")
-	public Long timeStamp;
+	public Date timeStamp;
 	
 	@Column(name = "asm_group_id")
     public String asm_group_id;
@@ -65,7 +73,14 @@ public class SendGridEmailEvent implements Serializable {
 	@Column(name = "url")
     public String url;
     
-    @SerializedName("smtp-id")
-    @Column(name = "smtp_id")
+	@JsonProperty("smtp-id")
+	@Column(name = "smtp_id")
     public String smtpId;
+	
+	@PrePersist
+	public void updateTimeStamp() {
+		if (this.timeStamp.before(LONG_AGO)) {
+			this.timeStamp = new Date();
+		}
+	}
 }
