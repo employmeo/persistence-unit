@@ -17,7 +17,9 @@ public interface PersonService {
 	Person save(@NonNull Person person);
 
 	Person getPersonById(@NonNull Long personId);
-	
-	List<SendGridEmailEvent> getEmailEvents(@NonNull Long personId);
+
+	List<SendGridEmailEvent> getEmailEvents(String email);
+
+	List<SendGridEmailEvent> getPersonEmailEvents(String personId);
 
 }
