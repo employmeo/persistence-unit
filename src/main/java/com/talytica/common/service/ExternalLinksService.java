@@ -31,4 +31,6 @@ public interface ExternalLinksService {
 	
 	public String getIntegrationEcho();
 
+	public String getAssessmentLinkBase();
+
 }

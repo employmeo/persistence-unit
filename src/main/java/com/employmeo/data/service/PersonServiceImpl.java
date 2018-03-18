@@ -58,7 +58,12 @@ public class PersonServiceImpl implements PersonService  {
 	}
 
 	@Override
-	public List<SendGridEmailEvent> getEmailEvents(Long personId) {
-		return sendGridEventRepository.findAllByPersonIdOrderByTimeStamp(personId);
+	public List<SendGridEmailEvent> getPersonEmailEvents(String personId) {
+		return sendGridEventRepository.findAllByPersonIdOrderByTimeStampDesc(personId);
+	}
+	
+	@Override
+	public List<SendGridEmailEvent> getEmailEvents(String email) {
+		return sendGridEventRepository.findAllByEmailOrderByTimeStampDesc(email);
 	}
 }
