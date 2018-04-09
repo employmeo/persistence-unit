@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public User getUserByEmail(@NonNull String email) {
-		User user = userRepository.findByEmail(email);
+		User user = userRepository.findByEmailIgnoreCase(email);
 		log.debug("Retrieved for email {} entity {}", email, user);
 
 		return user;
