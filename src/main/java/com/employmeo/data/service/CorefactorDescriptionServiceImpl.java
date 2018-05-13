@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.employmeo.data.model.CorefactorDescription;
 import com.employmeo.data.repository.CorefactorDescriptionRepository;
 
-import jersey.repackaged.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +33,7 @@ public class CorefactorDescriptionServiceImpl implements CorefactorDescriptionSe
 
 	@Override
 	public CorefactorDescription getById(@NonNull Long id) {
-		CorefactorDescription corefactorDescription = corefactorDescriptionRepository.findOne(id);
+		CorefactorDescription corefactorDescription = corefactorDescriptionRepository.findById(id).get();
 		log.debug("Retrieved for id {} entity {}", id, corefactorDescription);
 
 		return corefactorDescription;
@@ -50,7 +50,7 @@ public class CorefactorDescriptionServiceImpl implements CorefactorDescriptionSe
 
 	@Override
 	public void delete(Long id) {
-		corefactorDescriptionRepository.delete(id);
+		corefactorDescriptionRepository.deleteById(id);
 		log.info("Deleted corefactorDescription {}", id);
 	}
 

@@ -1,6 +1,7 @@
 package com.employmeo.data.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,7 +16,7 @@ import com.employmeo.data.model.GraderConfig;
 import com.employmeo.data.repository.AccountSurveyRepository;
 import com.employmeo.data.repository.GraderConfigRepository;
 
-import jersey.repackaged.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,10 +33,12 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 	@Override
 	@Cacheable(value="asurveybyid")
 	public AccountSurvey getAccountSurveyById(@NonNull Long accountSurveyId) {
-		AccountSurvey accountSurvey = accountSurveyRepository.findOne(accountSurveyId);
-		log.debug("Retrieved account survey for id {} as: {}", accountSurveyId, accountSurvey);
-
-		return accountSurvey;
+		Optional<AccountSurvey> accountSurvey = accountSurveyRepository.findById(accountSurveyId);
+		if (accountSurvey.isPresent()) {
+			log.debug("Retrieved account survey for id {} as: {}", accountSurveyId, accountSurvey);
+			return accountSurvey.get();
+		}
+		return null;
 	}
 
 	@Override
@@ -58,8 +61,7 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 
 	@Override
 	public GraderConfig getGraderConfigById(Long configId) {
-
-		return graderConfigRepository.findOne(configId);
+		return graderConfigRepository.findById(configId).get();
 	}
 
 	@Override

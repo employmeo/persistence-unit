@@ -1,6 +1,7 @@
 package com.employmeo.data.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.employmeo.data.model.*;
 import com.employmeo.data.repository.*;
 
-import jersey.repackaged.com.google.common.collect.Lists;
-import jersey.repackaged.com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,10 +47,12 @@ public class SurveyServiceImpl implements SurveyService  {
 
 	@Override
 	public Survey getSurveyById(@NonNull Long surveyId) {
-		Survey survey = surveyRepository.findOne(surveyId);
-		log.debug("Retrieved for id {} entity {}", surveyId, survey.getName());
-
-		return survey;
+		Optional<Survey> survey = surveyRepository.findById(surveyId);
+		if (survey.isPresent()) {
+			log.debug("Retrieved for id {} entity {}", surveyId, survey.get().getName());
+			return survey.get();
+		}
+		return null;
 	}
 
 // -------------------------
@@ -83,7 +86,7 @@ public class SurveyServiceImpl implements SurveyService  {
 
 	@Override
 	public SurveySection getSurveySectionById(@NonNull SurveySectionPK surveySectionPK) {
-		SurveySection surveySection = surveySectionRepository.findOne(surveySectionPK);
+		SurveySection surveySection = surveySectionRepository.findById(surveySectionPK).get();
 		log.debug("Retrieved for id {} entity {}", surveySectionPK, surveySection.getName());
 
 		return surveySection;
@@ -109,14 +112,14 @@ public class SurveyServiceImpl implements SurveyService  {
 
 	@Override
 	public Iterable<SurveyQuestion> save(Iterable<SurveyQuestion> surveyQuestions) {
-		Iterable<SurveyQuestion> savedSurveyQuestions = surveyQuestionRepository.save(surveyQuestions);
+		Iterable<SurveyQuestion> savedSurveyQuestions = surveyQuestionRepository.saveAll(surveyQuestions);
 		log.debug("Saved multiple surveyQuestions");
 		return savedSurveyQuestions;
 	}
 	
 	@Override
 	public SurveyQuestion getSurveyQuestionById(@NonNull Long surveyQuestionId) {
-		SurveyQuestion surveyQuestion = surveyQuestionRepository.findOne(surveyQuestionId);
+		SurveyQuestion surveyQuestion = surveyQuestionRepository.findById(surveyQuestionId).get();
 		log.debug("Retrieved for id {} entity {}", surveyQuestionId, surveyQuestion);
 
 		return surveyQuestion;
@@ -124,10 +127,10 @@ public class SurveyServiceImpl implements SurveyService  {
 
 	@Override
 	public void removeQuestion(Long sqId) {
-		SurveyQuestion sq = surveyQuestionRepository.findOne(sqId);
+		SurveyQuestion sq = surveyQuestionRepository.findById(sqId).get();
 		Survey survey = getSurveyById(sq.getSurveyId());
 		survey.getSurveyQuestions().remove(sq);
-		surveyQuestionRepository.delete(sqId);
+		surveyQuestionRepository.deleteById(sqId);
 		log.info("Deleted survey question {}", sqId);		
 	}
 
@@ -137,13 +140,13 @@ public class SurveyServiceImpl implements SurveyService  {
     	Survey survey = getSurveyById(id.getSurveyId());
     	SurveySection surveySection = getSurveySectionById(id);
     	survey.getSurveySections().remove(surveySection);
-		surveySectionRepository.delete(id);
+		surveySectionRepository.deleteById(id);
 		log.info("Deleted survey section {}", id);	
 	}
 
 	@Override
 	public void delete(Long surveyId) {
-		surveyRepository.delete(surveyId);
+		surveyRepository.deleteById(surveyId);
 		log.info("Deleted survey {}", surveyId);		
 	}
 

@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.employmeo.data.model.*;
 import com.employmeo.data.repository.*;
 
-import jersey.repackaged.com.google.common.collect.Lists;
-import jersey.repackaged.com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -93,15 +93,17 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	@Override
 	public Respondant getRespondantById(@NonNull Long respondantId) {
-		Respondant respondant = respondantRepository.findOne(respondantId);
-		log.debug("Retrieved for id {} entity {}", respondantId, respondant);
-
-		return respondant;
+		Optional<Respondant> respondant = respondantRepository.findById(respondantId);
+		if (respondant.isPresent()){
+			log.debug("Retrieved for id {} entity {}", respondantId, respondant);
+			return respondant.get();
+		}
+		return null;
 	}
 
 	@Override
 	public Page<Respondant> getByAccountId(Long accountId, @NonNull @Min(value = 1) Integer pageNumber, @NonNull @Min(value = 1) @Max(value = 100) Integer pageSize) {
-		Pageable  pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
+		Pageable  pageRequest = PageRequest.of(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
 
 		Page<Respondant> respondants = respondantRepository.findAllByAccountId(accountId, pageRequest);
 		log.debug("Respondants for AccountId {} for pageNumber {}: {}", accountId, pageNumber, respondants);
@@ -133,10 +135,13 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	@Override
 	public RespondantScore getRespondantScoreById(@NonNull RespondantScorePK respondantScorePK) {
-		RespondantScore respondantScore = respondantScoreRepository.findOne(respondantScorePK);
-		log.debug("Retrieved for id {} entity {}", respondantScorePK, respondantScore);
-
-		return respondantScore;
+		Optional<RespondantScore> respondantScore = respondantScoreRepository.findById(respondantScorePK);
+		
+		if(respondantScore.isPresent()) {
+			log.debug("Retrieved for id {} entity {}", respondantScorePK, respondantScore);
+			return respondantScore.get();
+		}
+		return null;
 	}
 
 	@Override
@@ -166,8 +171,8 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	@Override
 	public Response saveResponse(@NonNull Long respondantId, @NonNull Long questionId, Integer responseValue, String responseText) {
-		Respondant respondant = respondantRepository.findOne(respondantId);
-		Question question = questionRepository.findOne(questionId);
+		Respondant respondant = respondantRepository.findById(respondantId).get();
+		Question question = questionRepository.findById(questionId).get();
 
 		Response response = new Response();
 		response.setQuestion(question);
@@ -230,7 +235,7 @@ public class RespondantServiceImpl implements RespondantService  {
 			@NonNull @Min(value = 1) @Max(value = 500) Integer pageSize
 			) {
 
-		Pageable  pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
+		Pageable  pageRequest = PageRequest.of(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
 
 		Page<Respondant> respondants = null;
 
@@ -265,7 +270,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	@Override
 	public Page<Respondant> getErrorStatusRespondants(Long accountId, List<Integer> statuses, Boolean errorStatus, Integer pageNumber) {
 
-		Pageable  pageRequest = new PageRequest(pageNumber - 1, DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "id");
+		Pageable  pageRequest = PageRequest.of(pageNumber - 1, DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "id");
 		Page<Respondant> respondants = null;
 
 		if ((accountId != null) && (!statuses.isEmpty())) {
@@ -343,7 +348,7 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	@Override
 	public Set<Response> getGradeableResponses(Long respondantId) {
-		Respondant respondant = respondantRepository.findOne(respondantId);
+		Respondant respondant = respondantRepository.findById(respondantId).get();
 		Set<Response> allresponses = responseRepository.findAllByRespondantId(respondant.getId());
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> gradeables = new HashSet<Response>();
@@ -361,7 +366,7 @@ public class RespondantServiceImpl implements RespondantService  {
 
 	@Override
 	public Set<Response> getAudioResponses(Long respondantId) {
-		Respondant respondant = respondantRepository.findOne(respondantId);
+		Respondant respondant = respondantRepository.findById(respondantId).get();
 		Set<Response> allresponses = responseRepository.findAllByRespondantId(respondant.getId());
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> audioresponses = new HashSet<Response>();
@@ -384,7 +389,7 @@ public class RespondantServiceImpl implements RespondantService  {
 	
 	@Override
 	public Set<Response> getVideoResponses(Long respondantId) {
-		Respondant respondant = respondantRepository.findOne(respondantId);
+		Respondant respondant = respondantRepository.findById(respondantId).get();
 		Set<Response> allresponses = responseRepository.findAllByRespondantId(respondant.getId());
 		Set<SurveyQuestion> questionset= respondant.getAccountSurvey().getSurvey().getSurveyQuestions();
 		Set<Response> videoresponses = new HashSet<Response>();
@@ -443,7 +448,7 @@ public class RespondantServiceImpl implements RespondantService  {
 		nvps.forEach(nvp -> {
 			if (null == nvp.getNameId()) nvp.setNameId(getNVPNameId(nvp.getName()));
 			});
-		return respondantNVPRepository.save(nvps);
+		return respondantNVPRepository.saveAll(nvps);
 	}
 
 	@Override
@@ -537,6 +542,18 @@ public class RespondantServiceImpl implements RespondantService  {
 		if (dupGrader) messages.add("Some references share the same email or IP address.");
 		if (dupResp) messages.add("Candidate email or IP address matches a reference.");
 		return messages;
+	}
+
+	@Override
+	public Response getResponseById(Long responseId) {
+		Optional<Response> response = responseRepository.findById(responseId);
+		if (response.isPresent()) return response.get();
+		return null;
+	}
+
+	@Override
+	public Iterable<RespondantScore> saveAll(Iterable<RespondantScore> respondantScores) {
+		return respondantScoreRepository.saveAll(respondantScores);
 	}
 
 	

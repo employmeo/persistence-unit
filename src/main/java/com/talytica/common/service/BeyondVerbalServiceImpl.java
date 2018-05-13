@@ -65,7 +65,7 @@ public class BeyondVerbalServiceImpl implements BeyondVerbalService {
 	@Override
 	public JSONObject analyzeResponse(Long responseId) {
 
-		Response response = responseRepository.findOne(responseId);
+		Response response = responseRepository.findById(responseId).get();
 		log.debug("New Analysis requested for: {}" , response);
 		String recordingId = startAnalysis(response.getId());	
 		JSONObject json = analyzeMedia(response.getResponseMedia(), recordingId);
