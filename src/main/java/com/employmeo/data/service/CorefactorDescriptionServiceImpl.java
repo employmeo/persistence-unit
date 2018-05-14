@@ -33,7 +33,8 @@ public class CorefactorDescriptionServiceImpl implements CorefactorDescriptionSe
 
 	@Override
 	public CorefactorDescription getById(@NonNull Long id) {
-		CorefactorDescription corefactorDescription = corefactorDescriptionRepository.findById(id).get();
+		//CorefactorDescription corefactorDescription = corefactorDescriptionRepository.findById(id).get();
+		CorefactorDescription corefactorDescription = corefactorDescriptionRepository.findOne(id);
 		log.debug("Retrieved for id {} entity {}", id, corefactorDescription);
 
 		return corefactorDescription;
@@ -50,7 +51,8 @@ public class CorefactorDescriptionServiceImpl implements CorefactorDescriptionSe
 
 	@Override
 	public void delete(Long id) {
-		corefactorDescriptionRepository.deleteById(id);
+		//corefactorDescriptionRepository.deleteById(id);
+		corefactorDescriptionRepository.delete(id);
 		log.info("Deleted corefactorDescription {}", id);
 	}
 

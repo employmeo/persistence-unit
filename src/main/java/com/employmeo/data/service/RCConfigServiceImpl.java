@@ -19,7 +19,8 @@ public class RCConfigServiceImpl implements RCConfigService {
 	
 	@Override
 	public ReferenceCheckConfig getRCConfig(Long rccId) {
-		return rccRepository.findById(rccId).get();
+		//return rccRepository.findById(rccId).get();
+		return rccRepository.findOne(rccId);
 	}
 
 	@Override
@@ -29,13 +30,13 @@ public class RCConfigServiceImpl implements RCConfigService {
 
 	@Override
 	public ReferenceCheckConfig save(ReferenceCheckConfig rcConfig) {
-		// TODO Auto-generated method stub
 		return rccRepository.save(rcConfig);
 	}
 
 	@Override
 	public void deleteRCConfig(Long rccId) {
-		rccRepository.deleteById(rccId);	
+		//rccRepository.deleteById(rccId);	
+		rccRepository.delete(rccId);	
 	}
 	
 }

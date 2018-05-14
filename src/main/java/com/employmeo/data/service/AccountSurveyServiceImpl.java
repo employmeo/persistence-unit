@@ -33,12 +33,13 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 	@Override
 	@Cacheable(value="asurveybyid")
 	public AccountSurvey getAccountSurveyById(@NonNull Long accountSurveyId) {
-		Optional<AccountSurvey> accountSurvey = accountSurveyRepository.findById(accountSurveyId);
-		if (accountSurvey.isPresent()) {
-			log.debug("Retrieved account survey for id {} as: {}", accountSurveyId, accountSurvey);
-			return accountSurvey.get();
-		}
-		return null;
+		//Optional<AccountSurvey> accountSurvey = accountSurveyRepository.findById(accountSurveyId);
+		//if (accountSurvey.isPresent()) {
+		//	log.debug("Retrieved account survey for id {} as: {}", accountSurveyId, accountSurvey);
+		//	return accountSurvey.get();
+		//}
+		//return null;
+		return accountSurveyRepository.findOne(accountSurveyId);
 	}
 
 	@Override
@@ -61,7 +62,8 @@ public class AccountSurveyServiceImpl implements AccountSurveyService {
 
 	@Override
 	public GraderConfig getGraderConfigById(Long configId) {
-		return graderConfigRepository.findById(configId).get();
+		//return graderConfigRepository.findById(configId).get();
+		return graderConfigRepository.findOne(configId);
 	}
 
 	@Override

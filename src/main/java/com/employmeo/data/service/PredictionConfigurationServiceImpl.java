@@ -44,7 +44,8 @@ public class PredictionConfigurationServiceImpl implements PredictionConfigurati
 
 	@Override
 	public PredictionModel getPredictionModelById(@NonNull Long predictionModelId) {
-		PredictionModel predictionModel = predictionModelRepository.findById(predictionModelId).get();
+		//PredictionModel predictionModel = predictionModelRepository.findById(predictionModelId).get();
+		PredictionModel predictionModel = predictionModelRepository.findOne(predictionModelId);
 		log.debug("Retrieved for id {} entity {}", predictionModelId, predictionModel);
 
 		return predictionModel;
@@ -70,7 +71,8 @@ public class PredictionConfigurationServiceImpl implements PredictionConfigurati
 
 	@Override
 	public PredictionTarget getPredictionTargetById(@NonNull Long predictionTargetId) {
-		PredictionTarget predictionTarget = predictionTargetRepository.findById(predictionTargetId).get();
+		//PredictionTarget predictionTarget = predictionTargetRepository.findById(predictionTargetId).get();
+		PredictionTarget predictionTarget = predictionTargetRepository.findOne(predictionTargetId);
 		log.debug("Retrieved for id {} entity {}", predictionTargetId, predictionTarget);
 
 		return predictionTarget;
@@ -96,7 +98,8 @@ public class PredictionConfigurationServiceImpl implements PredictionConfigurati
 
 	@Override
 	public PositionPredictionConfiguration getPositionPredictionConfigurationById(@NonNull Long positionPredictionConfigurationId) {
-		PositionPredictionConfiguration positionPredictionConfiguration = positionPredictionConfigRepository.findById(positionPredictionConfigurationId).get();
+		//PositionPredictionConfiguration positionPredictionConfiguration = positionPredictionConfigRepository.findById(positionPredictionConfigurationId).get();
+		PositionPredictionConfiguration positionPredictionConfiguration = positionPredictionConfigRepository.findOne(positionPredictionConfigurationId);
 		log.debug("Retrieved for id {} entity {}", positionPredictionConfigurationId, positionPredictionConfiguration);
 
 		return positionPredictionConfiguration;

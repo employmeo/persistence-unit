@@ -488,7 +488,8 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public Iterable<SendGridEmailEvent> saveAll(Iterable<SendGridEmailEvent> events) {
 		
-		return sendGridEventRepository.saveAll(events);
+		//return sendGridEventRepository.saveAll(events);
+		return sendGridEventRepository.save(events);
 	}
 
 }
