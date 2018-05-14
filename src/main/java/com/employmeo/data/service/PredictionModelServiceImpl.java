@@ -12,8 +12,8 @@ import com.employmeo.data.repository.LinearRegressionConfigRepository;
 import com.employmeo.data.repository.PredictionModelRepository;
 import com.employmeo.data.repository.PredictionTargetRepository;
 
-import jersey.repackaged.com.google.common.collect.Lists;
-import jersey.repackaged.com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,6 +52,7 @@ public class PredictionModelServiceImpl implements PredictionModelService{
 	
 	@Override
 	public LinearRegressionConfig getLinearRegressionConfigurationById(Long configId) {
+		//return linearRegressionConfigRepository.findById(configId).get();
 		return linearRegressionConfigRepository.findOne(configId);
 	}	
 	
@@ -79,6 +80,7 @@ public class PredictionModelServiceImpl implements PredictionModelService{
 	public PredictionModel getModelById(@NonNull Long modelId) {
 		log.debug("Fetching prediction model by name {}", modelId);
 
+		//PredictionModel predictionModel = predictionModelRepository.findById(modelId).get();
 		PredictionModel predictionModel = predictionModelRepository.findOne(modelId);
 		log.debug("PredictionModel for modelName {} : {}", modelId, predictionModel);
 
@@ -102,6 +104,7 @@ public class PredictionModelServiceImpl implements PredictionModelService{
 
 	@Override
 	public PredictionTarget getTargetById(Long targetId) {
+		//return predictionTargetRepository.findById(targetId).get();
 		return predictionTargetRepository.findOne(targetId);
 	}
 

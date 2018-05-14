@@ -15,7 +15,7 @@ import com.employmeo.data.service.AccountService;
 import com.employmeo.data.service.CorefactorService;
 import com.employmeo.data.service.RespondantService;
 
-import jersey.repackaged.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;

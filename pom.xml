@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.employmeo</groupId>
+	<groupId>com.talytica</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.1.16</version>
+	<version>0.2.0</version>
 	<name>Talytica Persistence Unit</name>
 	<description>Talytica persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
@@ -11,9 +11,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<springframework.version>4.3.8.RELEASE</springframework.version>
-		<springdata-jpa.version>1.10.3.RELEASE</springdata-jpa.version>
-		<springboot.version>1.4.6.RELEASE</springboot.version>
+		<springframework.version>5.0.5.RELEASE</springframework.version>
+		<springdata-jpa.version>1.11.12.RELEASE</springdata-jpa.version>
+		<springboot.version>1.5.13.RELEASE</springboot.version>
 		<hibernate.version>5.2.3.Final</hibernate.version>
 		<postgres-version>9.4.1208</postgres-version>
 		<logback.version>1.0.13</logback.version>
@@ -27,12 +27,13 @@
 		<dbdeploy.dbms>pgsql</dbdeploy.dbms>	
 		<!-- Needed for Commons Unit -->
 		<metrics.version>3.1.3</metrics.version>
-		<org-json.version>20160810</org-json.version>
+		<org-json.version>20180130</org-json.version>
 		<sendgrid.version>3.1.0</sendgrid.version>
 		<stripe.version>5.8.0</stripe.version>
 		<commons-math-version>3.6.1</commons-math-version>
 		<commons-lang3.version>3.5</commons-lang3.version>
 		<commons-file.version>1.3.1</commons-file.version>
+		<guava.version>23.0</guava.version>
 		<spring-cloud-version>1.2.0.RELEASE</spring-cloud-version>
 	</properties>
 	<dependencies>
@@ -156,6 +157,11 @@
 			<artifactId>commons-math3</artifactId>
 			<version>${commons-math-version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
+		</dependency>	
 		<!-- web rest client and security -->
 		<dependency>
 			<groupId>org.glassfish.jersey.connectors</groupId>

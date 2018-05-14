@@ -1,5 +1,6 @@
 package com.employmeo.data.service;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import com.employmeo.data.model.Question;
 import com.employmeo.data.repository.AnswerRepository;
 import com.employmeo.data.repository.QuestionRepository;
 
-import jersey.repackaged.com.google.common.collect.Sets;
+import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,9 +48,13 @@ public class QuestionServiceImpl implements QuestionService  {
 	@Override
 	@Cacheable(value="questions")
 	public Question getQuestionById(@NonNull Long questionId) {
-		Question question = questionRepository.findOne(questionId);
-		log.debug("Retrieved question by id {}", questionId);
-		return question;
+		//Optional<Question> question = questionRepository.findById(questionId);
+		//if(question.isPresent()) {
+		//	log.debug("Retrieved question by id {}", questionId);
+		//	return question.get();
+		//}
+		//return null;
+		return questionRepository.findOne(questionId);
 	}
 
 	@Override
@@ -72,6 +77,7 @@ public class QuestionServiceImpl implements QuestionService  {
 	@Override
 	@Cacheable(value="answerbyid")
 	public Answer getAnswerById(@NonNull Long answerId) {
+		//Answer answer = answerRepository.findById(answerId).get();
 		Answer answer = answerRepository.findOne(answerId);
 		log.debug("Retrieved for id {} entity {}", answerId, answer);
 
@@ -80,12 +86,14 @@ public class QuestionServiceImpl implements QuestionService  {
 
 	@Override
 	public void deleteQuestion(Long questionId) {
+		//questionRepository.deleteById(questionId);
 		questionRepository.delete(questionId);
 		log.debug("Deleted question {}", questionId);	
 	}
 
 	@Override
 	public void deleteAnswer(Long answerId) {
+		//answerRepository.deleteById(answerId);
 		answerRepository.delete(answerId);
 		log.debug("Deleted answer {}", answerId);
 	}

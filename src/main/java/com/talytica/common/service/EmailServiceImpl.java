@@ -13,8 +13,10 @@ import com.employmeo.data.model.Account;
 import com.employmeo.data.model.AccountSurvey;
 import com.employmeo.data.model.Grader;
 import com.employmeo.data.model.Respondant;
+import com.employmeo.data.model.SendGridEmailEvent;
 import com.employmeo.data.model.Survey;
 import com.employmeo.data.model.User;
+import com.employmeo.data.repository.SendGridEventRepository;
 import com.employmeo.data.service.AccountSurveyService;
 import com.sendgrid.Content;
 import com.sendgrid.Email;
@@ -97,6 +99,9 @@ public class EmailServiceImpl implements EmailService {
 
 	@Autowired
 	AccountSurveyService accountSurveyService;
+	
+	@Autowired
+	SendGridEventRepository sendGridEventRepository;
 	
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
 	private Email FROM_ADDRESS;
@@ -478,6 +483,13 @@ public class EmailServiceImpl implements EmailService {
 			      }
 			}
 		});
+	}
+
+	@Override
+	public Iterable<SendGridEmailEvent> saveAll(Iterable<SendGridEmailEvent> events) {
+		
+		//return sendGridEventRepository.saveAll(events);
+		return sendGridEventRepository.save(events);
 	}
 
 }

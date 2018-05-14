@@ -1,6 +1,7 @@
 package com.employmeo.data.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import com.employmeo.data.model.SendGridEmailEvent;
 import com.employmeo.data.repository.PersonRepository;
 import com.employmeo.data.repository.SendGridEventRepository;
 
-import jersey.repackaged.com.google.common.collect.Sets;
+import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,10 +45,13 @@ public class PersonServiceImpl implements PersonService  {
 
 	@Override
 	public Person getPersonById(@NonNull Long personId) {
-		Person person = personRepository.findOne(personId);
-		log.debug("Retrieved for id {} entity {}", personId, person);
-
-		return person;
+		//Optional<Person> person = personRepository.findById(personId);
+		//if(person.isPresent()) {
+		//	log.debug("Retrieved for id {} entity {}", personId, person);
+		//	return person.get();
+		//}
+		//return null;
+		return personRepository.findOne(personId);
 	}
 
 	@Override

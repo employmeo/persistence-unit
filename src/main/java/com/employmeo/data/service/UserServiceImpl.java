@@ -1,6 +1,7 @@
 package com.employmeo.data.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ import com.employmeo.data.repository.GraderConfigRepository;
 import com.employmeo.data.repository.LocationRepository;
 import com.employmeo.data.repository.UserRepository;
 
-import jersey.repackaged.com.google.common.collect.Lists;
-import jersey.repackaged.com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,10 +52,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getUserById(@NonNull Long userId) {
-		User user = userRepository.findOne(userId);
-		log.debug("Retrieved for id {} entity {}", userId, user);
-
-		return user;
+		//Optional<User> user = userRepository.findById(userId);
+		//if (user.isPresent()) {
+		//	log.debug("Retrieved for id {} entity {}", userId, user);
+		//	return user.get();
+		//}
+		//return null;
+		return userRepository.findOne(userId);
 	}
 	
 	@Override
@@ -81,7 +85,8 @@ public class UserServiceImpl implements UserService {
 		Long keyId = user.getLocationRestrictionId();
 		if (keyId != null) {
 			locationIds.add(keyId);
-			Location location = locationRepository.findOne(keyId);
+//			Location location = locationRepository.findById(keyId).get(); //blows up if Loc not there
+			Location location = locationRepository.findOne(keyId); 
 			if ((location.getType() == Location.TYPE_HIDDEN_PARENT) || (location.getType() == Location.TYPE_VISIBLE_PARENT)) {
 				List<Location> locations = getChildrenFor(location);
 				for (Location loc : locations) locationIds.add(loc.getId());
