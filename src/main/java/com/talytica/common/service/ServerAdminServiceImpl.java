@@ -27,7 +27,7 @@ public class ServerAdminServiceImpl implements ServerAdminService {
 	
 	@Value("${com.talytica.integrationserver.user:test}")
 	private String userName;
-	@Value("${com.talytica.integrationserver.user:password}")
+	@Value("${com.talytica.integrationserver.password:password}")
 	private String userPassword;
 	
 	@Value("${com.talytica.urls.assessment}")
