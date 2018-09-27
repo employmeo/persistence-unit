@@ -74,6 +74,13 @@ public class Survey implements Serializable {
 	@Column(name = "survey_foreign_id")
 	private String foreignId;
 
+	@Column(name = "survey_default_preamble")
+	private String defaultPreamble;
+	
+	@Column(name = "survey_stripe_plan_id")
+	private String stripePlanId;
+
+	
 	// bi-directional many-to-one association to SurveyQuestion
 	@JsonManagedReference
 	@Fetch(FetchMode.SUBSELECT)

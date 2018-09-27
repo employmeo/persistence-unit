@@ -98,6 +98,9 @@ public class Account implements Serializable {
 	@Column(name = "account_custom_profile_id")
 	private Long customProfileId;
 	
+	@Column(name = "account_promo")
+	private String promo;
+	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "account_custom_profile_id", insertable=false, updatable=false)
