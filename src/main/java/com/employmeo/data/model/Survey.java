@@ -80,6 +80,9 @@ public class Survey implements Serializable {
 	@Column(name = "survey_stripe_plan_id")
 	private String stripePlanId;
 
+	@Column(name = "survey_recommended_template")
+	private String recommendedTemplate;
+
 	
 	// bi-directional many-to-one association to SurveyQuestion
 	@JsonManagedReference

@@ -27,6 +27,7 @@ public class Account implements Serializable {
 	public static final int STATUS_NEW = 1; // (not set up yet - e.g., no pos / survey, etc)
 	public static final int STATUS_BENCHMARKING = 50;
 	public static final int STATUS_READY = 100;
+	public static final int STATUS_WITH_TODOS = 101;
 	public static final int STATUS_HOLD = 500;
 	public static final int STATUS_CLOSED = 1000;
 	
