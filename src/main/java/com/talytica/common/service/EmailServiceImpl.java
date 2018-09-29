@@ -187,6 +187,7 @@ public class EmailServiceImpl implements EmailService {
 		if (Survey.TYPE_PHONE == as.getSurvey().getSurveyType()) {
 		
 			String idnum = respondant.getPayrollId();
+			if (as.getPrice() == 50d) idnum = respondant.getId().toString();
 			String phonenum = as.getPhoneNumber();
 		
 			body = "Dear " + respondant.getPerson().getFirstName() + ",\n" + "\n"

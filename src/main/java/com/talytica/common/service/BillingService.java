@@ -21,7 +21,6 @@ public interface BillingService {
 	
 	void clearCache();
 
-
 	Customer createCustomerFor(Account account) throws StripeException;
 
 	Customer createCustomerFor(Account account, User user) throws StripeException;
@@ -29,6 +28,9 @@ public interface BillingService {
 	Subscription subscribeCustomerToPlan(Customer customer, String planId) throws StripeException;	
 
 	Subscription subscribeCustomerToPlan(String customerId, String planId, Integer quantity, Integer trialPeriod)
+			throws StripeException;
+	
+	Subscription subscribeCustomerToPlan(String customerId, String planId, Integer quantity, Integer trialPeriod, String coupon)
 			throws StripeException;
 
 	Card addCardToCustomer(String stripeToken, Account account) throws StripeException;
