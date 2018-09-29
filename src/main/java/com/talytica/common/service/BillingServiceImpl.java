@@ -110,11 +110,15 @@ public class BillingServiceImpl implements BillingService {
 	@Override
 	public Subscription subscribeCustomerToPlan(Customer customer, String planId) throws StripeException {
 
-		return subscribeCustomerToPlan(customer.getId(), planId, 1, 10);
+		return subscribeCustomerToPlan(customer.getId(), planId, 1, 30, null);
+	}
+	@Override
+	public Subscription subscribeCustomerToPlan(String stripeId, String planId, Integer quantity, Integer trialPeriod) throws StripeException {
+		return subscribeCustomerToPlan(stripeId, planId, quantity, trialPeriod, null);
 	}
 	
 	@Override
-	public Subscription subscribeCustomerToPlan(String stripeId, String planId, Integer quantity, Integer trialPeriod) throws StripeException {
+	public Subscription subscribeCustomerToPlan(String stripeId, String planId, Integer quantity, Integer trialPeriod, String coupon) throws StripeException {
 
 		Map<String, Object> item = new HashMap<String, Object>();
 		item.put("plan", planId);
