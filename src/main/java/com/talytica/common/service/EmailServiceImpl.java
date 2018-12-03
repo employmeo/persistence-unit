@@ -227,6 +227,8 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[FNAME]", respondant.getPerson().getFirstName());
 		pers.addSubstitution("[FULL_NAME]", respondant.getPerson().getFirstName() + " " +respondant.getPerson().getLastName());
 		pers.addSubstitution("[ACCOUNT_NAME]",as.getAccount().getAccountName());
+		pers.addSubstitution("[REF_LINK]", externalLinksService.getReferenceShareableLink(respondant));
+		
 		if (respondant.getPosition() != null) pers.addSubstitution("[JOB_TITLE]", respondant.getPosition().getPositionName());		
 		pers.addTo(getEmailDeliveryAddress(respondant.getPerson().getEmail()));
 		if (bcc != null && !emailDeliveryOverrideEnabled) pers.addBcc(getEmailDeliveryAddress(bcc));
