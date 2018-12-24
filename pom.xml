@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.talytica</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.2.3</version>
+	<version>0.2.4-SNAPSHOT</version>
 	<name>Talytica Persistence Unit</name>
 	<description>Talytica persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
@@ -32,7 +32,7 @@
 		<stripe.version>5.8.0</stripe.version>
 		<commons-math-version>3.6.1</commons-math-version>
 		<commons-lang3.version>3.5</commons-lang3.version>
-		<commons-file.version>1.3.1</commons-file.version>
+		<commons-file.version>[1.3.3,)</commons-file.version>
 		<guava.version>23.0</guava.version>
 		<spring-cloud-version>1.2.0.RELEASE</spring-cloud-version>
 	</properties>
