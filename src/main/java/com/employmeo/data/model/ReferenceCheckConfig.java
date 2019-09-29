@@ -46,4 +46,7 @@ public class ReferenceCheckConfig implements Serializable {
 		@Column(name = "rcc_allow_anonymous")
 		private Boolean allowAnonymous = Boolean.FALSE;
 		
+		@Column(name = "rcc_email_resp_details")
+		private Boolean sendEmailDetails = Boolean.FALSE;
+		
 }
