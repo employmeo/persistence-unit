@@ -1,5 +1,6 @@
 package com.talytica.common.service;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -30,15 +31,18 @@ import com.employmeo.data.model.RespondantScore;
 import com.employmeo.data.model.SendGridEmailEvent;
 import com.employmeo.data.model.Survey;
 import com.employmeo.data.model.User;
-import com.employmeo.data.repository.QuestionTypeRepository;
+import com.twilio.Twilio;
+import com.twilio.http.HttpMethod;
+import com.twilio.http.TwilioRestClient;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.twiml.VoiceResponse;
+import com.twilio.type.PhoneNumber;
 import com.employmeo.data.repository.SendGridEventRepository;
 import com.employmeo.data.service.AccountSurveyService;
 import com.employmeo.data.service.CorefactorService;
 import com.employmeo.data.service.GraderService;
 import com.employmeo.data.service.PredictionModelService;
-import com.employmeo.data.service.QuestionService;
 import com.employmeo.data.service.RespondantService;
-import com.google.common.collect.Lists;
 import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
@@ -119,6 +123,12 @@ public class EmailServiceImpl implements EmailService {
 	@Value("${email.delivery.replyto:info@talytica.com}")
 	private String REPLYTO_EMAIL_ADDRESS;
 	
+	@Value("${com.talytica.apis.twilio.sid}")
+	private String ACCOUNT_SID;
+	
+	@Value("${com.talytica.apis.twilio.token}")
+	private String AUTH_TOKEN;
+		
 	@Autowired
 	ExternalLinksService externalLinksService;
 
@@ -370,7 +380,13 @@ public class EmailServiceImpl implements EmailService {
 		
 	}
 
-	public void sendReferenceRequest(Grader grader, boolean reminder){	
+	public void sendReferenceRequest(Grader grader, boolean reminder){
+		
+		if ((grader.getPerson().getEmail() == null) && (grader.getPerson().getPhone() != null)) {
+			sendReferenceText(grader);
+			return;
+		}
+		
 		Mail email = new Mail();
 		if ((grader.getRespondant().getAccount().getDefaultEmail() != null) && (!grader.getRespondant().getAccount().getDefaultEmail().isEmpty())) {
 			email.setFrom(new Email(FROM_EMAIL_ADDRESS, grader.getRespondant().getAccount().getAccountName()));
@@ -536,6 +552,21 @@ public class EmailServiceImpl implements EmailService {
 		});
 	}
 
+	
+	public void sendReferenceText(Grader grader) {
+		Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+		
+		String link = externalLinksService.getReferenceEmailLink(grader);
+		Respondant respondant = grader.getRespondant();
+		String fullname = respondant.getPerson().getFirstName() + " " + respondant.getPerson().getLastName();
+
+	    PhoneNumber to = new PhoneNumber(grader.getPerson().getPhone());
+	    PhoneNumber from = new PhoneNumber(respondant.getAccountSurvey().getPhoneNumber());
+		Message smsMessage = Message.creator(to, from, fullname + " has requested a reference from you. " + link).create();	
+	    log.debug("SMS sent via twilio: {}",smsMessage.getSid());	
+	}
+	
+	
 	@Override
 	public Iterable<SendGridEmailEvent> saveAll(Iterable<SendGridEmailEvent> events) {
 		
