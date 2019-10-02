@@ -1,5 +1,6 @@
 package com.employmeo.data.service;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.employmeo.data.model.Partner;
 import com.employmeo.data.repository.PartnerRepository;
 
-import jersey.repackaged.com.google.common.collect.Sets;
+import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,10 +39,13 @@ public class PartnerServiceImpl implements PartnerService {
 	}
 	@Override
 	public Partner getPartnerById(@NonNull Long partnerId) {
-		Partner partner = partnerRepository.findOne(partnerId);
-		log.debug("Retrieved for id {} entity {}", partnerId, partner);
-
-		return partner;
+		//Optional<Partner> partner = partnerRepository.findById(partnerId);
+		//if(partner.isPresent()){
+		//	log.debug("Retrieved for id {} entity {}", partnerId, partner);
+		//	return partner.get();
+		//}
+		//return null;
+		return partnerRepository.findOne(partnerId);
 	}
 
 	@Override

@@ -22,6 +22,18 @@ public class ExternalLinksServiceImpl implements ExternalLinksService {
 	@Value("${com.talytica.urls.integration}")
 	private String BASE_SERVICE_URL;
 	
+	
+	@Override
+	public String getAssessmentLinkBase() {
+		String link = null;
+		try {
+			link = new URL(BASE_SURVEY_URL + "/?&respondant_uuid=").toString();
+		} catch (Exception e) {
+			link = BASE_SURVEY_URL + "/?&respondant_uuid=";
+		}
+		return link.toString();
+	}
+	
 	@Override
 	public String getAssessmentLink(Respondant respondant) {
 		String link = null;
@@ -106,7 +118,20 @@ public class ExternalLinksServiceImpl implements ExternalLinksService {
 		}
 		return link.toString();
 	}
-
+	
+	@Override
+	public String getReferenceShareableLink(Respondant respondant) {
+		String link = null;
+		try {
+			link = new URL(
+					BASE_SURVEY_URL + "/?&newgraderUuid=" + respondant.getRespondantUuid())
+					.toString();
+		} catch (Exception e) {
+			link = BASE_SURVEY_URL + "/?&newgraderUuid=" + respondant.getRespondantUuid();
+		}
+		return link.toString();
+	}
+	
 	@Override
 	public String getGraderEmailLink(Grader grader) {
 		String link = null;

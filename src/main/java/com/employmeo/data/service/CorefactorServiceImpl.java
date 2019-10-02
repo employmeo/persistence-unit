@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.employmeo.data.model.Corefactor;
 import com.employmeo.data.repository.CorefactorRepository;
-
-import jersey.repackaged.com.google.common.collect.Lists;
+import java.util.Optional;
+import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,10 +37,13 @@ public class CorefactorServiceImpl implements CorefactorService {
 	@Override
 	@Cacheable(value="corefactors")
 	public Corefactor findCorefactorById(@NonNull Long corefactorId) {
-		Corefactor corefactor = corefactorRepository.findOne(corefactorId);
-		log.debug("Retrieved for id {} entity {}", corefactorId, corefactor);
-
-		return corefactor;
+		//Optional<Corefactor> corefactor = corefactorRepository.findById(corefactorId);
+		//if (corefactor.isPresent()) {
+		//	log.debug("Retrieved for id {} entity {}", corefactorId, corefactor);	
+		//	return corefactor.get();
+		//}
+		//return null;
+		return corefactorRepository.findOne(corefactorId);
 	}
 
 	@Override
@@ -62,6 +65,7 @@ public class CorefactorServiceImpl implements CorefactorService {
 
 	@Override
 	public void delete(Long corefactorId) {
+		//corefactorRepository.deleteById(corefactorId);
 		corefactorRepository.delete(corefactorId);
 		log.debug("Deleted corefactor {}", corefactorId);
 	}

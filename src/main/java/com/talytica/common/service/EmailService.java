@@ -3,6 +3,7 @@ package com.talytica.common.service;
 import com.employmeo.data.model.Account;
 import com.employmeo.data.model.Grader;
 import com.employmeo.data.model.Respondant;
+import com.employmeo.data.model.SendGridEmailEvent;
 import com.employmeo.data.model.User;
 import com.stripe.model.Invoice;
 
@@ -24,5 +25,6 @@ public interface EmailService {
 	public void sendGraderReminder(Grader grader);
 	public void sendInvoice(Account account, Invoice invoice, String email);
 	public void sendInvoiceReminder(Account account, Invoice invoice, String email);
+	public Iterable<SendGridEmailEvent> saveAll(Iterable<SendGridEmailEvent> events);
 	
 }

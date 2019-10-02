@@ -12,10 +12,17 @@ import com.employmeo.data.model.User;
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
 	@Query
+	@Deprecated
 	User findByEmail(String email);
 
 	@Query
 	User findByEmailAndPassword(String email, String password);
+	
+	@Query
+	User findByEmailIgnoreCase(String email);
+
+	@Query
+	User findByEmailIgnoreCaseAndPassword(String email, String password);
 	
 	@Query
 	Set<User> findAllByUserAccountId(Long userAccountId);

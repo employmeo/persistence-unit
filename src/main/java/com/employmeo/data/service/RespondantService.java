@@ -59,12 +59,16 @@ public interface RespondantService {
 	RespondantScore getRespondantScoreById(@NonNull RespondantScorePK respondantScorePK);
 	
 	RespondantScore save(@NonNull RespondantScore respondantScore);
+	
+	Iterable<RespondantScore> saveAll(@NonNull Iterable<RespondantScore> respondantScores);
 
 	Set<RespondantScore> getAllRespondantScores();
 
 	Response saveResponse(Response response);
 
 	Response saveResponse(Long respondantId, Long questionId, Integer responseValue, String responseText);
+	
+	Response getResponseById(Long responseId);
 
 	Set<Response> getResponses(@NonNull UUID respondantUuid);
 	

@@ -30,6 +30,7 @@ public class CustomWorkflow implements Serializable, Comparable<CustomWorkflow> 
 	public static final String TYPE_NOTIFY = "notify";
 	public static final String TYPE_ATSUPDATE = "atsupdate";
 	public static final String TYPE_STATUSPOLLING = "statuspolling";
+	public static final String TYPE_STATUSUPDATE = "statusupdate";
 	public static final String TYPE_PREDICT = "predict";
 	
 

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.employmeo.data.model.*;
 import com.employmeo.data.repository.*;
 
-import jersey.repackaged.com.google.common.collect.Sets;
+import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,6 +44,7 @@ public class PredictionConfigurationServiceImpl implements PredictionConfigurati
 
 	@Override
 	public PredictionModel getPredictionModelById(@NonNull Long predictionModelId) {
+		//PredictionModel predictionModel = predictionModelRepository.findById(predictionModelId).get();
 		PredictionModel predictionModel = predictionModelRepository.findOne(predictionModelId);
 		log.debug("Retrieved for id {} entity {}", predictionModelId, predictionModel);
 
@@ -70,6 +71,7 @@ public class PredictionConfigurationServiceImpl implements PredictionConfigurati
 
 	@Override
 	public PredictionTarget getPredictionTargetById(@NonNull Long predictionTargetId) {
+		//PredictionTarget predictionTarget = predictionTargetRepository.findById(predictionTargetId).get();
 		PredictionTarget predictionTarget = predictionTargetRepository.findOne(predictionTargetId);
 		log.debug("Retrieved for id {} entity {}", predictionTargetId, predictionTarget);
 
@@ -96,6 +98,7 @@ public class PredictionConfigurationServiceImpl implements PredictionConfigurati
 
 	@Override
 	public PositionPredictionConfiguration getPositionPredictionConfigurationById(@NonNull Long positionPredictionConfigurationId) {
+		//PositionPredictionConfiguration positionPredictionConfiguration = positionPredictionConfigRepository.findById(positionPredictionConfigurationId).get();
 		PositionPredictionConfiguration positionPredictionConfiguration = positionPredictionConfigRepository.findOne(positionPredictionConfigurationId);
 		log.debug("Retrieved for id {} entity {}", positionPredictionConfigurationId, positionPredictionConfiguration);
 

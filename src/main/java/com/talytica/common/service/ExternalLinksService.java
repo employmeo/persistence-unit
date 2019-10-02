@@ -21,6 +21,8 @@ public interface ExternalLinksService {
 	
 	public String getReferenceEmailLink(Grader grader);
 	
+	public String getReferenceShareableLink(Respondant respondant);
+	
 	public String getGraderEmailLink(Grader grader);
 
 	public String getReferenceDeclineLink(Grader grader);
@@ -30,5 +32,7 @@ public interface ExternalLinksService {
 	public String getCallStatusLink();
 	
 	public String getIntegrationEcho();
+
+	public String getAssessmentLinkBase();
 
 }

@@ -1,5 +1,10 @@
 package com.talytica.common.service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -11,11 +16,29 @@ import org.springframework.stereotype.Service;
 
 import com.employmeo.data.model.Account;
 import com.employmeo.data.model.AccountSurvey;
+import com.employmeo.data.model.Corefactor;
+import com.employmeo.data.model.CustomProfile;
+import com.employmeo.data.model.Grade;
 import com.employmeo.data.model.Grader;
+import com.employmeo.data.model.Prediction;
+import com.employmeo.data.model.PredictionTarget;
+import com.employmeo.data.model.Question;
+import com.employmeo.data.model.ReferenceCheckConfig;
 import com.employmeo.data.model.Respondant;
+import com.employmeo.data.model.RespondantNVP;
+import com.employmeo.data.model.RespondantScore;
+import com.employmeo.data.model.SendGridEmailEvent;
 import com.employmeo.data.model.Survey;
 import com.employmeo.data.model.User;
+import com.employmeo.data.repository.QuestionTypeRepository;
+import com.employmeo.data.repository.SendGridEventRepository;
 import com.employmeo.data.service.AccountSurveyService;
+import com.employmeo.data.service.CorefactorService;
+import com.employmeo.data.service.GraderService;
+import com.employmeo.data.service.PredictionModelService;
+import com.employmeo.data.service.QuestionService;
+import com.employmeo.data.service.RespondantService;
+import com.google.common.collect.Lists;
 import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
@@ -26,6 +49,7 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.stripe.model.Invoice;
 
+import jersey.repackaged.com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -53,6 +77,9 @@ public class EmailServiceImpl implements EmailService {
 	@Value("ff02e214-d13a-45ad-837e-9159f42a7180")
 	private String RESULTS_TEMPLATE_ID;
 	
+	@Value("6ced4282-58e3-4527-b4ad-21b45dade508")
+	private String RESULTS_DETAIL_TEMPLATE_ID;
+
 	@Value("8e5983ac-913d-4370-8ea9-312ff8665f39")
 	private String GRADER_NOTIFICATION_TEMPLATE_ID; 
 
@@ -97,6 +124,21 @@ public class EmailServiceImpl implements EmailService {
 
 	@Autowired
 	AccountSurveyService accountSurveyService;
+
+	@Autowired
+	RespondantService respondantService;
+
+	@Autowired
+	CorefactorService corefactorService;
+
+	@Autowired
+	GraderService graderService;
+	
+	@Autowired
+	PredictionModelService predictionModelService;
+	
+	@Autowired
+	SendGridEventRepository sendGridEventRepository;
 	
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
 	private Email FROM_ADDRESS;
@@ -182,6 +224,7 @@ public class EmailServiceImpl implements EmailService {
 		if (Survey.TYPE_PHONE == as.getSurvey().getSurveyType()) {
 		
 			String idnum = respondant.getPayrollId();
+			if (as.getPrice() == 50d) idnum = respondant.getId().toString();
 			String phonenum = as.getPhoneNumber();
 		
 			body = "Dear " + respondant.getPerson().getFirstName() + ",\n" + "\n"
@@ -221,9 +264,12 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[FNAME]", respondant.getPerson().getFirstName());
 		pers.addSubstitution("[FULL_NAME]", respondant.getPerson().getFirstName() + " " +respondant.getPerson().getLastName());
 		pers.addSubstitution("[ACCOUNT_NAME]",as.getAccount().getAccountName());
+		pers.addSubstitution("[REF_LINK]", externalLinksService.getReferenceShareableLink(respondant));
+		
 		if (respondant.getPosition() != null) pers.addSubstitution("[JOB_TITLE]", respondant.getPosition().getPositionName());		
 		pers.addTo(getEmailDeliveryAddress(respondant.getPerson().getEmail()));
 		if (bcc != null && !emailDeliveryOverrideEnabled) pers.addBcc(getEmailDeliveryAddress(bcc));
+		email.addCustomArg("person_id", respondant.getPersonId().toString());
 		email.addPersonalization(pers);
 
 		asynchSend(email);
@@ -281,21 +327,33 @@ public class EmailServiceImpl implements EmailService {
 		String link = externalLinksService.getPortalLink(respondant);
 		String body = "The assessment for applicant " + fullname
 				+ " has been submitted and scored. The results are now available on the portal at:\n"
-		        + link + "\n";	
+		        + link + "\n";
+		String html = "<pre>"+body+"</pre>";;
+		String template = RESULTS_TEMPLATE_ID;
+		
+		ReferenceCheckConfig rcConfig = respondant.getAccountSurvey().getRcConfig();
+		log.info("RC config: {}", rcConfig);
+		if (rcConfig != null && rcConfig.getSendEmailDetails()) {
+			log.debug("Creating detailed response for candidate: {}", respondant.getPerson().getEmail());
+			body = createResultsDetailBody(respondant);
+			html = "<pre>"+body+"</pre>";//createResultsDetailHTML(respondant);
+			template = RESULTS_DETAIL_TEMPLATE_ID;
+		}
 		
 		Mail email = new Mail();
 		email.setFrom(FROM_ADDRESS);
 		email.setSubject("Assessment Results Available: " + fullname);
 		email.addContent(new Content("text/plain", body));
-		email.addContent(new Content("text/html", body));
-		email.setTemplateId(RESULTS_TEMPLATE_ID);
+		email.addContent(new Content("text/html", html));
+		email.setTemplateId(template);
 
 		Personalization pers = new Personalization();
 		pers.addSubstitution("[LINK]", link );
 		pers.addSubstitution("[FULL_NAME]", fullname);
 		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
-		pers.addTo(getEmailDeliveryAddress(respondant.getEmailRecipient()));		
+		pers.addTo(getEmailDeliveryAddress(respondant.getEmailRecipient()));
 		
+		email.addCustomArg("person_id", respondant.getPersonId().toString());
 		email.addPersonalization(pers);
 		asynchSend(email);
 	}
@@ -354,8 +412,9 @@ public class EmailServiceImpl implements EmailService {
 		pers.addSubstitution("[GRADER_NAME]", grader.getPerson().getFirstName());
 		pers.addSubstitution("[GRADER_LASTNAME]", grader.getPerson().getLastName());
 		pers.addSubstitution("[ACCOUNT_NAME]",respondant.getAccount().getAccountName());
-		pers.addTo(getEmailDeliveryAddress(grader.getPerson().getEmail()));		
-
+		pers.addTo(getEmailDeliveryAddress(grader.getPerson().getEmail()));	
+		
+		email.addCustomArg("person_id", grader.getPersonId().toString());
 		email.addPersonalization(pers);
 
 		asynchSend(email);
@@ -477,4 +536,253 @@ public class EmailServiceImpl implements EmailService {
 		});
 	}
 
+	@Override
+	public Iterable<SendGridEmailEvent> saveAll(Iterable<SendGridEmailEvent> events) {
+		
+		//return sendGridEventRepository.saveAll(events);
+		return sendGridEventRepository.save(events);
+	}
+
+	private String createResultsDetailBody(Respondant respondant) {
+		StringBuffer results = new StringBuffer();
+		
+		List<String> warnings = respondantService.getWarningMessages(respondant);
+		for (String warning : warnings) {
+			results.append("WARNING: ");
+			results.append(warning);
+			results.append("\n\n");
+		}
+		
+		CustomProfile customProfile = respondant.getAccount().getCustomProfile();
+		results.append("Category: ");
+		results.append(customProfile.getName(respondant.getProfileRecommendation()));
+		results.append(" (");
+		results.append(respondant.getCompositeScore());
+		results.append(")\n\n");
+		
+		if (respondant.getPredictions().size() > 0) {
+			results.append("Prediction Results:\n");		
+			for (Prediction prediction : respondant.getPredictions()) {
+				PredictionTarget target = predictionModelService.getTargetById(prediction.getTargetId());
+				results.append(target.getLabel());
+				results.append(": ");
+				results.append(String.format("%.2f", prediction.getPredictionScore()));
+				results.append("\n");
+			}
+			results.append("\n");
+		}
+		
+		List<RespondantScore> scores = new ArrayList<RespondantScore>( respondant.getRespondantScores());		
+		scores.sort(new Comparator<RespondantScore>() {
+			public int compare (RespondantScore a, RespondantScore b) {
+				Corefactor corefactorA = corefactorService.findCorefactorById(a.getId().getCorefactorId());
+				Corefactor corefactorB = corefactorService.findCorefactorById(b.getId().getCorefactorId());
+				double aCoeff = 1d;
+				double bCoeff = 1d;
+				if (corefactorA.getDefaultCoefficient() != null) aCoeff = Math.abs(corefactorA.getDefaultCoefficient());
+				if (corefactorB.getDefaultCoefficient() != null) bCoeff = Math.abs(corefactorB.getDefaultCoefficient());
+				// first sort by coefficient - descending
+				if (aCoeff != bCoeff) return (int)(bCoeff - aCoeff);
+				// otherwise just sort by name
+				return corefactorA.getName().compareTo(corefactorB.getName());
+			}
+		});
+		results.append("Summary Scores:\n");		
+		for (RespondantScore score : scores) {
+			Corefactor cf = corefactorService.findCorefactorById(score.getId().getCorefactorId());
+			results.append(cf.getName());
+			results.append(" : ");
+			
+//			this is awful but, for now, always format as two digit leading zero
+//			if ((int) score.getValue().doubleValue() == score.getValue()) {
+				results.append(String.format("%02d",(int) score.getValue().doubleValue()));
+//			} else {
+//				notes.append(String.format("%.1f",score.getValue()));
+//			}
+			results.append("\n");
+		}
+		results.append("\n");
+		
+		Set<RespondantNVP> customQuestions = respondantService.getDisplayNVPsForRespondant(respondant.getId());
+		if (!customQuestions.isEmpty()) {
+			results.append("Candidate Questions:\n");
+			for (RespondantNVP nvp : customQuestions) {
+				results.append(nvp.getName());
+				results.append(" : ");
+				results.append(nvp.getValue());
+				results.append("\n");
+			}
+			results.append("\n");
+		}
+		
+		List<Grader> graders = graderService.getGradersByRespondantId(respondant.getId());
+		if (!graders.isEmpty()) {
+
+			StringBuffer references = new StringBuffer();
+			StringBuffer evaluators = new StringBuffer();
+			for (Grader grader : graders) {
+				switch (grader.getType()) {
+				case Grader.TYPE_PERSON:
+					references.append(grader.getPerson().getFirstName());
+					references.append(" ");
+					references.append(grader.getPerson().getLastName());
+					if ((null != grader.getRelationship()) && (!grader.getRelationship().isEmpty()))
+					  references.append(" ("+grader.getRelationship()+")");
+					references.append(" : ");
+					references.append(grader.getSummaryScore());
+					references.append("\n");
+					break;
+				case Grader.TYPE_SUMMARY_USER:
+				case Grader.TYPE_USER:
+				default:
+					evaluators.append(grader.getUser().getFirstName());
+					evaluators.append(" ");
+					evaluators.append(grader.getUser().getLastName());
+					evaluators.append(" : ");
+					evaluators.append(grader.getSummaryScore());
+					evaluators.append("\n");
+					break;
+				}
+			}
+			if (references.length() > 0) {
+				results.append("References:\n");
+				results.append(references);
+				results.append("\n");
+			}
+			if (evaluators.length() > 0) {
+				results.append("Evaluated By:\n");
+				results.append(evaluators);
+				results.append("\n");
+			}
+			HashMap<Question,StringBuffer> quotes = Maps.newHashMap();
+			List<Grade> grades = graderService.getAllGradesByRespondantId(respondant.getId());
+			for (Grade grade : grades){
+				Question ques = grade.getQuestion();
+				if (ques.getQuestionType() == 27) {
+					if (!quotes.containsKey(ques)) quotes.put(ques, new StringBuffer(ques.getQuestionText()));
+					quotes.get(ques).append("\n - \""+grade.getGradeText()+"\"");
+				}
+			}	
+			if (quotes.entrySet().size() > 0) {
+				results.append("Comments:\n");
+				quotes.entrySet().forEach(set -> results.append(set.getValue().toString()+"\n"));
+				results.append(evaluators);
+				results.append("\n");
+			}		
+		}
+		return results.toString();
+
+	}
+	private String createResultsDetailHTML(Respondant respondant) {		
+		StringBuffer results = new StringBuffer();
+			
+			List<String> warnings = respondantService.getWarningMessages(respondant);
+			for (String warning : warnings) {
+				results.append("WARNING: ");
+				results.append(warning);
+				results.append("\n");
+			}
+			
+			CustomProfile customProfile = respondant.getAccount().getCustomProfile();
+			results.append("Category: ");
+			results.append(customProfile.getName(respondant.getProfileRecommendation()));
+			results.append(" (");
+			results.append(respondant.getCompositeScore());
+			results.append(")\n");
+			
+			if (respondant.getPredictions().size() > 0) {
+				results.append("Summary Scores:\n");		
+				for (Prediction prediction : respondant.getPredictions()) {
+					PredictionTarget target = predictionModelService.getTargetById(prediction.getTargetId());
+					results.append(target.getLabel());
+					results.append(": ");
+					results.append(String.format("%.2f", prediction.getPredictionScore()));
+					results.append("\n");
+				}
+			}
+			
+			List<RespondantScore> scores = new ArrayList<RespondantScore>( respondant.getRespondantScores());		
+			scores.sort(new Comparator<RespondantScore>() {
+				public int compare (RespondantScore a, RespondantScore b) {
+					Corefactor corefactorA = corefactorService.findCorefactorById(a.getId().getCorefactorId());
+					Corefactor corefactorB = corefactorService.findCorefactorById(b.getId().getCorefactorId());
+					double aCoeff = 1d;
+					double bCoeff = 1d;
+					if (corefactorA.getDefaultCoefficient() != null) aCoeff = Math.abs(corefactorA.getDefaultCoefficient());
+					if (corefactorB.getDefaultCoefficient() != null) bCoeff = Math.abs(corefactorB.getDefaultCoefficient());
+					// first sort by coefficient - descending
+					if (aCoeff != bCoeff) return (int)(bCoeff - aCoeff);
+					// otherwise just sort by name
+					return corefactorA.getName().compareTo(corefactorB.getName());
+				}
+			});
+			results.append("Summary Scores:\n");		
+			for (RespondantScore score : scores) {
+				Corefactor cf = corefactorService.findCorefactorById(score.getId().getCorefactorId());
+				results.append(cf.getName());
+				results.append(" : ");
+				
+//				this is awful but, for now, always format as two digit leading zero
+//				if ((int) score.getValue().doubleValue() == score.getValue()) {
+					results.append(String.format("%02d",(int) score.getValue().doubleValue()));
+//				} else {
+//					notes.append(String.format("%.1f",score.getValue()));
+//				}
+				results.append("\n");
+			}
+
+			Set<RespondantNVP> customQuestions = respondantService.getDisplayNVPsForRespondant(respondant.getId());
+			if (!customQuestions.isEmpty()) {
+				results.append("Candidate Questions:\n");
+				for (RespondantNVP nvp : customQuestions) {
+					results.append(nvp.getName());
+					results.append(" : ");
+					results.append(nvp.getValue());
+					results.append("\n");
+				}
+			}
+			
+			List<Grader> graders = graderService.getGradersByRespondantId(respondant.getId());
+			if (!graders.isEmpty()) {
+				StringBuffer references = new StringBuffer();
+				StringBuffer evaluators = new StringBuffer();
+				for (Grader grader : graders) {
+					switch (grader.getType()) {
+					case Grader.TYPE_PERSON:
+						references.append(grader.getPerson().getFirstName());
+						references.append(" ");
+						references.append(grader.getPerson().getLastName());
+						if ((null != grader.getRelationship()) && (!grader.getRelationship().isEmpty()))
+						  references.append(" ("+grader.getRelationship()+")");
+						references.append(" : ");
+						references.append(grader.getSummaryScore());
+						references.append("\n");
+						break;
+					case Grader.TYPE_SUMMARY_USER:
+					case Grader.TYPE_USER:
+					default:
+						evaluators.append(grader.getUser().getFirstName());
+						evaluators.append(" ");
+						evaluators.append(grader.getUser().getLastName());
+						evaluators.append(" : ");
+						evaluators.append(grader.getSummaryScore());
+						evaluators.append("\n");
+						break;
+					}
+				}
+				if (references.length() > 0) {
+					results.append("References:\n");
+					results.append(references);
+				}
+				if (evaluators.length() > 0) {
+					results.append("Evaluated By:\n");
+					results.append(evaluators);
+				}
+			}
+			
+		return "<pre>" + results.toString() + "</pre>";
+	}
+	
+	
+	
 }
