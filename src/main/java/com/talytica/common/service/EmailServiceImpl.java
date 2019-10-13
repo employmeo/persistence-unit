@@ -3,6 +3,7 @@ package com.talytica.common.service;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +54,7 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.stripe.model.Invoice;
 
+import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 
@@ -149,6 +151,7 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Autowired
 	SendGridEventRepository sendGridEventRepository;
+	
 	
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
 	private Email FROM_ADDRESS;
@@ -537,6 +540,9 @@ public class EmailServiceImpl implements EmailService {
         request.endpoint = "mail/send";
 	    
 		TASK_EXECUTOR.submit(new Runnable() {
+			@Autowired
+			EmailService emailService;
+			
 			@Override
 			public void run() {	
 			    try {
@@ -544,9 +550,22 @@ public class EmailServiceImpl implements EmailService {
 			        log.debug("Sending Email with request body {}", request.body);
 			        Response resp = sg.api(request);
 			        log.debug("Sent Email with Response code {} Response Body {}", resp.statusCode, resp.body);
-
+			        if (resp.statusCode >= 300) throw new Exception(resp.body);
 			      } catch (Exception e) {
 			    	log.error("Sent Email failed with request {}, exception {}", request.body, e);
+			    	List<SendGridEmailEvent> events = Lists.newArrayList();
+			    	List<Personalization> recipieints = email.getPersonalization();
+			    	for (Personalization pers : recipieints) {
+				    	SendGridEmailEvent sge = new SendGridEmailEvent();
+				    	sge.setPersonId(new Long(email.getCustomArgs().get("person_id")));
+				    	sge.setEmail(pers.getTos().get(0).getEmail());
+				    	sge.setEvent("failed");
+				    	sge.setSg_event_id(sge.email + new Date().toString());
+				    	sge.setSg_message_id(e.getMessage());
+				    	sge.setTimeStamp(new Date());
+				    	events.add(sge);
+			    	}
+			    	emailService.saveAll(events);
 			      }
 			}
 		});
