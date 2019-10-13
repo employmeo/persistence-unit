@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.talytica</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.2.5</version>
+	<version>0.2.6</version>
 	<name>Talytica Persistence Unit</name>
 	<description>Talytica persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
@@ -27,6 +27,7 @@
 		<dbdeploy.dbms>pgsql</dbdeploy.dbms>	
 		<!-- Needed for Commons Unit -->
 		<metrics.version>3.1.3</metrics.version>
+		<twilio.version>7.17.0</twilio.version>
 		<org-json.version>20180130</org-json.version>
 		<sendgrid.version>3.1.0</sendgrid.version>
 		<stripe.version>5.8.0</stripe.version>
@@ -120,6 +121,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<!-- needed for the commons library -->
+		<dependency>
+			<groupId>com.twilio.sdk</groupId>
+			<artifactId>twilio</artifactId>
+			<version>${twilio.version}</version>
+		</dependency>
 		<!--  Metrics -->
 		<dependency>
 			<groupId>com.ryantenney.metrics</groupId>
