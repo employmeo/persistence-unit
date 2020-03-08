@@ -1,5 +1,6 @@
 package com.employmeo.data.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -105,5 +106,10 @@ public class UserServiceImpl implements UserService {
 		}
 		descendants.addAll(children);
 		return descendants;
+	}
+
+	@Override
+	public void updateLastLogin(User user) {
+		userRepository.setLastLogin(new Date(), user.getId());
 	}
 }
