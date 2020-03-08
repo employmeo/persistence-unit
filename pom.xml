@@ -12,7 +12,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<springframework.version>5.0.5.RELEASE</springframework.version>
-		<springdata-jpa.version>1.11.12.RELEASE</springdata-jpa.version>
+		<springdata-jpa.version>1.11.23.RELEASE</springdata-jpa.version>
 		<springboot.version>1.5.13.RELEASE</springboot.version>
 		<hibernate.version>5.2.3.Final</hibernate.version>
 		<postgres-version>9.4.1208</postgres-version>
