@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.talytica</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.2.6</version>
+	<version>0.2.7</version>
 	<name>Talytica Persistence Unit</name>
 	<description>Talytica persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
@@ -11,8 +11,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<springframework.version>5.0.5.RELEASE</springframework.version>
-		<springdata-jpa.version>1.11.12.RELEASE</springdata-jpa.version>
+		<springframework.version>5.2.4.RELEASE</springframework.version>
+		<springdata-jpa.version>1.11.23.RELEASE</springdata-jpa.version>
 		<springboot.version>1.5.13.RELEASE</springboot.version>
 		<hibernate.version>5.2.3.Final</hibernate.version>
 		<postgres-version>9.4.1208</postgres-version>

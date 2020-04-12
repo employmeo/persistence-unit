@@ -1,6 +1,5 @@
 package com.talytica.common.service;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -33,10 +32,7 @@ import com.employmeo.data.model.SendGridEmailEvent;
 import com.employmeo.data.model.Survey;
 import com.employmeo.data.model.User;
 import com.twilio.Twilio;
-import com.twilio.http.HttpMethod;
-import com.twilio.http.TwilioRestClient;
 import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.twiml.VoiceResponse;
 import com.twilio.type.PhoneNumber;
 import com.employmeo.data.repository.SendGridEventRepository;
 import com.employmeo.data.service.AccountSurveyService;
@@ -62,50 +58,46 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-	@Value("be0791d3-a047-4cbb-9b06-a79450822c46")
+	@Value("e7274ea4-b73d-4045-a020-92e6f0ad9701")
 	private String INVITE_TEMPLATE_ID;
 	
-	@Value("be0791d3-a047-4cbb-9b06-a79450822c46")  // Use Above
+	@Value("e7274ea4-b73d-4045-a020-92e6f0ad9701")  // Use Above
 	private String INVITE_REMINDER_TEMPLATE_ID;
 	
-	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d")
+	@Value("227f514f-b13a-4597-9e12-3a00cd857092")
 	private String PHONE_INVITE_TEMPLATE_ID;
 	
-	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d")  // Use Above
+	@Value("227f514f-b13a-4597-9e12-3a00cd857092")  // Use Above
 	private String PHONE_REMINDER_TEMPLATE_ID;
 		
-	@Value("dfae3d61-007a-4991-a8f3-f46290313859")
+	@Value("5c9cf714-579d-417e-8ef3-6759de5851b9")
 	private String FORGOT_PASSWORD_TEMPLATE_ID;
 	
-	@Value("6d624c56-e765-4419-882a-6baa44bf02bc")
+	@Value("b1b493ac-f3ef-4605-bb22-6f42e8c3ac00")
 	private String NEW_ACCOUNT_TEMPLATE_ID;	
 
-	@Value("ff02e214-d13a-45ad-837e-9159f42a7180")
+	@Value("a23150f8-1ca3-4eb2-ab1b-095cc1dc444a")
 	private String RESULTS_TEMPLATE_ID;
 	
-	@Value("6ced4282-58e3-4527-b4ad-21b45dade508")
+	@Value("6a571c21-7ce9-445e-875b-feb104db5c0c")
 	private String RESULTS_DETAIL_TEMPLATE_ID;
 
-	@Value("8e5983ac-913d-4370-8ea9-312ff8665f39")
+	@Value("ab39745a-c848-4a2f-b626-15f8d7b6be3a")
 	private String GRADER_NOTIFICATION_TEMPLATE_ID; 
 
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") 
+	@Value("c2415b25-4ede-488b-8642-a06d7dd26726") 
 	private String REFERENCE_TEMPLATE_ID;
 	
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Use Above
+	@Value("c2415b25-4ede-488b-8642-a06d7dd26726") // Use Above
 	private String REFERENCE_REMINDER_TEMPLATE_ID;
 	
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Not Created Yet
+	@Value("a89525e6-ab8a-4ab1-b3d8-afa0225feb7b") // Not Created Yet
+	
 	private String INVOICE_TEMPLATE_ID;
 	
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") //  Not Created Yet
+	@Value("a89525e6-ab8a-4ab1-b3d8-afa0225feb7b") //  Not Created Yet
 	private String INVOICE_REMINDER_TEMPLATE_ID;
 
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Not Created Yet
-	private String QUICKREF_TEMPLATE_ID;
-	
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Use Above
-	private String QUICKREF_REMINDER_TEMPLATE_ID;
 	
 	@Value("${com.talytica.apis.sendgrid:null}")
 	private String SG_API;
