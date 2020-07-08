@@ -573,7 +573,7 @@ public class EmailServiceImpl implements EmailService {
 
 	    PhoneNumber to = new PhoneNumber(grader.getPerson().getPhone());
 	    PhoneNumber from = new PhoneNumber(respondant.getAccountSurvey().getPhoneNumber());
-		Message smsMessage = Message.creator(to, from, fullname + " has requested a reference from you. " + link).create();	
+		Message smsMessage = Message.creator(to, from, fullname + " requested a reference " + link).create();	
 	    log.debug("SMS sent via twilio: {}",smsMessage.getSid());	
 	}
 	
