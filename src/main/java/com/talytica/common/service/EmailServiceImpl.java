@@ -582,7 +582,8 @@ public class EmailServiceImpl implements EmailService {
     	sge.setEvent("failed");
     	
 	    try {
-			Message smsMessage = Message.creator(to, from, fullname + " requested a reference " + link).create();	
+	    	String message = "Hi " +grader.getPerson().getFirstName() + ", " + fullname + " requested a reference " + link;
+			Message smsMessage = Message.creator(to, from, message).create();	
 		    log.debug("SMS sent via twilio: {}",smsMessage.getSid());
 	    	sge.setEvent("sent");
 	    } catch (Exception e) {
