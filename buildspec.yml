@@ -10,10 +10,8 @@ phases:
   build:
     commands:
       - mvn install | tee mvn-output.txt
-      - more mvn-output.txt
       - version=$(awk '{ if ($2 == "Building") print $4 }' mvn-output.txt | grep -v jar)
       - app_name=$(awk '{ if ($2 == "Building") print $3 }' mvn-output.txt | grep -v jar)
-      - echo the input string params are is $1 $2 $3 $4 $5
       - echo app name is ${app_name}
       - echo version is ${version}.jar 
       - echo copying to store at ${ARTIFACT_BUCKET_STORE}
