@@ -13,7 +13,8 @@ phases:
 #      - version=$(awk '{ if ($2 == "Building") print $4 }' mvn-output.txt | grep -v jar)
 #      - app_name=$(awk '{ if ($2 == "Building") print $3 }' mvn-output.txt | grep -v jar)
 #      - echo preparing to copy ${app_name}-${version}.jar to ${ARTIFACT_BUCKET_STORE}
-      - aws s3 list-buckets --query Owner.ID
-      - aws s3 list-objects --bucket talytica --prefix artifacts
+      - aws sts get-caller-identity
+#      - aws s3api list-buckets --query Owner.ID
+      - aws s3api list-objects --bucket talytica --prefix artifacts
 #      - aws s3 cp target/${app_name}-${version}.jar s3://${ARTIFACT_BUCKET_STORE}
       - aws s3 cp pom.xml s3://${ARTIFACT_BUCKET_STORE}/${app_name}-${version}.pom
