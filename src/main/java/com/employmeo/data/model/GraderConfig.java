@@ -62,7 +62,22 @@ public class GraderConfig implements Serializable {
 	
 	@Column(name = "grader_notify")
 	private Boolean notify = true;
+
+	@Column(name = "grader_reminders")
+	private Boolean reminders = false;
 	
+	@Column(name = "grader_reminder_1")
+	private Integer reminder1;
+	
+	@Column(name = "grader_reminder_2")
+	private Integer reminder2;
+	
+	@Column(name = "grader_reminder_3")
+	private Integer reminder3;
+
+	@Column(name = "grader_expire")
+	private Integer expire = null;
+
 	@JsonProperty("userName")
 	public String getUserName() {
 		if (this.user == null) return null;

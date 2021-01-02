@@ -41,4 +41,12 @@ public class Partner implements Serializable {
 	@Column(name = "partner_api_key")
 	private String apiKey;
 
+	@Column(name = "partner_oauth")
+	private String oauth;
+	
+	@Column(name = "partner_client_id")
+	private String clientId;
+	
+	@Column(name = "partner_client_secret")
+	private String clientSecret;
 }

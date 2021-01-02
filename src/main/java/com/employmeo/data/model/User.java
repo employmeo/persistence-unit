@@ -77,6 +77,9 @@ public class User implements Serializable {
 	@Column(name = "USER_LOCATION_RESTRICTION")
 	private Long locationRestrictionId;
 	
+	@Column(name = "USER_LAST_LOGIN")
+	private Date lastLogin;
+	
     @PrePersist
     @PreUpdate
     public void onPersist() {
