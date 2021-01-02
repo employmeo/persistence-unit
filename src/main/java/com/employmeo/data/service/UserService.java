@@ -23,5 +23,7 @@ public interface UserService {
 	Set<GraderConfig> getGraderConfigs(@NonNull Long userId);
 
 	List<Long> getLocationLimits(User user);
+	
+	void updateLastLogin(User user);
 
 }

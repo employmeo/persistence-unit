@@ -2,6 +2,7 @@ package com.talytica.common.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -30,15 +31,15 @@ import com.employmeo.data.model.RespondantScore;
 import com.employmeo.data.model.SendGridEmailEvent;
 import com.employmeo.data.model.Survey;
 import com.employmeo.data.model.User;
-import com.employmeo.data.repository.QuestionTypeRepository;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import com.employmeo.data.repository.SendGridEventRepository;
 import com.employmeo.data.service.AccountSurveyService;
 import com.employmeo.data.service.CorefactorService;
 import com.employmeo.data.service.GraderService;
 import com.employmeo.data.service.PredictionModelService;
-import com.employmeo.data.service.QuestionService;
 import com.employmeo.data.service.RespondantService;
-import com.google.common.collect.Lists;
 import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
@@ -49,6 +50,7 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.stripe.model.Invoice;
 
+import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,50 +58,46 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-	@Value("be0791d3-a047-4cbb-9b06-a79450822c46")
+	@Value("e7274ea4-b73d-4045-a020-92e6f0ad9701")
 	private String INVITE_TEMPLATE_ID;
 	
-	@Value("be0791d3-a047-4cbb-9b06-a79450822c46")  // Use Above
+	@Value("e7274ea4-b73d-4045-a020-92e6f0ad9701")  // Use Above
 	private String INVITE_REMINDER_TEMPLATE_ID;
 	
-	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d")
+	@Value("227f514f-b13a-4597-9e12-3a00cd857092")
 	private String PHONE_INVITE_TEMPLATE_ID;
 	
-	@Value("ea059aa6-bac6-41e0-821d-98dc4dbfc31d")  // Use Above
+	@Value("227f514f-b13a-4597-9e12-3a00cd857092")  // Use Above
 	private String PHONE_REMINDER_TEMPLATE_ID;
 		
-	@Value("dfae3d61-007a-4991-a8f3-f46290313859")
+	@Value("5c9cf714-579d-417e-8ef3-6759de5851b9")
 	private String FORGOT_PASSWORD_TEMPLATE_ID;
 	
-	@Value("6d624c56-e765-4419-882a-6baa44bf02bc")
+	@Value("b1b493ac-f3ef-4605-bb22-6f42e8c3ac00")
 	private String NEW_ACCOUNT_TEMPLATE_ID;	
 
-	@Value("ff02e214-d13a-45ad-837e-9159f42a7180")
+	@Value("a23150f8-1ca3-4eb2-ab1b-095cc1dc444a")
 	private String RESULTS_TEMPLATE_ID;
 	
-	@Value("6ced4282-58e3-4527-b4ad-21b45dade508")
+	@Value("6a571c21-7ce9-445e-875b-feb104db5c0c")
 	private String RESULTS_DETAIL_TEMPLATE_ID;
 
-	@Value("8e5983ac-913d-4370-8ea9-312ff8665f39")
+	@Value("ab39745a-c848-4a2f-b626-15f8d7b6be3a")
 	private String GRADER_NOTIFICATION_TEMPLATE_ID; 
 
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") 
+	@Value("c2415b25-4ede-488b-8642-a06d7dd26726") 
 	private String REFERENCE_TEMPLATE_ID;
 	
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Use Above
+	@Value("c2415b25-4ede-488b-8642-a06d7dd26726") // Use Above
 	private String REFERENCE_REMINDER_TEMPLATE_ID;
 	
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Not Created Yet
+	@Value("a89525e6-ab8a-4ab1-b3d8-afa0225feb7b") // Not Created Yet
+	
 	private String INVOICE_TEMPLATE_ID;
 	
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") //  Not Created Yet
+	@Value("a89525e6-ab8a-4ab1-b3d8-afa0225feb7b") //  Not Created Yet
 	private String INVOICE_REMINDER_TEMPLATE_ID;
 
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Not Created Yet
-	private String QUICKREF_TEMPLATE_ID;
-	
-	@Value("321ca619-10ed-4e80-9eb9-23a371d60aac") // Use Above
-	private String QUICKREF_REMINDER_TEMPLATE_ID;
 	
 	@Value("${com.talytica.apis.sendgrid:null}")
 	private String SG_API;
@@ -119,6 +117,12 @@ public class EmailServiceImpl implements EmailService {
 	@Value("${email.delivery.replyto:info@talytica.com}")
 	private String REPLYTO_EMAIL_ADDRESS;
 	
+	@Value("${com.talytica.apis.twilio.sid}")
+	private String ACCOUNT_SID;
+	
+	@Value("${com.talytica.apis.twilio.token}")
+	private String AUTH_TOKEN;
+		
 	@Autowired
 	ExternalLinksService externalLinksService;
 
@@ -139,6 +143,7 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Autowired
 	SendGridEventRepository sendGridEventRepository;
+	
 	
 	private final ExecutorService TASK_EXECUTOR = Executors.newCachedThreadPool();
 	private Email FROM_ADDRESS;
@@ -370,7 +375,13 @@ public class EmailServiceImpl implements EmailService {
 		
 	}
 
-	public void sendReferenceRequest(Grader grader, boolean reminder){	
+	public void sendReferenceRequest(Grader grader, boolean reminder){
+		
+		if ((grader.getPerson().getEmail() == null) && (grader.getPerson().getPhone() != null)) {
+			sendReferenceText(grader);
+			return;
+		}
+		
 		Mail email = new Mail();
 		if ((grader.getRespondant().getAccount().getDefaultEmail() != null) && (!grader.getRespondant().getAccount().getDefaultEmail().isEmpty())) {
 			email.setFrom(new Email(FROM_EMAIL_ADDRESS, grader.getRespondant().getAccount().getAccountName()));
@@ -521,6 +532,9 @@ public class EmailServiceImpl implements EmailService {
         request.endpoint = "mail/send";
 	    
 		TASK_EXECUTOR.submit(new Runnable() {
+			@Autowired
+			EmailService emailService;
+			
 			@Override
 			public void run() {	
 			    try {
@@ -528,14 +542,59 @@ public class EmailServiceImpl implements EmailService {
 			        log.debug("Sending Email with request body {}", request.body);
 			        Response resp = sg.api(request);
 			        log.debug("Sent Email with Response code {} Response Body {}", resp.statusCode, resp.body);
-
+			        if (resp.statusCode >= 300) throw new Exception(resp.body);
 			      } catch (Exception e) {
 			    	log.error("Sent Email failed with request {}, exception {}", request.body, e);
+			    	List<SendGridEmailEvent> events = Lists.newArrayList();
+			    	List<Personalization> recipieints = email.getPersonalization();
+			    	for (Personalization pers : recipieints) {
+				    	SendGridEmailEvent sge = new SendGridEmailEvent();
+				    	sge.setPersonId(new Long(email.getCustomArgs().get("person_id")));
+				    	sge.setEmail(pers.getTos().get(0).getEmail());
+				    	sge.setEvent("failed");
+				    	sge.setSg_event_id(sge.email + new Date().toString());
+				    	sge.setSg_message_id(e.getMessage());
+				    	sge.setTimeStamp(new Date());
+				    	events.add(sge);
+			    	}
+			    	emailService.saveAll(events);
 			      }
 			}
 		});
 	}
 
+	
+	public void sendReferenceText(Grader grader) {
+		Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+		
+		String link = externalLinksService.getReferenceEmailLink(grader);
+		Respondant respondant = grader.getRespondant();
+		String fullname = respondant.getPerson().getFirstName() + " " + respondant.getPerson().getLastName();
+
+	    PhoneNumber to = new PhoneNumber(grader.getPerson().getPhone());
+	    PhoneNumber from = new PhoneNumber(respondant.getAccountSurvey().getPhoneNumber());
+
+	    SendGridEmailEvent sge = new SendGridEmailEvent();
+    	sge.setPersonId(grader.getPersonId());
+    	sge.setEmail(grader.getPerson().getPhone());
+    	sge.setSg_event_id("txt_to_" + sge.email + new Date().toString());
+    	sge.setTimeStamp(new Date());
+    	sge.setEvent("failed");
+    	
+	    try {
+	    	String message = "Hi " +grader.getPerson().getFirstName() + ", " + fullname + " requested a reference " + link;
+			Message smsMessage = Message.creator(to, from, message).create();	
+		    log.debug("SMS sent via twilio: {}",smsMessage.getSid());
+	    	sge.setEvent("sent");
+	    } catch (Exception e) {
+	    	log.error("Failed to send text message: {}", e.getMessage());
+	    	sge.setSg_message_id(e.getMessage());
+	    } finally {
+	    	sendGridEventRepository.save(sge);
+	    }
+	}
+	
+	
 	@Override
 	public Iterable<SendGridEmailEvent> saveAll(Iterable<SendGridEmailEvent> events) {
 		

@@ -42,6 +42,7 @@ public class Grader implements Serializable {
 	
 	public static final int STATUS_NEW = 1;
 	public static final int STATUS_REMINDED = 2;
+	public static final int STATUS_PAST_DUE = 4;
 	public static final int STATUS_STARTED = 5;
 	public static final int STATUS_COMPLETED = 10;
 	public static final int STATUS_IGNORED = 20;
