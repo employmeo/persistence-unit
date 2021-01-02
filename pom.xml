@@ -3,8 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.talytica</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.2.8</version>
-	<name>Talytica Persistence Unit</name>
+	<version>0.2.9</version>
+	<name>persistence</name>
 	<description>Talytica persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
 	<properties>
@@ -17,7 +17,7 @@
 		<hibernate.version>5.2.3.Final</hibernate.version>
 		<postgres-version>9.4.1208</postgres-version>
 		<logback.version>1.0.13</logback.version>
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<mockito.version>1.10.19</mockito.version>
 		<lombok.version>1.16.10</lombok.version>
 		<surefire-plugin.version>2.19.1</surefire-plugin.version>

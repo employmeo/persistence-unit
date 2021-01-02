@@ -573,8 +573,25 @@ public class EmailServiceImpl implements EmailService {
 
 	    PhoneNumber to = new PhoneNumber(grader.getPerson().getPhone());
 	    PhoneNumber from = new PhoneNumber(respondant.getAccountSurvey().getPhoneNumber());
-		Message smsMessage = Message.creator(to, from, fullname + " has requested a reference from you. " + link).create();	
-	    log.debug("SMS sent via twilio: {}",smsMessage.getSid());	
+
+	    SendGridEmailEvent sge = new SendGridEmailEvent();
+    	sge.setPersonId(grader.getPersonId());
+    	sge.setEmail(grader.getPerson().getPhone());
+    	sge.setSg_event_id("txt_to_" + sge.email + new Date().toString());
+    	sge.setTimeStamp(new Date());
+    	sge.setEvent("failed");
+    	
+	    try {
+	    	String message = "Hi " +grader.getPerson().getFirstName() + ", " + fullname + " requested a reference " + link;
+			Message smsMessage = Message.creator(to, from, message).create();	
+		    log.debug("SMS sent via twilio: {}",smsMessage.getSid());
+	    	sge.setEvent("sent");
+	    } catch (Exception e) {
+	    	log.error("Failed to send text message: {}", e.getMessage());
+	    	sge.setSg_message_id(e.getMessage());
+	    } finally {
+	    	sendGridEventRepository.save(sge);
+	    }
 	}
 	
 	
