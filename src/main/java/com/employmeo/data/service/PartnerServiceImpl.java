@@ -39,13 +39,13 @@ public class PartnerServiceImpl implements PartnerService {
 	}
 	@Override
 	public Partner getPartnerById(@NonNull Long partnerId) {
-		//Optional<Partner> partner = partnerRepository.findById(partnerId);
-		//if(partner.isPresent()){
-		//	log.debug("Retrieved for id {} entity {}", partnerId, partner);
-		//	return partner.get();
-		//}
-		//return null;
-		return partnerRepository.findOne(partnerId);
+		Optional<Partner> partner = partnerRepository.findById(partnerId);
+		if(partner.isPresent()){
+			log.debug("Retrieved for id {} entity {}", partnerId, partner);
+			return partner.get();
+		}
+		return null;
+		//return partnerRepository.findOne(partnerId);
 	}
 
 	@Override

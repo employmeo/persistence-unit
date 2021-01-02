@@ -53,13 +53,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getUserById(@NonNull Long userId) {
-		//Optional<User> user = userRepository.findById(userId);
-		//if (user.isPresent()) {
-		//	log.debug("Retrieved for id {} entity {}", userId, user);
-		//	return user.get();
-		//}
-		//return null;
-		return userRepository.findOne(userId);
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			log.debug("Retrieved for id {} entity {}", userId, user);
+			return user.get();
+		}
+		return null;
+		//return userRepository.findOne(userId);
 	}
 	
 	@Override
@@ -86,8 +86,8 @@ public class UserServiceImpl implements UserService {
 		Long keyId = user.getLocationRestrictionId();
 		if (keyId != null) {
 			locationIds.add(keyId);
-//			Location location = locationRepository.findById(keyId).get(); //blows up if Loc not there
-			Location location = locationRepository.findOne(keyId); 
+			Location location = locationRepository.findById(keyId).get(); //blows up if Loc not there
+//			Location location = locationRepository.findOne(keyId); 
 			if ((location.getType() == Location.TYPE_HIDDEN_PARENT) || (location.getType() == Location.TYPE_VISIBLE_PARENT)) {
 				List<Location> locations = getChildrenFor(location);
 				for (Location loc : locations) locationIds.add(loc.getId());

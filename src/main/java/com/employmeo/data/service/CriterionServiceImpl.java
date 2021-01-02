@@ -21,16 +21,16 @@ public class CriterionServiceImpl implements CriterionService {
 	
 	@Override
 	public Criterion getCriterion(Long criterionId) {
-		//Optional<Criterion> criterion = criterionRepository.findById(criterionId);
-		//if (criterion.isPresent()) return criterion.get();
-		//return null;
-		return criterionRepository.findOne(criterionId);
+		Optional<Criterion> criterion = criterionRepository.findById(criterionId);
+		if (criterion.isPresent()) return criterion.get();
+		return null;
+		//return criterionRepository.findOne(criterionId);
 	}
 
 	@Override
 	public void deleteCriterion(Long criterionId) {
-		//criterionRepository.deleteById(criterionId);
-		criterionRepository.delete(criterionId);
+		criterionRepository.deleteById(criterionId);
+		//criterionRepository.delete(criterionId);
 	}
 
 	@Override

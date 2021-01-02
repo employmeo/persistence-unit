@@ -52,8 +52,8 @@ public class PredictionModelServiceImpl implements PredictionModelService{
 	
 	@Override
 	public LinearRegressionConfig getLinearRegressionConfigurationById(Long configId) {
-		//return linearRegressionConfigRepository.findById(configId).get();
-		return linearRegressionConfigRepository.findOne(configId);
+		return linearRegressionConfigRepository.findById(configId).get();
+		//return linearRegressionConfigRepository.findOne(configId);
 	}	
 	
 	@Override
@@ -80,8 +80,8 @@ public class PredictionModelServiceImpl implements PredictionModelService{
 	public PredictionModel getModelById(@NonNull Long modelId) {
 		log.debug("Fetching prediction model by name {}", modelId);
 
-		//PredictionModel predictionModel = predictionModelRepository.findById(modelId).get();
-		PredictionModel predictionModel = predictionModelRepository.findOne(modelId);
+		PredictionModel predictionModel = predictionModelRepository.findById(modelId).get();
+		//PredictionModel predictionModel = predictionModelRepository.findOne(modelId);
 		log.debug("PredictionModel for modelName {} : {}", modelId, predictionModel);
 
 		return predictionModel;
@@ -104,8 +104,8 @@ public class PredictionModelServiceImpl implements PredictionModelService{
 
 	@Override
 	public PredictionTarget getTargetById(Long targetId) {
-		//return predictionTargetRepository.findById(targetId).get();
-		return predictionTargetRepository.findOne(targetId);
+		return predictionTargetRepository.findById(targetId).get();
+		//return predictionTargetRepository.findOne(targetId);
 	}
 
 	@Override

@@ -45,8 +45,8 @@ public class GraderServiceImpl implements GraderService {
 
 	@Override
 	public Grader getGraderById(Long graderId) {
-		//return graderRepository.findById(graderId).get();
-		return graderRepository.findOne(graderId);
+		return graderRepository.findById(graderId).get();
+		//return graderRepository.findOne(graderId);
 	}
 
 	@Override
@@ -57,8 +57,8 @@ public class GraderServiceImpl implements GraderService {
 
 	@Override
 	public Page<Grader> getGradersByUserId(Long userId, int pageNumber, int pageSize) {
-		//Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
-		Pageable pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
+		Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
+		//Pageable pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "id");
 
 		return graderRepository.findAllByUserId(userId, pageRequest);
 	}
@@ -88,8 +88,8 @@ public class GraderServiceImpl implements GraderService {
 	
 	@Override
 	public List<Question> getQuestionsByGraderId(Long graderId) {
-		//Grader grader = graderRepository.findById(graderId).get();
-		Grader grader = graderRepository.findOne(graderId);
+		Grader grader = graderRepository.findById(graderId).get();
+		//Grader grader = graderRepository.findOne(graderId);
 		return getCriteriaByQuestionId(grader.getQuestionId());
 	}
 
@@ -134,8 +134,8 @@ public class GraderServiceImpl implements GraderService {
 
 	@Override
 	public Page<Grader> getGradersByUserIdStatusAndDates(Long userId, List<Integer>  status, Date from, Date to, int pageNumber, int pageSize) {
-		//Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
-		Pageable pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
+		Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
+		//Pageable pageRequest = new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
 		log.debug("Finding graders for userId {} and statuses {} between dates {} and {}", userId, status, from, to);
 		Page<Grader> graders = graderRepository.findAllByUserIdAndStatusInAndCreatedDateBetween(userId, status, from, to, pageRequest);
 		log.debug("Returning {} graders", graders.getNumberOfElements());
@@ -145,8 +145,8 @@ public class GraderServiceImpl implements GraderService {
 
 	@Override
 	public List<Question> getSummaryCriteriaByGraderId(Long graderId) {
-		//Grader grader = graderRepository.findById(graderId).get();
-		Grader grader = graderRepository.findOne(graderId);
+		Grader grader = graderRepository.findById(graderId).get();
+		//Grader grader = graderRepository.findOne(graderId);
 		List<Question> criteria = new ArrayList<Question>();
 		if (Grader.TYPE_SUMMARY_USER == grader.getType()) {
 			Set<Response> responses = respondantService.getGradeableResponses(grader.getRespondantId());
@@ -181,8 +181,8 @@ public class GraderServiceImpl implements GraderService {
 
 	@Override
 	public ReferenceCheckConfig getReferenceCheckConfigById(Long rcConfigId) {
-		//return rcconfigRepository.findById(rcConfigId).get();
-		return rcconfigRepository.findOne(rcConfigId);
+		return rcconfigRepository.findById(rcConfigId).get();
+		//return rcconfigRepository.findOne(rcConfigId);
 	}
 
 }

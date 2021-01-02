@@ -28,7 +28,8 @@ public class CorefactorServiceImpl implements CorefactorService {
 	@Override
 	@Cacheable(value="allcorefactors")
 	public List<Corefactor> getAllCorefactors() {
-		List<Corefactor> corefactors = Lists.newArrayList(corefactorRepository.findAll(new Sort(Direction.ASC, "id")));
+		//List<Corefactor> corefactors = Lists.newArrayList(corefactorRepository.findAll(new Sort(Direction.ASC, "id")));
+		List<Corefactor> corefactors = Lists.newArrayList(corefactorRepository.findAll(Sort.by(Direction.ASC, "id")));
 		log.debug("Retrieved all {} corefactors", corefactors.size());
 
 		return corefactors;
@@ -37,13 +38,13 @@ public class CorefactorServiceImpl implements CorefactorService {
 	@Override
 	@Cacheable(value="corefactors")
 	public Corefactor findCorefactorById(@NonNull Long corefactorId) {
-		//Optional<Corefactor> corefactor = corefactorRepository.findById(corefactorId);
-		//if (corefactor.isPresent()) {
-		//	log.debug("Retrieved for id {} entity {}", corefactorId, corefactor);	
-		//	return corefactor.get();
-		//}
-		//return null;
-		return corefactorRepository.findOne(corefactorId);
+		Optional<Corefactor> corefactor = corefactorRepository.findById(corefactorId);
+		if (corefactor.isPresent()) {
+			log.debug("Retrieved for id {} entity {}", corefactorId, corefactor);	
+			return corefactor.get();
+		}
+		return null;
+		//return corefactorRepository.findOne(corefactorId);
 	}
 
 	@Override
@@ -65,8 +66,8 @@ public class CorefactorServiceImpl implements CorefactorService {
 
 	@Override
 	public void delete(Long corefactorId) {
-		//corefactorRepository.deleteById(corefactorId);
-		corefactorRepository.delete(corefactorId);
+		corefactorRepository.deleteById(corefactorId);
+		//corefactorRepository.delete(corefactorId);
 		log.debug("Deleted corefactor {}", corefactorId);
 	}
 

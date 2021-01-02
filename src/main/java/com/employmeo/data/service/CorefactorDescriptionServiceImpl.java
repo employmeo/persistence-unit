@@ -25,7 +25,8 @@ public class CorefactorDescriptionServiceImpl implements CorefactorDescriptionSe
 
 	@Override
 	public List<CorefactorDescription> getAll() {
-		List<CorefactorDescription> corefactorDescriptions = Lists.newArrayList(corefactorDescriptionRepository.findAll(new Sort(Direction.ASC, "id")));
+//		List<CorefactorDescription> corefactorDescriptions = Lists.newArrayList(corefactorDescriptionRepository.findAll(new Sort(Direction.ASC, "id")));
+		List<CorefactorDescription> corefactorDescriptions = Lists.newArrayList(corefactorDescriptionRepository.findAll(Sort.by(Direction.ASC, "id")));
 		log.debug("Retrieved all {} corefactor descriptions", corefactorDescriptions.size());
 
 		return corefactorDescriptions;
@@ -33,8 +34,8 @@ public class CorefactorDescriptionServiceImpl implements CorefactorDescriptionSe
 
 	@Override
 	public CorefactorDescription getById(@NonNull Long id) {
-		//CorefactorDescription corefactorDescription = corefactorDescriptionRepository.findById(id).get();
-		CorefactorDescription corefactorDescription = corefactorDescriptionRepository.findOne(id);
+		CorefactorDescription corefactorDescription = corefactorDescriptionRepository.findById(id).get();
+		//CorefactorDescription corefactorDescription = corefactorDescriptionRepository.findOne(id);
 		log.debug("Retrieved for id {} entity {}", id, corefactorDescription);
 
 		return corefactorDescription;
@@ -51,8 +52,8 @@ public class CorefactorDescriptionServiceImpl implements CorefactorDescriptionSe
 
 	@Override
 	public void delete(Long id) {
-		//corefactorDescriptionRepository.deleteById(id);
-		corefactorDescriptionRepository.delete(id);
+		corefactorDescriptionRepository.deleteById(id);
+		//corefactorDescriptionRepository.delete(id);
 		log.info("Deleted corefactorDescription {}", id);
 	}
 

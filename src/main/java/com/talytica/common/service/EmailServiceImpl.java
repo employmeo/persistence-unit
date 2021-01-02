@@ -40,6 +40,8 @@ import com.employmeo.data.service.CorefactorService;
 import com.employmeo.data.service.GraderService;
 import com.employmeo.data.service.PredictionModelService;
 import com.employmeo.data.service.RespondantService;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
@@ -50,8 +52,6 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.stripe.model.Invoice;
 
-import jersey.repackaged.com.google.common.collect.Lists;
-import jersey.repackaged.com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -598,8 +598,8 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public Iterable<SendGridEmailEvent> saveAll(Iterable<SendGridEmailEvent> events) {
 		
-		//return sendGridEventRepository.saveAll(events);
-		return sendGridEventRepository.save(events);
+		return sendGridEventRepository.saveAll(events);
+//		return sendGridEventRepository.save(events);
 	}
 
 	private String createResultsDetailBody(Respondant respondant) {

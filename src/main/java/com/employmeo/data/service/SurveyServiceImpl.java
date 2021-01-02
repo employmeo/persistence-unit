@@ -47,13 +47,13 @@ public class SurveyServiceImpl implements SurveyService  {
 
 	@Override
 	public Survey getSurveyById(@NonNull Long surveyId) {
-		//Optional<Survey> survey = surveyRepository.findById(surveyId);
-		//if (survey.isPresent()) {
-		//	log.debug("Retrieved for id {} entity {}", surveyId, survey.get().getName());
-		//	return survey.get();
-		//}
-		//return null;
-		return surveyRepository.findOne(surveyId);
+		Optional<Survey> survey = surveyRepository.findById(surveyId);
+		if (survey.isPresent()) {
+			log.debug("Retrieved for id {} entity {}", surveyId, survey.get().getName());
+			return survey.get();
+		}
+		return null;
+		//return surveyRepository.findOne(surveyId);
 	}
 
 // -------------------------
@@ -74,7 +74,9 @@ public class SurveyServiceImpl implements SurveyService  {
 	}
 	
     private Sort sortBySurveyId() {
-        return new Sort(Sort.Direction.ASC, "surveyId");
+
+        //return new Sort(Sort.Direction.ASC, "surveyId");
+        return Sort.by(Sort.Direction.ASC, "surveyId");    	
     }
 
 	@Override
@@ -87,8 +89,8 @@ public class SurveyServiceImpl implements SurveyService  {
 
 	@Override
 	public SurveySection getSurveySectionById(@NonNull SurveySectionPK surveySectionPK) {
-		//SurveySection surveySection = surveySectionRepository.findById(surveySectionPK).get();
-		SurveySection surveySection = surveySectionRepository.findOne(surveySectionPK);
+		SurveySection surveySection = surveySectionRepository.findById(surveySectionPK).get();
+		//SurveySection surveySection = surveySectionRepository.findOne(surveySectionPK);
 		log.debug("Retrieved for id {} entity {}", surveySectionPK, surveySection.getName());
 
 		return surveySection;
@@ -114,16 +116,16 @@ public class SurveyServiceImpl implements SurveyService  {
 
 	@Override
 	public Iterable<SurveyQuestion> save(Iterable<SurveyQuestion> surveyQuestions) {
-		//Iterable<SurveyQuestion> savedSurveyQuestions = surveyQuestionRepository.saveAll(surveyQuestions);
-		Iterable<SurveyQuestion> savedSurveyQuestions = surveyQuestionRepository.save(surveyQuestions);
+		Iterable<SurveyQuestion> savedSurveyQuestions = surveyQuestionRepository.saveAll(surveyQuestions);
+		//Iterable<SurveyQuestion> savedSurveyQuestions = surveyQuestionRepository.save(surveyQuestions);
 		log.debug("Saved multiple surveyQuestions");
 		return savedSurveyQuestions;
 	}
 	
 	@Override
 	public SurveyQuestion getSurveyQuestionById(@NonNull Long surveyQuestionId) {
-		//SurveyQuestion surveyQuestion = surveyQuestionRepository.findById(surveyQuestionId).get();
-		SurveyQuestion surveyQuestion = surveyQuestionRepository.findOne(surveyQuestionId);
+		SurveyQuestion surveyQuestion = surveyQuestionRepository.findById(surveyQuestionId).get();
+		//SurveyQuestion surveyQuestion = surveyQuestionRepository.findOne(surveyQuestionId);
 		log.debug("Retrieved for id {} entity {}", surveyQuestionId, surveyQuestion);
 
 		return surveyQuestion;
@@ -131,12 +133,12 @@ public class SurveyServiceImpl implements SurveyService  {
 
 	@Override
 	public void removeQuestion(Long sqId) {
-		//SurveyQuestion sq = surveyQuestionRepository.findById(sqId).get();
-		SurveyQuestion sq = surveyQuestionRepository.findOne(sqId);
+		SurveyQuestion sq = surveyQuestionRepository.findById(sqId).get();
+		//SurveyQuestion sq = surveyQuestionRepository.findOne(sqId);
 		Survey survey = getSurveyById(sq.getSurveyId());
 		survey.getSurveyQuestions().remove(sq);
-		//surveyQuestionRepository.deleteById(sqId);
-		surveyQuestionRepository.delete(sqId);
+		surveyQuestionRepository.deleteById(sqId);
+		//surveyQuestionRepository.delete(sqId);
 		log.info("Deleted survey question {}", sqId);		
 	}
 
@@ -146,15 +148,15 @@ public class SurveyServiceImpl implements SurveyService  {
     	Survey survey = getSurveyById(id.getSurveyId());
     	SurveySection surveySection = getSurveySectionById(id);
     	survey.getSurveySections().remove(surveySection);
-		//surveySectionRepository.deleteById(id);
-		surveySectionRepository.delete(id);
+		surveySectionRepository.deleteById(id);
+		//surveySectionRepository.delete(id);
 		log.info("Deleted survey section {}", id);	
 	}
 
 	@Override
 	public void delete(Long surveyId) {
-		//surveyRepository.deleteById(surveyId);
-		surveyRepository.delete(surveyId);
+		surveyRepository.deleteById(surveyId);
+		//surveyRepository.delete(surveyId);
 		log.info("Deleted survey {}", surveyId);		
 	}
 

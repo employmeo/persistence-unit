@@ -48,13 +48,13 @@ public class QuestionServiceImpl implements QuestionService  {
 	@Override
 	@Cacheable(value="questions")
 	public Question getQuestionById(@NonNull Long questionId) {
-		//Optional<Question> question = questionRepository.findById(questionId);
-		//if(question.isPresent()) {
-		//	log.debug("Retrieved question by id {}", questionId);
-		//	return question.get();
-		//}
-		//return null;
-		return questionRepository.findOne(questionId);
+		Optional<Question> question = questionRepository.findById(questionId);
+		if(question.isPresent()) {
+			log.debug("Retrieved question by id {}", questionId);
+			return question.get();
+		}
+		return null;
+		//return questionRepository.findOne(questionId);
 	}
 
 	@Override
@@ -77,8 +77,8 @@ public class QuestionServiceImpl implements QuestionService  {
 	@Override
 	@Cacheable(value="answerbyid")
 	public Answer getAnswerById(@NonNull Long answerId) {
-		//Answer answer = answerRepository.findById(answerId).get();
-		Answer answer = answerRepository.findOne(answerId);
+		Answer answer = answerRepository.findById(answerId).get();
+		//Answer answer = answerRepository.findOne(answerId);
 		log.debug("Retrieved for id {} entity {}", answerId, answer);
 
 		return answer;
@@ -86,15 +86,15 @@ public class QuestionServiceImpl implements QuestionService  {
 
 	@Override
 	public void deleteQuestion(Long questionId) {
-		//questionRepository.deleteById(questionId);
-		questionRepository.delete(questionId);
+		questionRepository.deleteById(questionId);
+		//questionRepository.delete(questionId);
 		log.debug("Deleted question {}", questionId);	
 	}
 
 	@Override
 	public void deleteAnswer(Long answerId) {
-		//answerRepository.deleteById(answerId);
-		answerRepository.delete(answerId);
+		answerRepository.deleteById(answerId);
+		//answerRepository.delete(answerId);
 		log.debug("Deleted answer {}", answerId);
 	}
 

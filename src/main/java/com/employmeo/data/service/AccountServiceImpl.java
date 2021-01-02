@@ -68,13 +68,13 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Account getAccountById(@NonNull Long accountId) {
-		//Optional<Account> account = accountRepository.findById(accountId);
-		//if (account.isPresent()) {
-		//	log.debug("Retrieved for id {} entity {}", accountId, account);
-		//	return account.get();			
-		//}
-		//return null;
-		return accountRepository.findOne(accountId);
+		Optional<Account> account = accountRepository.findById(accountId);
+		if (account.isPresent()) {
+			log.debug("Retrieved for id {} entity {}", accountId, account);
+			return account.get();			
+		}
+		return null;
+		//return accountRepository.findOne(accountId);
 	}
 
 	@Override
@@ -118,13 +118,13 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Position getPositionById(@NonNull Long positionId) {
-		//Optional<Position> position = positionRepository.findById(positionId);
-		//if (position.isPresent()) {
-		//	log.debug("Retrieved for id {} entity {}", positionId, position);
-		//	return position.get();
-		//}
-		//return null;
-		return positionRepository.findOne(positionId);
+		Optional<Position> position = positionRepository.findById(positionId);
+		if (position.isPresent()) {
+			log.debug("Retrieved for id {} entity {}", positionId, position);
+			return position.get();
+		}
+		return null;
+		//return positionRepository.findOne(positionId);
 	}
 
 	@Override
@@ -144,12 +144,12 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Location getLocationById(Long locationId) {
-		//Optional<Location> location = locationRepository.findById(locationId);
-		//if (location.isPresent()) {
-		//	return location.get();
-		//}
-		//return null;
-		return locationRepository.findOne(locationId);
+		Optional<Location> location = locationRepository.findById(locationId);
+		if (location.isPresent()) {
+			return location.get();
+		}
+		return null;
+		//return locationRepository.findOne(locationId);
 	}
 
 	@Override
@@ -203,9 +203,9 @@ public class AccountServiceImpl implements AccountService {
 	
 	@Override
 	public Benchmark getBenchmarkById(Long benchmarkId) {
-		//Benchmark benchmark = benchmarkRepository.findById(benchmarkId).get();
-		//return benchmark;
-		return benchmarkRepository.findOne(benchmarkId);
+		Benchmark benchmark = benchmarkRepository.findById(benchmarkId).get();
+		return benchmark;
+		//return benchmarkRepository.findOne(benchmarkId);
 	}
 
 	@Override
@@ -256,8 +256,8 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public CustomWorkflow getCustomWorkflowById(Long workflowId) {
-//		return customWorkflowRepository.findById(workflowId).get();
-		return customWorkflowRepository.findOne(workflowId);
+		return customWorkflowRepository.findById(workflowId).get();
+//		return customWorkflowRepository.findOne(workflowId);
 	}
 
 	@Override

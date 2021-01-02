@@ -45,13 +45,13 @@ public class PersonServiceImpl implements PersonService  {
 
 	@Override
 	public Person getPersonById(@NonNull Long personId) {
-		//Optional<Person> person = personRepository.findById(personId);
-		//if(person.isPresent()) {
-		//	log.debug("Retrieved for id {} entity {}", personId, person);
-		//	return person.get();
-		//}
-		//return null;
-		return personRepository.findOne(personId);
+		Optional<Person> person = personRepository.findById(personId);
+		if(person.isPresent()) {
+			log.debug("Retrieved for id {} entity {}", personId, person);
+			return person.get();
+		}
+		return null;
+		//return personRepository.findOne(personId);
 	}
 
 	@Override

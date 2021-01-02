@@ -23,8 +23,8 @@ public class PopulationServiceImpl implements PopulationService {
 	
 	@Override
 	public Population getPopulationById(Long populationId) {
-		//return populationRepository.findById(populationId).get();
-		return populationRepository.findOne(populationId);
+		return populationRepository.findById(populationId).get();
+		//return populationRepository.findOne(populationId);
 	}
 
 	@Override
