@@ -20,6 +20,6 @@ public interface PersonService {
 
 	List<SendGridEmailEvent> getEmailEvents(String email);
 
-	List<SendGridEmailEvent> getPersonEmailEvents(String personId);
+	List<SendGridEmailEvent> getPersonEmailEvents(Long personId);
 
 }
