@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.talytica</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.2.9</version>
+	<version>0.2.10</version>
 	<name>persistence</name>
 	<description>Talytica persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->

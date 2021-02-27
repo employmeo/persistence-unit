@@ -17,4 +17,7 @@ public interface SendGridEventRepository extends PagingAndSortingRepository<Send
 	@Query
 	public List<SendGridEmailEvent> findAllByEmailOrderByTimeStampDesc(String email);
 
+	@Query
+	public List<SendGridEmailEvent> findAllByEmailIgnoreCaseOrderByTimeStampDesc(String email);
+
 }

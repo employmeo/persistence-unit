@@ -68,6 +68,6 @@ public class PersonServiceImpl implements PersonService  {
 	
 	@Override
 	public List<SendGridEmailEvent> getEmailEvents(String email) {
-		return sendGridEventRepository.findAllByEmailOrderByTimeStampDesc(email);
+		return sendGridEventRepository.findAllByEmailIgnoreCaseOrderByTimeStampDesc(email);
 	}
 }
