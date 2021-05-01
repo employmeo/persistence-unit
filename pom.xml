@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.talytica</groupId>
 	<artifactId>persistence</artifactId>
-	<version>0.2.10</version>
+	<version>0.2.11-SNAPSHOT</version>
 	<name>persistence</name>
 	<description>Talytica persistence model definitions and facilities for data interaction</description>
 	<!-- Property configs and software versions -->
@@ -30,7 +30,7 @@
 		<twilio.version>7.17.0</twilio.version>
 		<org-json.version>20180130</org-json.version>
 		<sendgrid.version>3.1.0</sendgrid.version>
-		<stripe.version>5.8.0</stripe.version>
+		<stripe.version>20.46.0</stripe.version>
 		<commons-math-version>3.6.1</commons-math-version>
 		<commons-lang3.version>3.5</commons-lang3.version>
 		<commons-file.version>[1.3.3,)</commons-file.version>

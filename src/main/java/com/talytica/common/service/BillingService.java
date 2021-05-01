@@ -39,6 +39,8 @@ public interface BillingService {
 	
 	Customer getStripeCustomer(Account account) throws StripeException;
 
+	Subscription checkSubscription(String id) throws StripeException;
+
 	List<Plan> getCustomerPlans(String id) throws StripeException;
 
 	List<Invoice> getCustomerInvoices(String id) throws StripeException;

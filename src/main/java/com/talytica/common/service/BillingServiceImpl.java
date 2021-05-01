@@ -15,6 +15,7 @@ import com.stripe.model.*;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +76,11 @@ public class BillingServiceImpl implements BillingService {
 	
 	@Override
 	public Customer getCustomer(String id) throws StripeException {
-		Customer customer = addLinkTo(Customer.retrieve(id));
+		Map<String, Object> retrieveParams = new HashMap<>();
+		List<String> expandList = new ArrayList<>();
+		expandList.add("sources");
+		retrieveParams.put("expand", expandList);
+		Customer customer = addLinkTo(Customer.retrieve(id, retrieveParams, null));
 		return customer;
 	}
 
@@ -83,9 +88,15 @@ public class BillingServiceImpl implements BillingService {
 	public List<Plan> getCustomerPlans(String id) throws StripeException {
 		Customer customer = Customer.retrieve(id);
 		List<Subscription> subs = customer.getSubscriptions().getData();
+		
 		List<Plan> plans = Lists.newArrayList();
 		for (Subscription sub : subs) {
-			if (activeSubscriptionStatuses.contains(sub.getStatus())) plans.add(sub.getPlan());
+			if (activeSubscriptionStatuses.contains(sub.getStatus())) {
+				for (SubscriptionItem item : sub.getItems().getData()) {
+					plans.add(item.getPlan());
+				}
+			}
+
 		}
 		return plans;
 	}
@@ -139,9 +150,10 @@ public class BillingServiceImpl implements BillingService {
 	@Override
 	public Card addCardToCustomer(String stripeToken, Account account) throws StripeException {
 		Customer customer = getCustomer(account.getStripeId());
+		
 		Map<String, Object> creationParams = new HashMap<String, Object>();
 		creationParams.put("source", stripeToken);        		
-		Card card = customer.createCard(creationParams);
+		Card card = (Card) customer.getSources().create(creationParams);
 		return card;
 	}
 	
@@ -149,6 +161,23 @@ public class BillingServiceImpl implements BillingService {
 	public Customer getStripeCustomer(Account account) throws StripeException {
 		return getCustomer(account.getStripeId());
 	}
+
+	@Override
+	public Subscription checkSubscription(String id) throws StripeException {
+		Customer customer = Customer.retrieve(id);
+		List<Subscription> subs = customer.getSubscriptions().getData();
+		Subscription subscription = null;
+		for (Subscription sub : subs) {
+			sub.getEndedAt();
+			if (activeSubscriptionStatuses.contains(sub.getStatus())) {
+				subscription = sub;
+				break;
+			}
+			if ((subscription != null) && (subscription.getEndedAt() < sub.getEndedAt())) subscription = sub;			
+		}
+		return subscription;
+	}
+	
 	
 	@Override
 	public List<Invoice> getCustomerInvoices(String id) throws StripeException {
