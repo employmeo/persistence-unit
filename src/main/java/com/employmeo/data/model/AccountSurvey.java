@@ -100,7 +100,20 @@ public class AccountSurvey implements Serializable {
 	@Column(name = "as_benchmark_id")
 	private Long benchmarkId;
 	
-//  Moved this into ref check config
+	@Column(name = "as_confirm_user")
+	private Boolean confirmUser;
+
+	@Column(name = "as_min_response_length")
+	private Long minResponseLength;
+	
+	@Column(name = "as_too_short_text")
+	private String tooShortText;
+	
+	@Column(name = "as_too_short_media")
+	private String tooShortMedia;
+
+	
+	//  Moved this into ref check config
 //	@Column(name = "as_min_graders")
 //	private Integer minGraders = 0;
 
