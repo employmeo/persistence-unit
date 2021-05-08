@@ -86,8 +86,9 @@ public class BillingServiceImpl implements BillingService {
 
 	@Override
 	public List<Plan> getCustomerPlans(String id) throws StripeException {
-		Customer customer = Customer.retrieve(id);
-		List<Subscription> subs = customer.getSubscriptions().getData();
+		Map<String, Object> params = new HashMap<>();
+		params.put("customer", id);
+		List<Subscription> subs = Subscription.list(params).getData();
 		
 		List<Plan> plans = Lists.newArrayList();
 		for (Subscription sub : subs) {
@@ -163,9 +164,16 @@ public class BillingServiceImpl implements BillingService {
 	}
 
 	@Override
+	public List<Subscription> getCustomerSubscriptions(String id) throws StripeException {
+		Map<String, Object> params = new HashMap<>();
+		params.put("customer", id);
+		List<Subscription> subs = Subscription.list(params).getData();
+		return subs;
+	}
+
+	@Override
 	public Subscription checkSubscription(String id) throws StripeException {
-		Customer customer = Customer.retrieve(id);
-		List<Subscription> subs = customer.getSubscriptions().getData();
+		List<Subscription> subs = getCustomerSubscriptions(id);
 		Subscription subscription = null;
 		for (Subscription sub : subs) {
 			sub.getEndedAt();
@@ -233,4 +241,5 @@ public class BillingServiceImpl implements BillingService {
 		plan.setMetadata(meta);
 		return plan;
 	}
+
 }
