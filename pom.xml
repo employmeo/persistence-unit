@@ -15,7 +15,7 @@
 		<springdata-jpa.version>1.11.23.RELEASE</springdata-jpa.version>
 		<springboot.version>1.5.13.RELEASE</springboot.version>
 		<hibernate.version>5.2.3.Final</hibernate.version>
-		<postgres-version>42.2.18</postgres-version>
+		<postgres-version>42.2.25</postgres-version>
 		<logback.version>1.0.13</logback.version>
 		<junit.version>4.13.1</junit.version>
 		<mockito.version>1.10.19</mockito.version>
